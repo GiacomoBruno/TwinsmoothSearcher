@@ -7,6 +7,7 @@ set(GMP_LIBRARY_DIR "/opt/homebrew/lib")
 
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 link_directories(${GMP_LIBRARY_DIR})
 add_executable(BSmooth main.cpp tree.cpp file_manager.cpp file_manager.h tree.h nb.h twinsmooth_full.cpp twinsmooth_full.h twinsmooth.h twinsmooth.cpp list.cpp list.h)

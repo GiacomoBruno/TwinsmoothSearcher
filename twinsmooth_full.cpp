@@ -70,7 +70,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
     return result;
 }
 
-LinkedTree* iteration(LinkedList* points)
+LinkedTree* iteration(LinkedList* chunks)
 {
     auto result_tree = new LinkedTree();
 
@@ -82,9 +82,9 @@ LinkedTree* iteration(LinkedList* points)
 
 
 
-    while(!points->empty())
+    while(!chunks->empty())
     {
-        EXTRACT_POINTS(points_arr, points, NUM_THREADS);
+        EXTRACT_POINTS(points_arr, chunks, NUM_THREADS);
 
         #pragma omp parallel num_threads(NUM_THREADS)
         //for(int i = 0; i < NUM_THREADS; i++)
@@ -102,8 +102,8 @@ LinkedTree* iteration(LinkedList* points)
         DEALLOCATE_ARRAY_MEMBERS(results, NUM_THREADS);
 
     }
-    points->clear();
-    delete points;
+    chunks->clear();
+    delete chunks;
     delete[] results;
 
     return result_tree;
@@ -129,9 +129,6 @@ void twinsmooth_full::execute()
         CLEAR(points);
 
         current_results = iteration(chunks);
-
-        //delete chunks;
-        //CLEAR(chunks);
 
         std::cout << "found " << new_found << " new numbers" << std::endl;
     } while(new_found > 0);
