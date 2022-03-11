@@ -130,6 +130,9 @@ void twinsmooth_full::execute()
 
         current_results = iteration(chunks);
 
+        //delete chunks;
+        //CLEAR(chunks);
+
         std::cout << "found " << new_found << " new numbers" << std::endl;
     } while(new_found > 0);
 

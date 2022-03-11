@@ -35,7 +35,7 @@ void conclude_bench()
 int main(int argc, char** argv)
 {
     start_bench();
-    uint64_t smoothness = 100;
+    uint64_t smoothness = 50;
 
     auto tsf = new twinsmooth_full(smoothness);
     tsf->execute();
