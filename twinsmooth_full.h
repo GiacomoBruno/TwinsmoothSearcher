@@ -12,8 +12,8 @@ protected:
     void initialize_smooth_set() override;
 public:
     explicit twinsmooth_full(uint64_t s) : twinsmooth(s) {}
-    ~twinsmooth_full(){}
     void execute() override;
+    void terminate() override;
 
 
 };

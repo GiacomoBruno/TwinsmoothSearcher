@@ -1,16 +1,20 @@
 #include "list.h"
 
-void LinkedList::push_back(void* n) {
+//actually push front
+void LinkedList::push_front(void* n) {
     _size++;
 
-    if(first == nullptr || last == nullptr) {
-        last =  new LLNode(n);
-        first = last;
+    if(first == nullptr){//} || last == nullptr) {
+        //last =  ;
+        first = new LLNode(n);
     }
     else
     {
-        last->next = new LLNode(n);
-        last = last->next;
+        auto tmp = new LLNode(n);
+        tmp->next = first;
+        first = tmp;
+        //last->next = new LLNode(n);
+        //last = last->next;
     }
 }
 
@@ -18,13 +22,13 @@ void LinkedList::remove_first() {
     if(first == nullptr) return;
 
     _size--;
-    if(first == last)
-    {
-        delete first;
-        first = nullptr;
-        last = nullptr;
-    }
-    else
+    //if(first == last)
+   // {
+   //     delete first;
+   //     first = nullptr;
+   //     last = nullptr;
+    //}
+    //else
     {
         auto tmp = first;
         first = first->next;
@@ -42,7 +46,7 @@ void* LinkedList::pop()
 
 
 LNode LinkedList::begin() { return first; }
-LNode LinkedList::end(){ return last; }
+//LNode LinkedList::end(){ return last; }
 
 void LinkedList::clear() {
     while(first != nullptr)
@@ -54,3 +58,13 @@ void LinkedList::clear() {
 }
 
 bool LinkedList::empty() const { return _size == 0; }
+
+void print_as_bigint(LinkedList* l)
+{
+    auto iter = l->begin();
+    while(iter != nullptr)
+    {
+        gmp_printf("%Zd\n", *VAL(iter)->val);
+        iter = iter->next;
+    }
+}

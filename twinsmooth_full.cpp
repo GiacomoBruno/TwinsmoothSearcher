@@ -105,6 +105,7 @@ LinkedTree* iteration(LinkedList* points)
     points->clear();
     delete points;
     delete[] results;
+
     return result_tree;
 
 
@@ -122,8 +123,9 @@ void twinsmooth_full::execute()
     {
         auto points = results->simple_merge(current_results);
         current_results->light_cleanup();
-        auto chunks = create_chunks(points, 100);
         new_found = points->size();
+        auto chunks = create_chunks(points, 100);
+
         CLEAR(points);
 
         current_results = iteration(chunks);
@@ -145,4 +147,8 @@ void twinsmooth_full::initialize_smooth_set()
         results->insert(n);
     }
     std::filesystem::create_directories(OUT_FOLDER);
+}
+
+void twinsmooth_full::terminate() {
+    results->cleanup();
 }

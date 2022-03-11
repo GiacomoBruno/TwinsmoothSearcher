@@ -37,9 +37,9 @@ int main(int argc, char** argv)
     start_bench();
     uint64_t smoothness = 100;
 
-    twinsmooth_full* tsf = new twinsmooth_full(smoothness);
+    auto tsf = new twinsmooth_full(smoothness);
     tsf->execute();
-    tsf->get_results()->cleanup();
+    tsf->terminate();
     delete tsf;
     conclude_bench();
 

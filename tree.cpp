@@ -505,7 +505,7 @@ LinkedList* LinkedTree::simple_merge(LinkedTree* other) {
         Node inserted = this->insert_del(&iter->val);
         if(inserted != nullptr)
         {
-            res->push_back(inserted);
+            res->push_front(inserted);
         }
 
         iter = iter->next;

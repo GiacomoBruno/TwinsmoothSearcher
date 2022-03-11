@@ -23,4 +23,5 @@ public:
     ~twinsmooth()= default;
     [[nodiscard]] LinkedTree* get_results() const { return results; }
     virtual void execute() = 0;
+    virtual void terminate() = 0;
 };
