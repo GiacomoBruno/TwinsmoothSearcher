@@ -45,6 +45,7 @@ public:
 
     Node search(bigint key);
 
+    void simple_merge_no_ret(LinkedTree* other);
     LinkedList* simple_merge(LinkedTree* other);
 
     void print(std::string& indent, bool last);

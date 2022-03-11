@@ -44,7 +44,7 @@ for(int i = 0; i < (size); i++) {               \
 #define INSERT_ARRAY_MEMBERS_INTO_TREE(array, tree, size) \
 for(int i = 0; i < (size); i++) {                           \
     if((array)[i] != nullptr){                              \
-        (tree)->simple_merge((array)[i]);                     \
+        (tree)->simple_merge_no_ret((array)[i]);                     \
     }                                                     \
 }
 

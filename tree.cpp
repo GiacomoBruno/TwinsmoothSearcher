@@ -512,3 +512,14 @@ LinkedList* LinkedTree::simple_merge(LinkedTree* other) {
     }
     return res;
 }
+
+
+void LinkedTree::simple_merge_no_ret(LinkedTree* other) {
+    auto iter = other->begin();
+    while(iter != nullptr)
+    {
+        Node inserted = this->insert_del(&iter->val);
+
+        iter = iter->next;
+    }
+}

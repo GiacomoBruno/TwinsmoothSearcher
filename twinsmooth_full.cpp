@@ -95,6 +95,8 @@ LinkedTree* iteration(LinkedList* chunks)
                 //std::cout << points_arr[i]->size() <<std::endl;
                 //results[i] = generate_twinsmooth(points[i], X->get_size());
                 results[i] = generate_twinsmooth_from_chunks(points_arr[i]);
+                points_arr[i]->clear();
+                delete points_arr[i];
             }
         }
 
@@ -103,6 +105,7 @@ LinkedTree* iteration(LinkedList* chunks)
 
     }
     chunks->clear();
+    delete[] points_arr;
     delete chunks;
     delete[] results;
 
@@ -123,15 +126,26 @@ void twinsmooth_full::execute()
     {
         auto points = results->simple_merge(current_results);
         current_results->light_cleanup();
-        new_found = points->size();
-        auto chunks = create_chunks(points, 100);
+        delete current_results;
 
+
+        new_found = points->size();
+        if(new_found > 0)
+        {
+            auto chunks = create_chunks(points, 100);
+            
+            current_results = iteration(chunks);
+            std::cout << "found " << new_found << " new numbers" << std::endl;
+
+        }  
         CLEAR(points);
 
-        current_results = iteration(chunks);
-
-        std::cout << "found " << new_found << " new numbers" << std::endl;
     } while(new_found > 0);
+
+    current_results->light_cleanup();
+    delete current_results;
+    
+    results->cleanup();
 
     std::cout << "found in total: " << results->get_size() << std::endl;
 }
