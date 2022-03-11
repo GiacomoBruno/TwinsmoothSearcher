@@ -48,32 +48,30 @@ LinkedTree* generate_twinsmooth_complete(Node start_number)
     return result;
 }
 
-std::vector<std::vector<Node>*>* create_chunks(std::vector<Node>* input, int chunk_size)
+LinkedList* create_chunks(LinkedList* input, int chunk_size)
 {
-    auto chunks = new std::vector<std::vector<Node>*>();
+    auto chunks = new LinkedList();
 
-    auto chunk = new std::vector<Node>();
+    auto chunk = new LinkedList();
     int counter = 0;
     auto iter = input->begin();
 
-    while(iter != input->end())
+    while(iter != nullptr)
     {
         if(counter > chunk_size)
         {
             counter = 0;
             chunks->push_back(chunk);
-            chunk = new std::vector<Node>();
+            chunk = new LinkedList();
         }
+        //here value is a pointer to a linkedtree node
+        chunk->push_back(iter->value);
 
-        chunk->push_back(*iter);
-
-        iter++;
+        iter = iter->next;
         counter++;
     }
 
     if(counter != 0) chunks->push_back(chunk);
-
-
 
     return chunks;
 }

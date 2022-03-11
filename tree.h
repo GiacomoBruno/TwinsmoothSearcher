@@ -1,26 +1,9 @@
 #pragma once
 
 #include "nb.h"
+#include "list.h"
 #include <vector>
 
-struct node {
-    node* left = nullptr;
-    node* right = nullptr;
-
-    node* next = nullptr;
-    node* prev = nullptr;
-
-    int8_t height = 1;
-
-    bigint val = nullptr;
-
-    explicit node(bigint v) : val(v){}
-
-    node* rotate_right();
-    node* rotate_left();
-};
-
-typedef node* Node;
 
 
 
@@ -62,7 +45,7 @@ public:
 
     Node search(bigint key);
 
-    std::vector<Node>* simple_merge(LinkedTree* other);
+    LinkedList* simple_merge(LinkedTree* other);
 
     void print(std::string& indent, bool last);
     void print_order();

@@ -1,6 +1,6 @@
 #include "twinsmooth_full.h"
 
-LinkedTree* generate_twinsmooth_from_chunks(std::vector<Node>* chunk)
+LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
 {
     auto d = bigint_new;
     auto delta = bigint_new;
@@ -11,11 +11,11 @@ LinkedTree* generate_twinsmooth_from_chunks(std::vector<Node>* chunk)
     auto result = new LinkedTree();
 
     auto iter = chunk->begin();
-    while(iter != chunk->end())
+    while(iter != nullptr)
     {
-        auto x = *iter; //costante per il ciclo corrente
-        auto y = (*iter)->next;
-        auto z = (*iter)->prev;
+        auto x = VAL(iter); //costante per il ciclo corrente
+        auto y = VAL(iter)->next;
+        auto z = VAL(iter)->prev;
 
         // (x|y) with y > x
         while(y != nullptr)
@@ -61,7 +61,7 @@ LinkedTree* generate_twinsmooth_from_chunks(std::vector<Node>* chunk)
             z = z->prev;
         }
 
-        iter++;
+        iter = iter->next;
     }
 
     bigint_free(d);
@@ -70,35 +70,39 @@ LinkedTree* generate_twinsmooth_from_chunks(std::vector<Node>* chunk)
     return result;
 }
 
-LinkedTree* iteration(std::vector<std::vector<Node>*>* points)
+LinkedTree* iteration(LinkedList* points)
 {
     auto result_tree = new LinkedTree();
 
     auto results = new LinkedTree*[NUM_THREADS];
+    auto points_arr = new LinkedList*[NUM_THREADS];
+
+    NULL_INIT_ARRAY(points_arr, NUM_THREADS);
     NULL_INIT_ARRAY(results, NUM_THREADS);
+
+
 
     while(!points->empty())
     {
+        EXTRACT_POINTS(points_arr, points, NUM_THREADS);
+
         #pragma omp parallel num_threads(NUM_THREADS)
+        //for(int i = 0; i < NUM_THREADS; i++)
         {
             int i = omp_get_thread_num();
-            if(points->size() > i ) {
+
+            if(points_arr[i] != nullptr ) {
+                //std::cout << points_arr[i]->size() <<std::endl;
                 //results[i] = generate_twinsmooth(points[i], X->get_size());
-                results[i] = generate_twinsmooth_from_chunks(points->at(i));
+                results[i] = generate_twinsmooth_from_chunks(points_arr[i]);
             }
         }
 
-        REMOVE_FIRST_N_FROM_ARRAY(points, NUM_THREADS);
         INSERT_ARRAY_MEMBERS_INTO_TREE(results, result_tree, NUM_THREADS);
         DEALLOCATE_ARRAY_MEMBERS(results, NUM_THREADS);
 
     }
-    for(int i =0; i< points->size(); i++)
-    {
-        points->at(i)->clear();
-        delete points->at(i);
-    }
-
+    points->clear();
     delete points;
     delete[] results;
     return result_tree;

@@ -497,12 +497,12 @@ Node LinkedTree::search(bigint key) {
     return search_node(root, key);
 }
 
-std::vector<Node>* LinkedTree::simple_merge(LinkedTree* other) {
+LinkedList* LinkedTree::simple_merge(LinkedTree* other) {
     auto iter = other->begin();
-    auto res = new std::vector<Node>();
+    auto res = new LinkedList();
     while(iter != nullptr)
     {
-        auto inserted = this->insert_del(&iter->val);
+        Node inserted = this->insert_del(&iter->val);
         if(inserted != nullptr)
         {
             res->push_back(inserted);

@@ -4,7 +4,7 @@
 #include "tree.h"
 
 LinkedTree* generate_twinsmooth_complete(Node start_number);
-std::vector<std::vector<Node>*>* create_chunks(std::vector<Node>* input, int chunk_size);
+LinkedList* create_chunks(LinkedList* input, int chunk_size);
 
 class twinsmooth
 {
@@ -20,7 +20,7 @@ public:
 
 
     explicit twinsmooth(uint64_t s) : smoothness(s), results(new LinkedTree()) { }
-    ~twinsmooth(){ }
+    ~twinsmooth()= default;
     [[nodiscard]] LinkedTree* get_results() const { return results; }
     virtual void execute() = 0;
 };

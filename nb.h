@@ -7,7 +7,6 @@
 
 #define NUM_THREADS 8
 #define MPZ_INIT_BITS 128                                           /* Max bit-length for integers at start*/
-
 #define MEGABYTE 1000000
 #define MAX_FILE_SIZE 100*MEGABYTE
 
@@ -27,7 +26,8 @@
 typedef mpz_t* bigint;
 
 
-#define CLEAR(a) a->clear(); delete a;
+#define CLEAR(a) a->clear(); delete (a);
+
 #define NULL_INIT_ARRAY(array, size) \
 for(int i = 0; i < (size); i++) {      \
     (array)[i] = nullptr;              \
@@ -48,9 +48,37 @@ for(int i = 0; i < (size); i++) {                           \
     }                                                     \
 }
 
-#define REMOVE_FIRST_N_FROM_ARRAY(array, n) \
-if((array)->size() <= (n) )\
-    (array)->erase((array)->begin(), (array)->end());\
-else \
-    (array)->erase((array)->begin(), (array)->begin()+(n));
+#define REMOVE_FIRST_N_FROM_LINKEDLIST(ll, n) \
+for(int i = 0; i < (n); i++) (ll)->remove_first();
 
+#define EXTRACT_POINTS(array, points, n)                        \
+for(int i = 0; i < (n); i++)                                    \
+{                                                               \
+    auto pts = (points)->pop() ;                                 \
+    if(pts == nullptr) break;\
+    (array)[i] = static_cast<LinkedList*>(pts);     \
+}
+
+#define VAL(n) ((Node)((n)->value))
+
+
+
+
+struct node {
+    node* left = nullptr;
+    node* right = nullptr;
+
+    node* next = nullptr;
+    node* prev = nullptr;
+
+    int8_t height = 1;
+
+    bigint val = nullptr;
+
+    explicit node(bigint v) : val(v){}
+
+    node* rotate_right();
+    node* rotate_left();
+};
+
+typedef node* Node;
