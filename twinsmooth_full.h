@@ -6,12 +6,13 @@
 
 LinkedTree* generate_twinsmooth_from_chunks(std::vector<Node>* chunk);
 
-class twinsmooth_full : twinsmooth {
+class twinsmooth_full : public twinsmooth {
 protected:
     void load_files() override;
     void initialize_smooth_set() override;
 public:
     explicit twinsmooth_full(uint64_t s) : twinsmooth(s) {}
+    ~twinsmooth_full(){}
     void execute() override;
 
 

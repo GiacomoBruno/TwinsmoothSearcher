@@ -4,7 +4,10 @@
 #include <fstream>
 #include <vector>
 #include <sys/stat.h>
+#include <cstring>
+#include <string>
 #include "nb.h"
+
 typedef std::string string;
 
 bool file_exists(const string& path);

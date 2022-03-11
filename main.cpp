@@ -35,13 +35,15 @@ void conclude_bench()
 int main(int argc, char** argv)
 {
     start_bench();
-    uint64_t smoothness = 100;
+    uint64_t smoothness = 50;
 
-    twinsmooth_full tsf(smoothness);
-    tsf.execute();
-
+    twinsmooth_full* tsf = new twinsmooth_full(smoothness);
+    tsf->execute();
+    tsf->get_results()->cleanup();
+    delete tsf;
     conclude_bench();
 
+    
     return 0;
 }
 

@@ -20,7 +20,7 @@ public:
 
 
     explicit twinsmooth(uint64_t s) : smoothness(s), results(new LinkedTree()) { }
-
-    [[nodiscard]] const LinkedTree* get_results() const { return results; }
+    ~twinsmooth(){ }
+    [[nodiscard]] LinkedTree* get_results() const { return results; }
     virtual void execute() = 0;
 };

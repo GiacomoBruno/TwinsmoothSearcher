@@ -502,11 +502,12 @@ std::vector<Node>* LinkedTree::simple_merge(LinkedTree* other) {
     auto res = new std::vector<Node>();
     while(iter != nullptr)
     {
-        auto inserted = this->insert(iter->val);
+        auto inserted = this->insert_del(&iter->val);
         if(inserted != nullptr)
         {
             res->push_back(inserted);
         }
+
         iter = iter->next;
     }
     return res;

@@ -42,7 +42,6 @@ private:
     void print_tree(Node nd, std::string indent, bool last);
 
     void post_order(Node nd);
-    void light_cleanup();
 
 public:
     explicit LinkedTree() : size(0) { }
@@ -59,6 +58,7 @@ public:
     void del(bigint key);
 
     void cleanup();
+    void light_cleanup();
 
     Node search(bigint key);
 

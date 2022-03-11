@@ -93,6 +93,13 @@ LinkedTree* iteration(std::vector<std::vector<Node>*>* points)
         DEALLOCATE_ARRAY_MEMBERS(results, NUM_THREADS);
 
     }
+    for(int i =0; i< points->size(); i++)
+    {
+        points->at(i)->clear();
+        delete points->at(i);
+    }
+
+    delete points;
     delete[] results;
     return result_tree;
 
@@ -110,6 +117,7 @@ void twinsmooth_full::execute()
     do
     {
         auto points = results->simple_merge(current_results);
+        current_results->light_cleanup();
         auto chunks = create_chunks(points, 100);
         new_found = points->size();
         CLEAR(points);
