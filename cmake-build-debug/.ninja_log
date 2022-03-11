@@ -1,0 +1,9 @@
+# ninja log v5
+1	375	1647004914587482737	CMakeFiles/BSmooth.dir/twinsmooth.cpp.o	6fdf7500be9ac541
+0	3	0	clean	3c8e6cc385ee00ba
+519	561	1647004914774278718	BSmooth	7826e898d7c2ba96
+1	519	1647004914731249556	CMakeFiles/BSmooth.dir/file_manager.cpp.o	56b0b4d89dcbdd93
+1	415	1647004914626573943	CMakeFiles/BSmooth.dir/twinsmooth_full.cpp.o	7960be4edddb0aca
+2	362	1647004914574299175	CMakeFiles/BSmooth.dir/main.cpp.o	b840ed9947c37e2c
+1	33	1647004915747040828	build.ninja	6c86bf76ed1033ba
+2	420	1647004914632416401	CMakeFiles/BSmooth.dir/tree.cpp.o	7b069aa3066ca8de

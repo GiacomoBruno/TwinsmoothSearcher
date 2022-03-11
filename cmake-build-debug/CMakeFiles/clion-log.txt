@@ -1,0 +1,4 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -G Ninja /Users/giacomobruno/CLionProjects/BSmooth
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/giacomobruno/CLionProjects/BSmooth/cmake-build-debug
