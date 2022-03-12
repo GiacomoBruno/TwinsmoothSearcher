@@ -49,13 +49,10 @@ public:
     void fast_insert(bigint key);
     void fast_insert_delete_source(bigint key);
 
-    void remove_node(Node nd);
-
     void erase(bigint key);
     void destroy(bigint key);
 
     void cleanup();
-    void light_cleanup();
 
     Node search(bigint key);
 

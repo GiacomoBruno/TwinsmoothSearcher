@@ -1,5 +1,6 @@
 #include <chrono>
 
+#include "Tests/test.h"
 #include "nb.h"
 #include "twinsmooth_full.h"
 
@@ -34,14 +35,16 @@ void conclude_bench()
 
 int main(int argc, char** argv)
 {
-    start_bench();
-    uint64_t smoothness = 50;
+    //if(!test::run_tests()) return -1;
+
+    //start_bench();
+     uint64_t smoothness = 150;
 
     auto tsf = new twinsmooth_full(smoothness);
     tsf->execute();
     tsf->terminate();
-    delete tsf;
-    conclude_bench();
+    //delete tsf;
+    //conclude_bench();
 
     
     return 0;

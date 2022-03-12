@@ -54,6 +54,7 @@ Node LinkedTree::fast_insert_node(Node nd, bigint key) {
         auto res = new struct node(key);
         first_element = res;
         last_element = res;
+        size++;
         return res;
     }
 
@@ -141,6 +142,7 @@ Node LinkedTree::fast_insert_node_delete_source(Node nd, bigint key) {
         auto res = new struct node(key);
         first_element = res;
         last_element = res;
+        size++;
         return res;
     }
 
@@ -232,6 +234,7 @@ Node LinkedTree::insert_node(Node nd, bigint key, Node& inserted_node) {
         auto res = new struct node(key);
         first_element = res;
         last_element = res;
+        size++;
         inserted_node = res;
         return res;
     }
@@ -326,6 +329,7 @@ Node LinkedTree::insert_node_delete_source(Node nd, bigint key, Node& inserted_n
         first_element = res;
         last_element = res;
         inserted_node = res;
+        size++;
         return res;
     }
 
@@ -600,21 +604,6 @@ void LinkedTree::destroy(bigint key)
 
 //clean up of tree
 
-void LinkedTree::light_cleanup()
-{
-    Node cursor = first_element;
-    while(cursor != nullptr)
-    {
-        Node tmp = cursor->next;
-        delete cursor;
-        cursor = tmp;
-    }
-
-    first_element = nullptr;
-    last_element = nullptr;
-    size = 0;
-}
-
 void LinkedTree::cleanup()
 {
     Node cursor = first_element;
@@ -721,5 +710,6 @@ void LinkedTree::print(std::string& indent, bool last)
 {
     print_tree(root, indent, last);
 }
+
 
 LinkedTree::~LinkedTree() = default;

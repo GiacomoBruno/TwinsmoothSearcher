@@ -10,6 +10,9 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
     mpz_init2(*m1, MPZ_INIT_BITS);
     auto result = new LinkedTree();
 
+   // print_as_bigint(chunk);
+    if(chunk->size() < 200)
+    {
     auto iter = chunk->begin();
     while(iter != nullptr)
     {
@@ -62,7 +65,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
         }
 
         iter = iter->next;
-    }
+    }}
 
     bigint_free(d);
     bigint_free(delta);
@@ -90,9 +93,9 @@ LinkedTree* iteration(LinkedList* points)
     {
         //EXTRACT_POINTS(points_arr, chunks, NUM_THREADS);
         for (int i = 0; i < (8); i++) {
-            auto pts = (chunks)->pop();
+            auto pts = static_cast<LinkedList*>((chunks)->pop());
             if (pts == nullptr)break;
-            (points_arr)[i] = static_cast<LinkedList*>(pts);
+            points_arr[i] = pts;
         }
 
         //#pragma omp parallel num_threads(NUM_THREADS)
