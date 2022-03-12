@@ -2,7 +2,7 @@
 
 #include "Tests/test.h"
 #include "nb.h"
-#include "twinsmooth_full.h"
+#include "twinsmooth_range.h"
 
 
 
@@ -35,16 +35,19 @@ void conclude_bench()
 
 int main(int argc, char** argv)
 {
-    //if(!test::run_tests()) return -1;
 
-    //start_bench();
-     uint64_t smoothness = 100;
+    start_bench();
+     uint64_t smoothness = 110;
 
-    auto tsf = new twinsmooth_full(smoothness);
+    auto tsf = new twinsmooth_range(smoothness, 1000);
     tsf->execute();
+    conclude_bench();
+
+    start_bench();
     tsf->terminate();
+    conclude_bench();
+
     delete tsf;
-    //conclude_bench();
 
     
     return 0;

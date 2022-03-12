@@ -1,6 +1,10 @@
-#include "twinsmooth_full.h"
+//
+// Created by Giacomo Bruno on 12/03/22.
+//
 
-LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
+#include "twinsmooth_range.h"
+
+LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk, int range)
 {
     auto d = bigint_new;
     auto delta = bigint_new;
@@ -10,9 +14,10 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
     mpz_init2(*m1, MPZ_INIT_BITS);
     auto result = new LinkedTree();
 
-   // print_as_bigint(chunk);
+    // print_as_bigint(chunk);
 
     auto iter = chunk->begin();
+    int counter = 0;
     while(iter != nullptr)
     {
         auto x = VAL(iter); //costante per il ciclo corrente
@@ -20,7 +25,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
         auto z = VAL(iter)->prev;
 
         // (x|y) with y > x
-        while(y != nullptr)
+        while(counter < range && y != nullptr)
         {
             mpz_mul(*m1, *(x->val), *(y->val));
             mpz_add(*m1, *m1, *(y->val));
@@ -39,10 +44,12 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
             }
 
             y = y->next;
+            counter++;
         }
 
+        counter = 0;
         // (x|z) with x > z
-        while(z != nullptr)
+        while(counter < 0 && z != nullptr)
         {
             mpz_mul(*m1, *(z->val), *(x->val));
             mpz_add(*m1, *m1, *(x->val));
@@ -64,6 +71,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
         }
 
         iter = iter->next;
+        counter++;
     }
 
     bigint_free(d);
@@ -72,20 +80,13 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
     return result;
 }
 
-LinkedTree* iteration(LinkedList* points)
+LinkedTree* iteration(LinkedList* points, int range)
 {
     auto chunks = create_chunks(points, 100);
 
     //delete after use
     auto result_tree = new LinkedTree();
-
-
-
-
     //set all array values to nullptr
-
-
-
 
     while(!chunks->empty())
     {
@@ -101,13 +102,13 @@ LinkedTree* iteration(LinkedList* points)
             points_arr[i] = pts;
         }
 
-        #pragma omp parallel num_threads(NUM_THREADS)
+#pragma omp parallel num_threads(NUM_THREADS)
         //for(int i = 0; i < NUM_THREADS; i++)
         {
             int i = omp_get_thread_num();
 
             if(points_arr[i] != nullptr ) {
-                results[i] = generate_twinsmooth_from_chunks(points_arr[i]);
+                results[i] = generate_twinsmooth_from_chunks(points_arr[i], range);
                 points_arr[i]->clear();
                 delete points_arr[i];
             }
@@ -135,14 +136,15 @@ LinkedTree* iteration(LinkedList* points)
 
 }
 
-void twinsmooth_full::execute()
-{
+
+void twinsmooth_range::execute() {
+
     load_files();
 
     size_t new_found = 0;
     while(!computation_numbers->empty())
     {
-        auto new_res = iteration(computation_numbers);
+        auto new_res = iteration(computation_numbers, range);
         computation_numbers->clear();
         delete computation_numbers;
         computation_numbers = results->merge_return_inserted(new_res);
@@ -152,13 +154,9 @@ void twinsmooth_full::execute()
     computation_numbers->clear();
     delete computation_numbers;
 
-
-
 }
 
-
-
-void twinsmooth_full::terminate() {
+void twinsmooth_range::terminate() {
     std::cout << "found in total: " << results->get_size() << std::endl;
     save_files();
     results->cleanup();

@@ -6,13 +6,14 @@
 
 LinkedTree* generate_twinsmooth_from_chunks(std::vector<Node>* chunk);
 
-class twinsmooth_full : public twinsmooth {
+class twinsmooth_range : public twinsmooth {
 protected:
+    int range =0;
 public:
-    explicit twinsmooth_full(uint64_t s) : twinsmooth(s) {}
+    explicit twinsmooth_range(uint64_t s, int _range) : twinsmooth(s), range(_range) {}
     void execute() override;
     void terminate() override;
-    ~twinsmooth_full() override = default;
+    ~twinsmooth_range() override = default;
 
 
 

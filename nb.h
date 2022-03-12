@@ -16,7 +16,7 @@
 #define PRIMES_FN "primes"
 #define LOOK_OLD_FILES true
 
-#define OUT_FOLDER (std::string(OUTPUT_FOLDER)+"_"+std::to_string(smoothness))
+#define OUT_FOLDER(n) (std::string(OUTPUT_FOLDER)+"_"+std::to_string(n))
 
 
 #define bigint_new (bigint)malloc(sizeof(mpz_t))

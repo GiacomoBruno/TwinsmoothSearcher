@@ -1,4 +1,16 @@
 #include "twinsmooth.h"
+#include "file_manager.h"
+
+void load_file(CappedFile& fm, LinkedTree* output)
+{
+    string line;
+    while(fm.getline(line))
+    {
+        auto val = bigint_new;
+        bigint_str(val, line);
+        output->fast_insert_delete_source(val);
+    }
+}
 
 
 LinkedTree* generate_twinsmooth_complete(Node start_number)
@@ -70,4 +82,59 @@ LinkedList* create_chunks(LinkedList* input, int chunk_size)
     if(counter != 0) chunks->push_front(chunk);
 
     return chunks;
+}
+
+void twinsmooth::load_files()
+{
+    std::filesystem::create_directories(OUT_FOLDER(smoothness));
+
+    for(int i = 1; i < smoothness; i++)
+    {
+        CappedFile previously_found_twins = CappedFile(TWINSMOOTH_FN, OUT_FOLDER(i), true, i);
+        if(previously_found_twins.is_open()) {
+            std::cout << "loading file of smoothness = " << i << std::endl;
+            load_file(previously_found_twins, results);
+        }
+    }
+
+    for(int i = 1; i <= smoothness; i++)
+    {
+        auto num = bigint_new;
+        bigint_init(num, i);
+
+        auto inserted = results->search(num);
+        if(inserted == nullptr)
+        {
+            computation_numbers->push_front(results->insert(num));
+        }
+        else
+        {
+            computation_numbers->push_front(inserted);
+            bigint_free(num);
+        }
+
+    }
+}
+
+void twinsmooth::save_files() {
+    for(int i = 1; i < smoothness; i++)
+    {
+        CappedFile file(TWINSMOOTH_FN, OUT_FOLDER(i), true, i);
+        auto nums = new LinkedTree();
+        if(file.is_open())
+        {
+            load_file(file, nums);
+            //TODO fix this and remove already saved numbers
+        }
+        nums->cleanup();
+        delete nums;
+    }
+
+    auto iter = results->begin();
+    CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), false, smoothness);
+    while(iter != nullptr)
+    {
+        output.printn("%Zd\n", *iter->val);
+        iter = iter->next;
+    }
 }
