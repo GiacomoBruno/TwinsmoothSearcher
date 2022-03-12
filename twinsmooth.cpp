@@ -28,13 +28,10 @@ LinkedTree* generate_twinsmooth_complete(Node start_number)
             {
                 auto nv = bigint_new;
                 mpz_init2(*nv, MPZ_INIT_BITS);
-
-
                 mpz_div(*m1, *m1, *delta);
                 mpz_sub_ui(*nv, *m1, 1);
-                //gmp_printf("computing %Zd %Zd...", *(cursor_1->val), *(cursor_2->val));
 
-                result->insert_del(&nv);
+                result->insert_delete_source(nv);
             }
 
             y = y->next;

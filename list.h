@@ -5,7 +5,6 @@
 struct LLNode {
     void* value{};
     LLNode* next{};
-
     explicit LLNode(void* n) : value(n) {}
 
 };

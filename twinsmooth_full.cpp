@@ -33,7 +33,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
                 mpz_div(*m1, *m1, *delta);
                 mpz_sub_ui(*nv, *m1, 1);
 
-                result->insert_del(&nv);
+                result->insert_delete_source(nv);
             }
 
             y = y->next;
@@ -55,7 +55,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
                 mpz_div(*m1, *m1, *delta);
                 mpz_sub_ui(*nv, *m1, 1);
 
-                result->insert_del(&nv);
+                result->insert_delete_source(nv);
             }
 
             z = z->prev;
@@ -70,13 +70,17 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
     return result;
 }
 
-LinkedTree* iteration(LinkedList* chunks)
+LinkedTree* iteration(LinkedList* points)
 {
+    auto chunks = create_chunks(points, 100);
+
+    //delete after use
     auto result_tree = new LinkedTree();
 
     auto results = new LinkedTree*[NUM_THREADS];
     auto points_arr = new LinkedList*[NUM_THREADS];
 
+    //set all array values to nullptr
     NULL_INIT_ARRAY(points_arr, NUM_THREADS);
     NULL_INIT_ARRAY(results, NUM_THREADS);
 
@@ -84,12 +88,17 @@ LinkedTree* iteration(LinkedList* chunks)
 
     while(!chunks->empty())
     {
-        EXTRACT_POINTS(points_arr, chunks, NUM_THREADS);
+        //EXTRACT_POINTS(points_arr, chunks, NUM_THREADS);
+        for (int i = 0; i < (8); i++) {
+            auto pts = (chunks)->pop();
+            if (pts == nullptr)break;
+            (points_arr)[i] = static_cast<LinkedList*>(pts);
+        }
 
-        #pragma omp parallel num_threads(NUM_THREADS)
-        //for(int i = 0; i < NUM_THREADS; i++)
+        //#pragma omp parallel num_threads(NUM_THREADS)
+        for(int i = 0; i < NUM_THREADS; i++)
         {
-            int i = omp_get_thread_num();
+            //int i = omp_get_thread_num();
 
             if(points_arr[i] != nullptr ) {
                 //std::cout << points_arr[i]->size() <<std::endl;
@@ -100,8 +109,16 @@ LinkedTree* iteration(LinkedList* chunks)
             }
         }
 
-        INSERT_ARRAY_MEMBERS_INTO_TREE(results, result_tree, NUM_THREADS);
-        DEALLOCATE_ARRAY_MEMBERS(results, NUM_THREADS);
+        for (int i = 0; i < (8); i++)
+        {
+            if ((results)[i] != nullptr)
+            {
+                (result_tree)->merge((results)[i]);
+            }
+        }
+        //INSERT_ARRAY_MEMBERS_INTO_TREE(results, result_tree, NUM_THREADS);
+
+        //DEALLOCATE_ARRAY_MEMBERS(results, NUM_THREADS);
 
     }
     chunks->clear();
@@ -124,17 +141,14 @@ void twinsmooth_full::execute()
     size_t new_found = 0;
     do
     {
-        auto points = results->simple_merge(current_results);
-        current_results->light_cleanup();
-        delete current_results;
+        auto points = results->merge_return_inserted(current_results);
 
 
         new_found = points->size();
         if(new_found > 0)
         {
-            auto chunks = create_chunks(points, 100);
-            
-            current_results = iteration(chunks);
+
+            current_results = iteration(points);
             std::cout << "found " << new_found << " new numbers" << std::endl;
 
         }  
@@ -142,10 +156,6 @@ void twinsmooth_full::execute()
 
     } while(new_found > 0);
 
-    current_results->light_cleanup();
-    delete current_results;
-    
-    results->cleanup();
 
     std::cout << "found in total: " << results->get_size() << std::endl;
 }
@@ -165,4 +175,5 @@ void twinsmooth_full::initialize_smooth_set()
 
 void twinsmooth_full::terminate() {
     results->cleanup();
+    delete results;
 }

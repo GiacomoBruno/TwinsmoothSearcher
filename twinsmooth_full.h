@@ -14,6 +14,8 @@ public:
     explicit twinsmooth_full(uint64_t s) : twinsmooth(s) {}
     void execute() override;
     void terminate() override;
+    ~twinsmooth_full() override = default;
+
 
 
 };

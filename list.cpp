@@ -22,18 +22,10 @@ void LinkedList::remove_first() {
     if(first == nullptr) return;
 
     _size--;
-    //if(first == last)
-   // {
-   //     delete first;
-   //     first = nullptr;
-   //     last = nullptr;
-    //}
-    //else
-    {
-        auto tmp = first;
-        first = first->next;
-        delete tmp;
-    }
+
+    auto tmp = first;
+    first = first->next;
+    delete tmp;
 }
 
 void* LinkedList::pop()
