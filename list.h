@@ -3,8 +3,8 @@
 
 
 struct LLNode {
-    void* value{};
-    LLNode* next{};
+    void* value = nullptr;
+    LLNode* next = nullptr;
     explicit LLNode(void* n) : value(n) {}
 
 };
@@ -22,7 +22,7 @@ public:
     void* pop();
     [[nodiscard]] size_t size() const {return _size;}
 
-    LNode begin();
+    [[nodiscard]] LNode begin() const;
     //LNode end();
 
     void clear();

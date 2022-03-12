@@ -80,21 +80,25 @@ LinkedTree* iteration(LinkedList* points)
     //delete after use
     auto result_tree = new LinkedTree();
 
-    auto results = new LinkedTree*[NUM_THREADS];
-    auto points_arr = new LinkedList*[NUM_THREADS];
+
+
 
     //set all array values to nullptr
-    NULL_INIT_ARRAY(points_arr, NUM_THREADS);
-    NULL_INIT_ARRAY(results, NUM_THREADS);
+
 
 
 
     while(!chunks->empty())
     {
-        //EXTRACT_POINTS(points_arr, chunks, NUM_THREADS);
-        for (int i = 0; i < (8); i++) {
-            auto pts = static_cast<LinkedList*>((chunks)->pop());
-            if (pts == nullptr)break;
+        auto results = new LinkedTree*[NUM_THREADS];
+        auto points_arr = new LinkedList*[NUM_THREADS];
+        NULL_INIT_ARRAY(points_arr, NUM_THREADS);
+        NULL_INIT_ARRAY(results, NUM_THREADS);
+
+
+        for (int i = 0; i < (NUM_THREADS); i++) {
+            auto pts = (LinkedList*)(chunks->pop());
+            if (pts == nullptr) break;
             points_arr[i] = pts;
         }
 
@@ -104,8 +108,6 @@ LinkedTree* iteration(LinkedList* points)
             //int i = omp_get_thread_num();
 
             if(points_arr[i] != nullptr ) {
-                //std::cout << points_arr[i]->size() <<std::endl;
-                //results[i] = generate_twinsmooth(points[i], X->get_size());
                 results[i] = generate_twinsmooth_from_chunks(points_arr[i]);
                 points_arr[i]->clear();
                 delete points_arr[i];
@@ -122,12 +124,12 @@ LinkedTree* iteration(LinkedList* points)
         //INSERT_ARRAY_MEMBERS_INTO_TREE(results, result_tree, NUM_THREADS);
 
         //DEALLOCATE_ARRAY_MEMBERS(results, NUM_THREADS);
+        delete[] points_arr;
+        delete[] results;
 
     }
     chunks->clear();
-    delete[] points_arr;
     delete chunks;
-    delete[] results;
 
     return result_tree;
 

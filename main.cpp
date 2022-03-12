@@ -38,12 +38,12 @@ int main(int argc, char** argv)
     //if(!test::run_tests()) return -1;
 
     //start_bench();
-     uint64_t smoothness = 150;
+     uint64_t smoothness = 100;
 
     auto tsf = new twinsmooth_full(smoothness);
     tsf->execute();
     tsf->terminate();
-    //delete tsf;
+    delete tsf;
     //conclude_bench();
 
     

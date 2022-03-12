@@ -4,8 +4,7 @@
 void LinkedList::push_front(void* n) {
     _size++;
 
-    if(first == nullptr){//} || last == nullptr) {
-        //last =  ;
+    if(first == nullptr){
         first = new LLNode(n);
     }
     else
@@ -13,8 +12,6 @@ void LinkedList::push_front(void* n) {
         auto tmp = new LLNode(n);
         tmp->next = first;
         first = tmp;
-        //last->next = new LLNode(n);
-        //last = last->next;
     }
 }
 
@@ -32,13 +29,15 @@ void* LinkedList::pop()
 {
     if(first == nullptr) return nullptr;
     auto res = first->value;
-    remove_first();
+    _size--;
+    auto tmp = first;
+    first = first->next;
+    delete tmp;
     return res;
 }
 
 
-LNode LinkedList::begin() { return first; }
-//LNode LinkedList::end(){ return last; }
+LNode LinkedList::begin() const { return first; }
 
 void LinkedList::clear() {
     while(first != nullptr)
