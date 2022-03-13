@@ -1,8 +1,5 @@
-//
-// Created by Giacomo Bruno on 12/03/22.
-//
-
 #include "twinsmooth_range.h"
+#include "file_manager.h"
 
 LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk, int range)
 {
@@ -84,25 +81,25 @@ LinkedTree* iteration(LinkedList* points, int range)
 {
     auto chunks = create_chunks(points, 100);
 
-    //delete after use
     auto result_tree = new LinkedTree();
-    //set all array values to nullptr
 
     while(!chunks->empty())
     {
         auto results = new LinkedTree*[NUM_THREADS];
         auto points_arr = new LinkedList*[NUM_THREADS];
-        NULL_INIT_ARRAY(points_arr, NUM_THREADS);
-        NULL_INIT_ARRAY(results, NUM_THREADS);
-
-
+        for (int i = 0; i < (NUM_THREADS); i++) {
+            points_arr[i] = nullptr;
+        }
+        for (int i = 0; i < (NUM_THREADS); i++) {
+            results[i] = nullptr;
+        }
         for (int i = 0; i < (NUM_THREADS); i++) {
             auto pts = (LinkedList*)(chunks->pop());
             if (pts == nullptr) break;
             points_arr[i] = pts;
         }
 
-#pragma omp parallel num_threads(NUM_THREADS)
+        #pragma omp parallel num_threads(NUM_THREADS)
         //for(int i = 0; i < NUM_THREADS; i++)
         {
             int i = omp_get_thread_num();
@@ -114,16 +111,14 @@ LinkedTree* iteration(LinkedList* points, int range)
             }
         }
 
-        for (int i = 0; i < (8); i++)
+        for (int i = 0; i < (NUM_THREADS); i++)
         {
             if ((results)[i] != nullptr)
             {
                 (result_tree)->merge((results)[i]);
             }
         }
-        //INSERT_ARRAY_MEMBERS_INTO_TREE(results, result_tree, NUM_THREADS);
 
-        //DEALLOCATE_ARRAY_MEMBERS(results, NUM_THREADS);
         delete[] points_arr;
         delete[] results;
 
@@ -141,9 +136,10 @@ void twinsmooth_range::execute() {
 
     load_files();
 
-    size_t new_found = 0;
+    CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
     while(!computation_numbers->empty())
     {
+        output.save_list(computation_numbers);
         auto new_res = iteration(computation_numbers, range);
         computation_numbers->clear();
         delete computation_numbers;
@@ -153,12 +149,11 @@ void twinsmooth_range::execute() {
 
     computation_numbers->clear();
     delete computation_numbers;
-
+    output.reorder();
 }
 
 void twinsmooth_range::terminate() {
     std::cout << "found in total: " << results->get_size() << std::endl;
-    save_files();
     results->cleanup();
     delete results;
 }

@@ -11,7 +11,6 @@ class LinkedTree {
 private:
     Node root = nullptr;
     size_t size;
-    Node first_element{};
     Node last_element{};
 
     //insert a key in the tree and returns the new root
@@ -64,4 +63,5 @@ public:
     void merge(LinkedTree* other);
     LinkedList* merge_return_inserted(LinkedTree* other);
 
+    Node first_element{};
 };

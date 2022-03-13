@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 {
 
     start_bench();
-     uint64_t smoothness = 110;
+    uint64_t smoothness = 40;
 
     auto tsf = new twinsmooth_range(smoothness, 1000);
     tsf->execute();
