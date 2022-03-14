@@ -134,6 +134,10 @@ LinkedTree* iteration(LinkedList* points, int range)
 
 void twinsmooth_range::execute() {
 
+    std::cout << "executing twinsmooth calculation on {" << NUM_THREADS << "} threads" << std::endl;
+    std::cout << "mode = range optimization with range: " << range << std::endl;
+    std::cout << "smoothness = " << smoothness << std::endl;
+
     load_files();
 
     CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);

@@ -76,16 +76,7 @@ LinkedTree* iteration(LinkedList* points)
 {
     auto chunks = create_chunks(points, 100);
 
-    //delete after use
     auto result_tree = new LinkedTree();
-
-
-
-
-    //set all array values to nullptr
-
-
-
 
     while(!chunks->empty())
     {
@@ -113,16 +104,14 @@ LinkedTree* iteration(LinkedList* points)
             }
         }
 
-        for (int i = 0; i < (8); i++)
+        for (int i = 0; i < (NUM_THREADS); i++)
         {
             if ((results)[i] != nullptr)
             {
                 (result_tree)->merge((results)[i]);
             }
         }
-        //INSERT_ARRAY_MEMBERS_INTO_TREE(results, result_tree, NUM_THREADS);
 
-        //DEALLOCATE_ARRAY_MEMBERS(results, NUM_THREADS);
         delete[] points_arr;
         delete[] results;
 
@@ -137,9 +126,12 @@ LinkedTree* iteration(LinkedList* points)
 
 void twinsmooth_full::execute()
 {
+    std::cout << "executing twinsmooth calculation on {" << NUM_THREADS << "} threads" << std::endl;
+    std::cout << "mode = no optimization " << std::endl;
+    std::cout << "smoothness = " << smoothness << std::endl;
+
     load_files();
 
-    size_t new_found = 0;
     while(!computation_numbers->empty())
     {
         auto new_res = iteration(computation_numbers);

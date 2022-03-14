@@ -3,7 +3,8 @@
 #include "Tests/test.h"
 #include "nb.h"
 #include "twinsmooth_range.h"
-
+#include "twinsmooth_full.h"
+#include "twinsmooth_kopt.h"
 
 
 #define ELAPSED(START,END) (std::chrono::duration_cast<std::chrono::microseconds>(END - START).count() / (double)1000000)
@@ -32,22 +33,51 @@ void conclude_bench()
     printf("Clock time: %f\n", (double)(et-st)/CLOCKS_PER_SEC);
 }
 
+uint64_t get_uint64_t(const std::string& s)
+{
+    std::cout << s;
+    std::flush(std::cout);
+    uint64_t res;
+    std::cin >> res;
+    return res;
+}
+
+double get_double(const std::string& s)
+{
+    std::cout << s;
+    std::flush(std::cout);
+    double res;
+    std::cin >> res;
+    return res;
+}
 
 int main(int argc, char** argv)
 {
+    auto smoothness = get_uint64_t("choose smoothness: ");
+    std::cout << "(0) no optimizations" << std::endl << "(1) range optimization"
+    << std::endl << "(2) k optimization" << std::endl;
+
+    uint64_t mode = get_uint64_t("select: ");
+
+    twinsmooth* ts = nullptr;
+    while(ts == nullptr)
+    {
+        switch(mode){
+            case 0: ts = new twinsmooth_full(smoothness); break;
+            case 1: ts = new twinsmooth_range(smoothness, (int)get_uint64_t("choose range: ")); break;
+            case 2: ts = new twinsmooth_kopt(smoothness, get_double("choose k1: "), get_double("choose k2: ")); break;
+            default: std::cout << "not a valid option" << std::endl; break;
+        }
+    }
+
+
+
 
     start_bench();
-    uint64_t smoothness = 40;
-
-    auto tsf = new twinsmooth_range(smoothness, 1000);
-    tsf->execute();
+    ts->execute();
+    ts->terminate();
+    delete ts;
     conclude_bench();
-
-    start_bench();
-    tsf->terminate();
-    conclude_bench();
-
-    delete tsf;
 
     
     return 0;
