@@ -13,6 +13,7 @@ protected:
     void save_files();
     virtual LinkedList* create_chunks(LinkedList* input, int chunk_size);
     virtual LinkedTree* iteration(LinkedList* points) = 0;
+    static LinkedTree* generate_twinsmooth(LinkedList* input);
 
 
 

@@ -46,7 +46,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk, int range)
 
         counter = 0;
         // (x|z) with x > z
-        while(counter < 0 && z != nullptr)
+        while(counter < range && z != nullptr)
         {
             mpz_mul(*m1, *(z->val), *(x->val));
             mpz_add(*m1, *m1, *(x->val));
@@ -65,10 +65,10 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk, int range)
             }
 
             z = z->prev;
+            counter++;
         }
 
         iter = iter->next;
-        counter++;
     }
 
     bigint_free(d);

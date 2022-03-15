@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <omp.h>
 
-#define NUM_THREADS 64
+#define NUM_THREADS 4
 #define MPZ_INIT_BITS 128                                           /* Max bit-length for integers at start*/
 #define MEGABYTE 1000000
 #define MAX_FILE_SIZE MEGABYTE*100
@@ -35,6 +35,17 @@ for(int i = 0; i < (size); i++) {      \
 
 #define VAL(n) ((Node)((n)->value))
 
+
+#define ELAPSED(START,END) (std::chrono::duration_cast<std::chrono::microseconds>(END - START).count() / (double)1000000)
+#define CURRENT_TIME std::chrono::steady_clock::now()
+typedef std::chrono::steady_clock::time_point t;
+
+
+void start_bench();
+
+void conclude_bench();
+
+
 struct node {
     node* left = nullptr;
     node* right = nullptr;
@@ -50,6 +61,7 @@ struct node {
 
     node* rotate_right();
     node* rotate_left();
+    size_t distance(node* other);
 };
 
 typedef node* Node;

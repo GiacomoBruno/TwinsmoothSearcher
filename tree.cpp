@@ -1,6 +1,21 @@
 #include "tree.h"
 
 //node functions
+void printTree(Node root, std::string indent, bool last) {
+    if (root != nullptr) {
+        std::cout << indent;
+        if (last) {
+            std::cout << "R----";
+            indent += "   ";
+        } else {
+            std::cout << "L----";
+            indent += "|  ";
+        }
+        gmp_printf("%Zd\n", *root->val);
+        printTree(root->left, indent, false);
+        printTree(root->right, indent, true);
+    }
+}
 
 int8_t get_height(Node n)
 {
@@ -45,6 +60,20 @@ Node min_val_node(Node n)
     while(cursor->left != nullptr)
         cursor = cursor->left;
     return cursor;
+}
+
+size_t node::distance(Node other)
+{
+    auto iter = this;
+    size_t counter = 0;
+    while(iter != nullptr)
+    {
+        if (iter == other)
+            return counter;
+        counter++;
+        iter = iter->next;
+    }
+    return -1;
 }
 
 //insertions
@@ -489,26 +518,23 @@ void LinkedTree::cleanup()
     size = 0;
 }
 
-/// search for key inside the tree
-/// \return node with key in the tree or nullptr
 Node LinkedTree::search_node(Node nd, bigint key)
 {
-    if(nd == nullptr)
-        return nullptr;
+    if(nd == nullptr) return nullptr;
+    //assumption tree is not empty
+    int cmp = mpz_cmp(*nd->val, *key);
 
-    int cmp = mpz_cmp(*key, *(nd->val));
-    if( cmp > 0 )
+    if(cmp > 0)
     {
-        return search_node(nd->right, key);
-    }
-    else if( cmp < 0 )
-    {
+        if(nd->prev == nullptr) return nullptr;
         return search_node(nd->left, key);
     }
-    else
+    else if(cmp < 0)
     {
-        return nd;
+        if(nd->next == nullptr) return nullptr;
+        return search_node(nd->right, key);
     }
+    else return nd;
 }
 
 /// search for key inside the tree
@@ -517,7 +543,102 @@ Node LinkedTree::search(bigint key) {
     return search_node(root, key);
 }
 
-//merge
+
+Node LinkedTree::lower_bound_node(Node nd, bigint key) {
+    if(nd == nullptr)
+        return first_element;
+    int cmp = mpz_cmp(*nd->val, *key);
+    if(cmp > 0)
+    {
+        if(nd->prev == nullptr) return nd;
+        else if(nd->left == nullptr)
+        {
+            auto iter = nd->prev;
+            while(iter != nullptr)
+            {
+                int cmp2 = mpz_cmp(*iter->val, *key);
+                if(cmp2 < 0) return iter;
+                else if(cmp == 0) return iter->prev ? iter->prev : iter;
+
+                iter = iter->prev;
+            }
+        }
+        return lower_bound_node(nd->left, key);
+    }
+    else if(cmp < 0)
+    {
+        if(nd->next == nullptr) return nd;
+        else if(nd->right == nullptr)
+        {
+            auto iter = nd->next;
+            while(iter != nullptr)
+            {
+                int cmp2 = mpz_cmp(*iter->val, *key);
+                if(cmp2 > 0) return iter;
+                else if(cmp == 0) return iter->prev;
+                iter = iter->next;
+            }
+        }
+        return lower_bound_node(nd->right, key);
+    }
+    else
+    {
+        if(nd->prev != nullptr) return nd->prev;
+        else return nd;
+    }
+}
+
+
+Node LinkedTree::upper_bound_node(Node nd, bigint key) {
+    if(nd == nullptr) return last_element;
+    int cmp = mpz_cmp(*nd->val, *key);
+    if(cmp > 0)
+    {
+        if(nd->prev == nullptr) return nd;
+        else if(nd->left == nullptr)
+        {
+            auto iter = nd->prev;
+            while(iter != nullptr)
+            {
+                int cmp2 = mpz_cmp(*iter->val, *key);
+                if(cmp2 < 0) return iter;
+                else if(cmp == 0) return iter->next;
+                iter = iter->prev;
+            }
+        }
+        return upper_bound_node(nd->left, key);
+    }
+    else if(cmp < 0)
+    {
+        if(nd->next == nullptr) return nd;
+        else if(nd->right == nullptr)
+        {
+            auto iter = nd->next;
+            while(iter != nullptr)
+            {
+                int cmp2 = mpz_cmp(*iter->val, *key);
+                if(cmp2 > 0) return iter;
+                else if (cmp == 0) return iter->next ? iter->next : iter;
+                iter = iter->next;
+            }
+        }
+        return upper_bound_node(nd->right, key);
+    }
+    else
+    {
+        if(nd->next != nullptr) return nd->next;
+        else return nd;
+    }}
+
+
+Node LinkedTree::lower_bound(bigint key)
+{
+    return lower_bound_node(root, key);
+}
+Node LinkedTree::upper_bound(bigint key)
+{
+    return upper_bound_node(root, key);
+}
 
 /// moves all content of other into the tree, all nodes of other are deleted in the process
 /// \param other tree to merge in current tree, unusable after completion of merge
@@ -555,3 +676,5 @@ LinkedList* LinkedTree::merge_return_inserted(LinkedTree* other) {
     delete other;
     return result;
 }
+
+
