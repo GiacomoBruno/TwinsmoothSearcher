@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <cstring>
 #include <string>
+#include <filesystem>
 #include "nb.h"
 #include "tree.h"
 

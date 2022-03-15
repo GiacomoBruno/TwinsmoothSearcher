@@ -201,7 +201,7 @@ LinkedTree* twinsmooth_growing_k::generate_twinsmooth_from_k_chunks(range_pair* 
 
     LinkedList* chunk = rp->nodes;
     auto iter = chunk->begin();
-    int counter = 0;
+    size_t counter = 0;
     while(iter != nullptr)
     {
         auto x = VAL(iter); //costante per il ciclo corrente
@@ -328,7 +328,7 @@ void twinsmooth_growing_k::execute() {
     CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
     while(k_current < k_end)
     {
-        for(int i = 1; i <= smoothness; i++)
+        for(size_t i = 1; i <= smoothness; i++)
         {
             auto num = bigint_new;
             bigint_init(num, i);
@@ -347,12 +347,11 @@ void twinsmooth_growing_k::execute() {
         auto first_res = twinsmooth::generate_twinsmooth(computation_numbers);
         computation_numbers->clear();
         computation_numbers = results->merge_return_inserted(first_res);
-        std::cout << "found " << computation_numbers->size() << " new twinsmooth" << std::endl;
 
 
         select_current_k();
         std::cout << "started for k = " << k_current << std::endl;
-
+        size_t found = 0;
         while(!computation_numbers->empty())
         {
             output.save_list(computation_numbers);
@@ -360,8 +359,11 @@ void twinsmooth_growing_k::execute() {
             computation_numbers->clear();
             delete computation_numbers;
             computation_numbers = results->merge_return_inserted(new_res);
-            std::cout << "found " << computation_numbers->size() << " new twinsmooth" << std::endl;
+            found += computation_numbers->size();
+            //std::cout << "found " << computation_numbers->size() << " new twinsmooth" << std::endl;
         }
+
+        std::cout << "found {" << found <<"} twinsmooth for k = " << k_current <<std::endl;
     }
 
 

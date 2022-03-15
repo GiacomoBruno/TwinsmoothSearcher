@@ -79,7 +79,7 @@ void twinsmooth::load_files()
 {
     std::filesystem::create_directories(OUT_FOLDER(smoothness));
 
-    for(int i = 1; i < smoothness; i++)
+    for(uint64_t i = 1; i < smoothness; i++)
     {
         CappedFile previously_found_twins = CappedFile(TWINSMOOTH_FN, OUT_FOLDER(i), std::fstream::in, i);
         if(previously_found_twins.exists()) {
@@ -88,7 +88,7 @@ void twinsmooth::load_files()
         }
     }
 
-    for(int i = 1; i <= smoothness; i++)
+    for(uint64_t i = 1; i <= smoothness; i++)
     {
         auto num = bigint_new;
         bigint_init(num, i);

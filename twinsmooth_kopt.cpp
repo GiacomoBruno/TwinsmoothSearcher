@@ -17,7 +17,7 @@ LinkedTree* twinsmooth_kopt::generate_twinsmooth_from_k_chunks(range_pair* rp)
 
     LinkedList* chunk = rp->nodes;
     auto iter = chunk->begin();
-    int counter = 0;
+    size_t counter = 0;
     while(iter != nullptr)
     {
         auto x = VAL(iter); //costante per il ciclo corrente
