@@ -77,7 +77,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk, int range)
     return result;
 }
 
-LinkedTree* iteration(LinkedList* points, int range)
+LinkedTree* twinsmooth_range::iteration(LinkedList* points)
 {
     auto chunks = create_chunks(points, 100);
 
@@ -134,9 +134,9 @@ LinkedTree* iteration(LinkedList* points, int range)
 
 void twinsmooth_range::execute() {
 
-    std::cout << "executing twinsmooth calculation on {" << NUM_THREADS << "} threads" << std::endl;
-    std::cout << "mode = range optimization with range: " << range << std::endl;
-    std::cout << "smoothness = " << smoothness << std::endl;
+    std::cout << "executing twinsmooth calculation on threads: {" << NUM_THREADS << "}" << std::endl;
+    std::cout << "mode = range optimization with range: {" << range << "}" << std::endl;
+    std::cout << "smoothness = {" << smoothness << "}" <<std::endl;
 
     load_files();
 
@@ -144,7 +144,7 @@ void twinsmooth_range::execute() {
     while(!computation_numbers->empty())
     {
         output.save_list(computation_numbers);
-        auto new_res = iteration(computation_numbers, range);
+        auto new_res = iteration(computation_numbers);
         computation_numbers->clear();
         delete computation_numbers;
         computation_numbers = results->merge_return_inserted(new_res);

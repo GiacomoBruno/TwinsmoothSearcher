@@ -3,8 +3,6 @@
 #include "nb.h"
 #include "tree.h"
 
-LinkedTree* generate_twinsmooth_complete(Node start_number);
-LinkedList* create_chunks(LinkedList* input, int chunk_size);
 
 class twinsmooth
 {
@@ -13,6 +11,10 @@ protected:
 
     void load_files();
     void save_files();
+    virtual LinkedList* create_chunks(LinkedList* input, int chunk_size);
+    virtual LinkedTree* iteration(LinkedList* points) = 0;
+
+
 
     LinkedTree *results;
     LinkedList *computation_numbers;

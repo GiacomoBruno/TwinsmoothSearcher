@@ -72,7 +72,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
     return result;
 }
 
-LinkedTree* iteration(LinkedList* points)
+LinkedTree* twinsmooth_full::iteration(LinkedList* points)
 {
     auto chunks = create_chunks(points, 100);
 
@@ -126,9 +126,9 @@ LinkedTree* iteration(LinkedList* points)
 
 void twinsmooth_full::execute()
 {
-    std::cout << "executing twinsmooth calculation on {" << NUM_THREADS << "} threads" << std::endl;
-    std::cout << "mode = no optimization " << std::endl;
-    std::cout << "smoothness = " << smoothness << std::endl;
+    std::cout << "executing twinsmooth calculation on threads: {" << NUM_THREADS << "}" << std::endl;
+    std::cout << "mode = no optimization" << std::endl;
+    std::cout << "smoothness = {" << smoothness << "}" <<std::endl;
 
     load_files();
 
@@ -147,8 +147,6 @@ void twinsmooth_full::execute()
 
 
 }
-
-
 
 void twinsmooth_full::terminate() {
     std::cout << "found in total: " << results->get_size() << std::endl;
