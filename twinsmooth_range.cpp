@@ -138,8 +138,6 @@ void twinsmooth_range::execute() {
     std::cout << "mode = range optimization with range: {" << range << "}" << std::endl;
     std::cout << "smoothness = {" << smoothness << "}" <<std::endl;
 
-    load_files();
-
     CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
     while(!computation_numbers->empty())
     {

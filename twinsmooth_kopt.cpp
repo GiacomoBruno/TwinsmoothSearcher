@@ -18,6 +18,8 @@ LinkedTree* twinsmooth_kopt::generate_twinsmooth_from_k_chunks(range_pair* rp)
     LinkedList* chunk = rp->nodes;
     auto iter = chunk->begin();
     size_t counter = 0;
+    auto upper_bound_distance = VAL(iter)->distance(rp->upper_bound_node);
+    auto lower_bound_distance = rp->lower_bound_node->distance(VAL(iter));
     while(iter != nullptr)
     {
         auto x = VAL(iter); //costante per il ciclo corrente
@@ -26,7 +28,7 @@ LinkedTree* twinsmooth_kopt::generate_twinsmooth_from_k_chunks(range_pair* rp)
         //gmp_printf("%Zd %Zd\n", *x->val, *y->val);
 
         // (x|y) with y > x
-        while(counter < rp->upper_bound_distance && y != nullptr)
+        while(counter < upper_bound_distance && y != nullptr)
         {
             mpz_mul(*m1, *(x->val), *(y->val));
             mpz_add(*m1, *m1, *(y->val));
@@ -50,7 +52,7 @@ LinkedTree* twinsmooth_kopt::generate_twinsmooth_from_k_chunks(range_pair* rp)
 
         counter = 0;
         // (x|z) with x > z
-        while(counter < rp->lower_bound_distance && z != nullptr)
+        while(counter < lower_bound_distance && z != nullptr)
         {
             mpz_mul(*m1, *(z->val), *(x->val));
             mpz_add(*m1, *m1, *(x->val));
@@ -80,6 +82,31 @@ LinkedTree* twinsmooth_kopt::generate_twinsmooth_from_k_chunks(range_pair* rp)
     return result;
 }
 
+range_pair* twinsmooth_kopt::get_range_pair(LinkedList* chunk)
+{
+    auto num = bigint_new;
+    mpz_init2(*num, MPZ_INIT_BITS);
+
+    auto flnum = bigfloat_new;
+    mpf_init2(*flnum, MPZ_INIT_BITS);
+    mpf_set_z(*flnum, *VAL(chunk->begin())->val);
+
+    mpf_div(*flnum, *flnum, *current_k);
+    mpz_set_f(*num, *flnum);
+
+    mpf_set_z(*flnum, *VAL(chunk->begin())->val);
+    mpf_mul(*flnum, *flnum, *current_k);
+
+    auto rp = new struct range_pair;
+    rp->nodes = chunk;
+    rp->lower_bound_node = results->lower_bound(num);
+    mpz_set_f(*num, *flnum);
+    rp->upper_bound_node = results->upper_bound(num);
+
+    bigfloat_free(flnum);
+    bigint_free(num);
+    return rp;
+}
 
 LinkedList* twinsmooth_kopt::create_chunks(LinkedList* input, int chunk_size)
 {
@@ -94,27 +121,7 @@ LinkedList* twinsmooth_kopt::create_chunks(LinkedList* input, int chunk_size)
         {
             counter = 0;
 
-            auto num = bigint_new;
-            mpz_init2(*num, MPZ_INIT_BITS);
-
-            auto flnum = bigfloat_new;
-            mpf_init2(*flnum, MPZ_INIT_BITS);
-            mpf_set_z(*flnum, *VAL(chunk->begin())->val);
-
-            mpf_div(*flnum, *flnum, *current_k);
-            mpz_set_f(*num, *flnum);
-
-            mpf_set_z(*flnum, *VAL(chunk->begin())->val);
-            mpf_mul(*flnum, *flnum, *current_k);
-
-            auto rp = new struct range_pair;
-            rp->nodes = chunk;
-            rp->lower_bound_distance = results->lower_bound(num)->distance(VAL(chunk->begin()));
-            mpz_set_f(*num, *flnum);
-            rp->upper_bound_distance = VAL(chunk->begin())->distance(results->upper_bound(num));
-
-            bigfloat_free(flnum);
-            bigint_free(num);
+            auto rp = get_range_pair(chunk);
 
             chunks->push_front(rp);
             chunk = new LinkedList();
@@ -131,34 +138,12 @@ LinkedList* twinsmooth_kopt::create_chunks(LinkedList* input, int chunk_size)
         {
             auto rp = new struct range_pair;
             rp->nodes = chunk;
-            rp->lower_bound_distance = results->get_size();
-            rp->upper_bound_distance = results->get_size();
+            rp->lower_bound_node = results->begin();
+            rp->upper_bound_node = results->end();
             chunks->push_front(rp);
             return chunks;
         }
-
-        auto num = bigint_new;
-        mpz_init2(*num, MPZ_INIT_BITS);
-
-        auto flnum = bigfloat_new;
-        mpf_init2(*flnum, MPZ_INIT_BITS);
-        mpf_set_z(*flnum, *VAL(chunk->begin())->val);
-
-        mpf_div(*flnum, *flnum, *current_k);
-        mpz_set_f(*num, *flnum);
-
-
-        mpf_set_z(*flnum, *VAL(chunk->begin())->val);
-        mpf_mul(*flnum, *flnum, *current_k);
-
-        auto rp = new struct range_pair;
-        rp->nodes = chunk;
-        rp->lower_bound_distance = results->lower_bound(num)->distance(VAL(chunk->begin()));
-        mpz_set_f(*num, *flnum);
-        rp->upper_bound_distance = VAL(chunk->begin())->distance(results->upper_bound(num));
-
-        bigfloat_free(flnum);
-        bigint_free(num);
+        auto rp = get_range_pair(chunk);
 
         chunks->push_front(rp);
     }
@@ -222,21 +207,30 @@ void twinsmooth_kopt::select_current_k()
 {
     if(current_new_results < new_found_results)
     {
-        current_k = k2;
+        if (current_k != nullptr) {
+            bigfloat_free(current_k);
+        }
+        current_k = bigfloat_new;
+        bigfloat_init(current_k, k2);
     }
-    else current_k = k1;
+    else
+    {
+        if(current_k != nullptr)
+        {
+            bigfloat_free(current_k);
+        }
+        current_k = bigfloat_new;
+        bigfloat_init(current_k, k1);
+    }
 
     new_found_results = current_new_results;
 }
 
-
 void twinsmooth_kopt::execute() {
-    mpf_set_default_prec(20);
     std::cout << "executing twinsmooth calculation on threads: {" << NUM_THREADS << "}" << std::endl;
-    std::cout << "mode = k optimization with k1: {" << mpf_get_d(*k1) << "} and k2: {" << mpf_get_d(*k2) << "}" << std::endl;
+    std::cout << "mode = k optimization with k1: {" << k1 << "} and k2: {" << k2 << "}" << std::endl;
     std::cout << "smoothness = {" << smoothness << "}" << std::endl;
 
-    load_files();
 
     CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
 

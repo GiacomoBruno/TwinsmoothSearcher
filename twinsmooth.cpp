@@ -87,7 +87,20 @@ void twinsmooth::load_files()
             previously_found_twins.load_file(results);
         }
     }
+}
 
+void twinsmooth::save_files()
+{
+    auto iter = results->begin();
+    CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::out, smoothness);
+    while(iter != nullptr)
+    {
+        output.printn("%Zd\n", *iter->val);
+        iter = iter->next;
+    }
+}
+
+void twinsmooth::init_starting_set() {
     for(uint64_t i = 1; i <= smoothness; i++)
     {
         auto num = bigint_new;
@@ -106,13 +119,8 @@ void twinsmooth::load_files()
     }
 }
 
-void twinsmooth::save_files()
+void twinsmooth::start()
 {
-    auto iter = results->begin();
-    CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::out, smoothness);
-    while(iter != nullptr)
-    {
-        output.printn("%Zd\n", *iter->val);
-        iter = iter->next;
-    }
+    load_files();
+    init_starting_set();
 }

@@ -7,7 +7,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk);
 
 class twinsmooth_full : public twinsmooth {
 protected:
-    LinkedTree* iteration(LinkedList* points) override;
+    LinkedTree* iteration(LinkedList* points);
 
 public:
     explicit twinsmooth_full(uint64_t s) : twinsmooth(s) {}

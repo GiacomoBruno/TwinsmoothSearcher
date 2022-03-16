@@ -121,7 +121,6 @@ LinkedTree* twinsmooth_full::iteration(LinkedList* points)
 
     return result_tree;
 
-
 }
 
 void twinsmooth_full::execute()
@@ -129,8 +128,6 @@ void twinsmooth_full::execute()
     std::cout << "executing twinsmooth calculation on threads: {" << NUM_THREADS << "}" << std::endl;
     std::cout << "mode = no optimization" << std::endl;
     std::cout << "smoothness = {" << smoothness << "}" <<std::endl;
-
-    load_files();
 
     while(!computation_numbers->empty())
     {

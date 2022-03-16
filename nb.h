@@ -6,11 +6,12 @@
 #include <omp.h>
 #include <chrono>
 
-#define NUM_THREADS 64
+#define NUM_THREADS 4
 #define MPZ_INIT_BITS 128                                           /* Max bit-length for integers at start*/
 #define MEGABYTE 1000000
 #define MAX_FILE_SIZE MEGABYTE*100
 
+#define CHUNK_SIZE 100
 #define OUTPUT_FOLDER "./results/outputs"
 #define TWINSMOOTH_FN "neighbors"
 #define PRIMES_FN "primes"
