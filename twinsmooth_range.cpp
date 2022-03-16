@@ -1,6 +1,8 @@
 #include "twinsmooth_range.h"
 #include "file_manager.h"
 
+size_t contatore2;
+
 LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk, int range)
 {
     auto d = bigint_new;
@@ -24,6 +26,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk, int range)
         // (x|y) with y > x
         while(counter < range && y != nullptr)
         {
+            contatore2++;
             mpz_mul(*m1, *(x->val), *(y->val));
             mpz_add(*m1, *m1, *(y->val));
             mpz_sub(*delta, *(y->val), *(x->val));
@@ -48,6 +51,7 @@ LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk, int range)
         // (x|z) with x > z
         while(counter < range && z != nullptr)
         {
+            contatore2++;
             mpz_mul(*m1, *(z->val), *(x->val));
             mpz_add(*m1, *m1, *(x->val));
             mpz_sub(*delta, *(x->val), *(z->val));
@@ -155,7 +159,7 @@ void twinsmooth_range::execute() {
 }
 
 void twinsmooth_range::terminate() {
-    std::cout << "found in total: " << results->get_size() << std::endl;
+    std::cout << "found in total: " << results->get_size() <<"tot computations: "<< contatore2 << std::endl;
     results->cleanup();
     delete results;
 }

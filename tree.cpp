@@ -76,6 +76,31 @@ size_t node::distance(Node other)
     return -1;
 }
 
+Node node::skip(size_t n)
+{
+    size_t counter = 0;
+    auto iter = this;
+    while(counter < n && iter != nullptr)
+    {
+        iter = iter->next;
+        counter++;
+    }
+    return iter;
+}
+
+
+Node node::skip_back(size_t n)
+{
+    size_t counter = 0;
+    auto iter = this;
+    while(counter < n && iter != nullptr)
+    {
+        iter = iter->prev;
+        counter++;
+    }
+    return iter;
+}
+
 //insertions
 
 /// inserts key in tree, returns new root

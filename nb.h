@@ -6,10 +6,12 @@
 #include <omp.h>
 #include <chrono>
 
-#define NUM_THREADS 4
+#define NUM_THREADS 8
 #define MPZ_INIT_BITS 128                                           /* Max bit-length for integers at start*/
 #define MEGABYTE 1000000
 #define MAX_FILE_SIZE MEGABYTE*100
+
+#define DONT_SAVE_FILE true
 
 #define CHUNK_SIZE 100
 #define OUTPUT_FOLDER "./results/outputs"
@@ -64,6 +66,8 @@ struct node {
     node* rotate_right();
     node* rotate_left();
     size_t distance(node* other);
+    node* skip(size_t n);
+    node* skip_back(size_t n);
 };
 
 typedef node* Node;

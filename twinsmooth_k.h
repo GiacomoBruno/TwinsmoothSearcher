@@ -27,7 +27,7 @@ public:
     explicit twinsmooth_k(uint64_t s) : twinsmooth(s) {}
 
 
-    LinkedTree* iteration_S_S_no_small_k(double small_k);
+    LinkedTree* iteration_S_S_no_small_k();
     LinkedTree* iteration_S_S();
     LinkedTree* iteration_S_N(LinkedList* input);
 
