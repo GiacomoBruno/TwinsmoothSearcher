@@ -5,7 +5,7 @@ LinkedList* twinsmooth_k::create_chunks(LinkedList* input, size_t chunk_size)
     auto chunks = new LinkedList();
     auto chunk = new LinkedList();
 
-    int counter = 0;
+    size_t counter = 0;
 
     while(!input->empty())
     {
@@ -30,7 +30,7 @@ LinkedList* twinsmooth_k::create_chunks(LinkedTree* input, size_t chunk_size)
     auto chunks = new LinkedList();
     auto chunk = new LinkedList();
 
-    int counter = 0;
+    size_t counter = 0;
     auto iter = input->begin();
     while(iter != nullptr)
     {
@@ -128,7 +128,7 @@ LinkedTree *twinsmooth_k::generate_twinsmooth(LinkedTree *S, LinkedList *input, 
     auto iter = input->begin();
     get_ranges(VAL(iter), S, lower_range, upper_range, k);
 
-    int counter = 0;
+    size_t counter = 0;
     while(iter != nullptr)
     {
         auto x = VAL(iter); //costante per il ciclo corrente
@@ -205,7 +205,7 @@ LinkedTree *twinsmooth_k::generate_twinsmooth_no_oldk(LinkedTree *S, LinkedList 
     auto iter = input->begin();
     get_ranges(VAL(iter), S, lower_range, upper_range, lower_skip, upper_skip, k, oldk);
 
-    int counter = 0;
+    size_t counter = 0;
     while(iter != nullptr)
     {
         auto x = VAL(iter); //costante per il ciclo corrente
