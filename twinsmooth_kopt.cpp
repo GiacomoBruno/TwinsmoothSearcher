@@ -5,8 +5,6 @@
 #include "twinsmooth_kopt.h"
 #include "file_manager.h"
 
-size_t contatore = 0;
-
 void twinsmooth_kopt::get_ranges(Node nd, size_t& lower_range, size_t& upper_range)
 {
     auto num = bigint_new;
@@ -58,7 +56,6 @@ LinkedTree* twinsmooth_kopt::generate_twinsmooth_from_k_chunks(LinkedList* chunk
         // (x|y) with y > x
         while(counter < upper_bound_distance && y != nullptr)
         {
-            contatore++;
             mpz_mul(*m1, *(x->val), *(y->val));
             mpz_add(*m1, *m1, *(y->val));
             mpz_sub(*delta, *(y->val), *(x->val));
@@ -84,7 +81,6 @@ LinkedTree* twinsmooth_kopt::generate_twinsmooth_from_k_chunks(LinkedList* chunk
         // (x|z) with x > z
         while(counter < lower_bound_distance && z != nullptr)
         {
-            contatore++;
             mpz_mul(*m1, *(z->val), *(x->val));
             mpz_add(*m1, *m1, *(x->val));
             mpz_sub(*delta, *(x->val), *(z->val));
@@ -164,6 +160,7 @@ LinkedTree* twinsmooth_kopt::iteration(LinkedList *points) {
 
     return result_tree;
 }
+
 void twinsmooth_kopt::execute() {
     std::cout << "executing twinsmooth calculation on threads: {" << NUM_THREADS << "}" << std::endl;
     std::cout << "mode = k optimization with k: {";
@@ -189,7 +186,7 @@ void twinsmooth_kopt::execute() {
 }
 
 void twinsmooth_kopt::terminate() {
-    std::cout << "found in total: " << results->get_size() <<"tot computations: "<< contatore << std::endl;
+    std::cout << "found in total: " << results->get_size() << std::endl;
     results->cleanup();
     delete results;
 }

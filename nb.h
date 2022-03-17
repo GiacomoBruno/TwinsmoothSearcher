@@ -40,14 +40,19 @@ for(int i = 0; i < (size); i++) {      \
 #define VAL(n) ((Node)((n)->value))
 
 
-#define ELAPSED(START,END) (std::chrono::duration_cast<std::chrono::microseconds>(END - START).count() / (double)1000000)
+#define ELAPSED(START,END) (std::chrono::duration_cast<std::chrono::microseconds>((END) - (START)).count() / (double)1000000)
 #define CURRENT_TIME std::chrono::steady_clock::now()
 typedef std::chrono::steady_clock::time_point t;
 
+class benchmark {
+private:
+    t start_time, end_time;
+    clock_t st, et;
+public:
+    void start_bench();
+    void conclude_bench();
 
-void start_bench();
-
-void conclude_bench();
+};
 
 
 struct node {
