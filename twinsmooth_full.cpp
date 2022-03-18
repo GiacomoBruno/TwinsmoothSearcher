@@ -1,4 +1,5 @@
 #include "twinsmooth_full.h"
+#include "file_manager.h"
 
 LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk)
 {
@@ -125,29 +126,29 @@ LinkedTree* twinsmooth_full::iteration(LinkedList* points)
 
 void twinsmooth_full::execute()
 {
-    std::cout << "executing twinsmooth calculation on threads: {" << NUM_THREADS << "}" << std::endl;
-    std::cout << "mode = no optimization" << std::endl;
-    std::cout << "smoothness = {" << smoothness << "}" <<std::endl;
+    log->logl("executing twinsmooth calculation on threads: ", NUM_THREADS);
+    log->logl("mode = no optimization");
+    log->logl("smoothness = ", smoothness);
+    CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
 
     while(!computation_numbers->empty())
     {
+        output.save_list(computation_numbers);
+
         auto new_res = iteration(computation_numbers);
         computation_numbers->clear();
         delete computation_numbers;
         computation_numbers = results->merge_return_inserted(new_res);
-        std::cout << "found " << computation_numbers->size() << " new twinsmooth" << std::endl;
+        log->logl("new twinsmooth found: ", computation_numbers->size());
     }
 
+    output.reorder();
     computation_numbers->clear();
     delete computation_numbers;
-
-
-
 }
 
 void twinsmooth_full::terminate() {
-    std::cout << "found in total: " << results->get_size() << std::endl;
-    save_files();
+    log->logl("found in total: ",results->get_size());
     results->cleanup();
     delete results;
 }

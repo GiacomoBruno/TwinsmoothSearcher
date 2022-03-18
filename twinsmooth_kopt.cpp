@@ -162,11 +162,9 @@ LinkedTree* twinsmooth_kopt::iteration(LinkedList *points) {
 }
 
 void twinsmooth_kopt::execute() {
-    std::cout << "executing twinsmooth calculation on threads: {" << NUM_THREADS << "}" << std::endl;
-    std::cout << "mode = k optimization with k: {";
-    gmp_printf("%.5Ff}\n", *k);
-    std::cout << "smoothness = {" << smoothness << "}" << std::endl;
-
+    log->logl("executing twinsmooth calculation on threads: ", NUM_THREADS);
+    log->logl("mode = k optimization with k:", dk);
+    log->logl("smoothness = ", smoothness);
 
     CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
 
@@ -177,7 +175,7 @@ void twinsmooth_kopt::execute() {
         computation_numbers->clear();
         delete computation_numbers;
         computation_numbers = results->merge_return_inserted(new_res);
-        std::cout << "found " << computation_numbers->size() << " new twinsmooth" << std::endl;
+        log->logl("new twinsmooth found: ", computation_numbers->size());
     }
 
     output.reorder();
@@ -186,7 +184,7 @@ void twinsmooth_kopt::execute() {
 }
 
 void twinsmooth_kopt::terminate() {
-    std::cout << "found in total: " << results->get_size() << std::endl;
+    log->logl("total twinsmooth found: ", results->get_size());
     results->cleanup();
     delete results;
 }

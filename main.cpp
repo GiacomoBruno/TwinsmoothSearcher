@@ -1,12 +1,10 @@
 #include <chrono>
 
-#include "Tests/test.h"
 #include "nb.h"
 #include "twinsmooth_range.h"
 #include "twinsmooth_full.h"
 #include "twinsmooth_kopt.h"
 #include "twinsmooth_k_growing.h"
-
 
 uint64_t get_uint64_t(const std::string& s)
 {
@@ -45,11 +43,11 @@ int main(int argc, char** argv)
             case 0: ts = new twinsmooth_full(smoothness); break;
             case 1: ts = new twinsmooth_range(smoothness, (int)get_uint64_t("choose range: ")); break;
             case 2: ts = new twinsmooth_kopt(smoothness, get_double("choose k: ")); break;
-            case 3: ts = new twinsmooth_k_growing(smoothness, get_double("chose start k: "), get_double("chose max k: "),get_double("chose k step: "));
+            case 3: ts = new twinsmooth_k_growing(smoothness, get_double("chose start k: "), get_double("chose max k: "),get_double("chose k step: ")); break;
             default: std::cout << "not a valid option" << std::endl; break;
         }
     }
-
+    log = new logger(STATUS_FN, OUT_FOLDER(smoothness), smoothness);
 
 
     //twinsmooth* ts = new twinsmooth_range(150,100);

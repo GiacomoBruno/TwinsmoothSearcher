@@ -6,7 +6,7 @@
 #include <omp.h>
 #include <chrono>
 
-#define NUM_THREADS 64
+#define NUM_THREADS 120
 #define MPZ_INIT_BITS 128                                           /* Max bit-length for integers at start*/
 #define MEGABYTE 1000000
 #define MAX_FILE_SIZE MEGABYTE*100
@@ -15,11 +15,14 @@
 
 #define CHUNK_SIZE 100
 #define OUTPUT_FOLDER "./results/outputs"
+#define STATUS_FOLDER "./results/status"
 #define TWINSMOOTH_FN "neighbors"
+#define STATUS_FN "stats"
 #define PRIMES_FN "primes"
-
+#define LOG(s) log->log(s)
+#define LOGNL log->newline()
 #define OUT_FOLDER(n) (std::string(OUTPUT_FOLDER)+"_"+std::to_string(n))
-
+#define STAT_FOLDER(n) (std::string(STATUS_FOLDER)+"_"+std::to_string(n))
 
 #define bigint_new (bigint)malloc(sizeof(mpz_t))
 #define bigint_free(n) mpz_clear(*n); free(n)
@@ -44,15 +47,7 @@ for(int i = 0; i < (size); i++) {      \
 #define CURRENT_TIME std::chrono::steady_clock::now()
 typedef std::chrono::steady_clock::time_point t;
 
-class benchmark {
-private:
-    t start_time, end_time;
-    clock_t st, et;
-public:
-    void start_bench();
-    void conclude_bench();
 
-};
 
 
 struct node {

@@ -2,7 +2,18 @@
 
 #include "nb.h"
 #include "tree.h"
+#include "logger.h"
 
+class benchmark {
+private:
+    t start_time, end_time;
+    clock_t st, et;
+
+public:
+    void start_bench();
+    void conclude_bench();
+
+};
 
 class twinsmooth
 {

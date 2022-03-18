@@ -1,6 +1,21 @@
 #include "twinsmooth.h"
 #include "file_manager.h"
 
+void benchmark::start_bench()
+{
+    start_time = CURRENT_TIME;
+    st = clock();
+}
+
+void benchmark::conclude_bench()
+{
+    et = clock();
+    end_time = CURRENT_TIME;
+    log->log("time in seconds : ", ELAPSED(start_time, end_time));
+    log->logl(" - CPU time in seconds: ", (double)(et-st)/CLOCKS_PER_SEC);
+}
+
+
 LinkedTree* twinsmooth::generate_twinsmooth(LinkedList* input)
 {
     auto d = bigint_new;
@@ -77,7 +92,6 @@ LinkedList* twinsmooth::create_chunks(LinkedList* input, int chunk_size)
 
 void twinsmooth::load_files()
 {
-    std::filesystem::create_directories(OUT_FOLDER(smoothness));
 
     for(uint64_t i = 1; i < smoothness; i++)
     {
