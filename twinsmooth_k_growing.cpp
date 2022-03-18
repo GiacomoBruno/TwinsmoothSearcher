@@ -62,13 +62,18 @@ void twinsmooth_k_growing::execute() {
         new_i_results = results->merge_return_inserted(i_results);
         output.save_list(new_i_results);
         do {
+            auto iter_bench = benchmark();
+            iter_bench.start_bench();
             i_results = k::iteration_S_N(results, new_i_results, current_k);
+            
             new_i_results->clear();
             delete new_i_results;
             new_i_results = results->merge_return_inserted(i_results);
+            std::cout << "\t\tcompleted iteration for " << cur_k << " found: " << new_i_results->size() << " in ";
+            iter_bench.conclude_bench();
             result_counter += new_i_results->size();
             output.save_list(new_i_results);
-        } while (new_i_results->empty());
+        } while (!new_i_results->empty());
         std::cout << "FINISHED - Found " << result_counter << " new twinsmooths with k = " << cur_k << " in ";
         b.conclude_bench();
 
