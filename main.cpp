@@ -47,7 +47,7 @@ int main(int argc, char** argv)
             default: std::cout << "not a valid option" << std::endl; break;
         }
     }
-    log = new logger(STATUS_FN, OUT_FOLDER(smoothness), smoothness);
+    lg = new logger(STATUS_FN, OUT_FOLDER(smoothness), smoothness);
 
 
     //twinsmooth* ts = new twinsmooth_range(150,100);

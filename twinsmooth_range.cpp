@@ -133,9 +133,11 @@ LinkedTree* twinsmooth_range::iteration(LinkedList* points)
 
 
 void twinsmooth_range::execute() {
-    log->logl("executing twinsmooth calculation on threads: ", NUM_THREADS);
-    log->logl("mode = range optimization with range: ", range);
-    log->logl("smoothness = ", smoothness);
+        lg->newline();
+
+    lg->logl("executing twinsmooth calculation on threads: ", NUM_THREADS);
+    lg->logl("mode = range optimization with range: ", range);
+    lg->logl("smoothness = ", smoothness);
 
     CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
     while(!computation_numbers->empty())
@@ -145,7 +147,7 @@ void twinsmooth_range::execute() {
         computation_numbers->clear();
         delete computation_numbers;
         computation_numbers = results->merge_return_inserted(new_res);
-        log->logl("new twinsmooth found: ", computation_numbers->size());
+        lg->logl("new twinsmooth found: ", computation_numbers->size());
     }
 
     computation_numbers->clear();
@@ -154,7 +156,7 @@ void twinsmooth_range::execute() {
 }
 
 void twinsmooth_range::terminate() {
-    log->logl("total twinsmooth found: ", results->get_size());
+    lg->logl("total twinsmooth found: ", results->get_size());
     results->cleanup();
     delete results;
 }

@@ -11,8 +11,8 @@ void benchmark::conclude_bench()
 {
     et = clock();
     end_time = CURRENT_TIME;
-    log->log("time in seconds : ", ELAPSED(start_time, end_time));
-    log->logl(" - CPU time in seconds: ", (double)(et-st)/CLOCKS_PER_SEC);
+    lg->log("time in seconds : ", ELAPSED(start_time, end_time));
+    lg->logl(" - CPU time in seconds: ", (double)(et-st)/CLOCKS_PER_SEC);
 }
 
 

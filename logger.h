@@ -5,6 +5,7 @@
 #pragma once
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 #include "nb.h"
 
 std::string get_path(const std::string& fl, const std::string& fd, uint64_t sm);
@@ -22,7 +23,6 @@ public:
     void log(const std::string& s, double n);
     void log(const std::string& s, float n);
     void log(const std::string& s, int n);
-    void log(const std::string& s, uint64_t n);
     void log(const std::string& s, size_t n);
 
     void logl(const std::string& s);
@@ -30,7 +30,6 @@ public:
     void logl(const std::string& s, double n);
     void logl(const std::string& s, float n);
     void logl(const std::string& s, int n);
-    void logl(const std::string& s, uint64_t n);
     void logl(const std::string& s, size_t n);
 
 
@@ -40,8 +39,7 @@ public:
     void log(double d);
     void log(float f);
     void log(int n);
-    void log(uint64_t n);
     void log(size_t n);
 };
 
-extern logger* log;
+extern logger* lg;

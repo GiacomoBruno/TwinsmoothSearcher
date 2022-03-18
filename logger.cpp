@@ -4,6 +4,7 @@
 
 #include "logger.h"
 
+
 std::string get_path(const std::string& fl, const std::string& fd, uint64_t sm)
 {
     return (fd + "/" + fl +"_"+std::to_string(sm)+".txt");
@@ -38,10 +39,6 @@ void logger::log(const std::string& s, int n)
 {
     log(s); log(n);
 }
-void logger::log(const std::string& s, uint64_t n)
-{
-    log(s); log(n);
-}
 void logger::log(const std::string& s, size_t n)
 {
     log(s); log(n);
@@ -64,10 +61,6 @@ void logger::logl(const std::string& s, float n)
     log(s); log(n); newline();
 }
 void logger::logl(const std::string& s, int n)
-{
-    log(s); log(n); newline();
-}
-void logger::logl(const std::string& s, uint64_t n)
 {
     log(s); log(n); newline();
 }
@@ -98,11 +91,6 @@ void logger::log(int n) {
     std::cout << "{" << n << "}";
 }
 
-void logger::log(uint64_t n) {
-    log_file << "{" << n << "}";
-    std::cout << "{" << n << "}";
-}
-
 void logger::log(size_t n) {
     log_file << "{" << n << "}";
     std::cout << "{" << n << "}";
@@ -113,4 +101,4 @@ void logger::newline() {
     std::cout << std::endl;
 }
 
-logger* log;
+logger* lg;
