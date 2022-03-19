@@ -83,6 +83,7 @@ void twinsmooth_k_growing::execute() {
 
     lg->log("FINISHED - results found: ", result_counter);
     lg->log(" "); b.conclude_bench();
+    print_top_numbers(results);
 
 
     while(cur_k <= end_k) {
@@ -113,6 +114,7 @@ void twinsmooth_k_growing::execute() {
         lg->newline();
         lg->log("FINISHED - results found: ",result_counter);
         lg->log(" "); b.conclude_bench();
+        print_top_numbers(results);
 
     }
     output.reorder();
