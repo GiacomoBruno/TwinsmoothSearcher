@@ -13,7 +13,7 @@ protected:
     void get_ranges(Node nd, size_t& lower_range, size_t& upper_range);
 
 public:
-    explicit twinsmooth_kopt(uint64_t s, double _k) : twinsmooth(s) {
+    explicit twinsmooth_kopt(size_t s, double _k) : twinsmooth(s) {
         dk = _k;
         k = bigfloat_new;
         bigfloat_init(k, _k);

@@ -10,7 +10,7 @@ protected:
     LinkedTree* iteration(LinkedList* points);
 
 public:
-    explicit twinsmooth_range(uint64_t s, int _range) : twinsmooth(s), range(_range) {}
+    explicit twinsmooth_range(size_t s, int _range) : twinsmooth(s), range(_range) {}
     void execute() override;
     void terminate() override;
     ~twinsmooth_range() override = default;

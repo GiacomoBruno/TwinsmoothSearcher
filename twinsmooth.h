@@ -18,7 +18,7 @@ public:
 class twinsmooth
 {
 protected:
-    const uint64_t smoothness;
+    const size_t smoothness;
 
 
     virtual LinkedList* create_chunks(LinkedList* input, int chunk_size);
@@ -32,14 +32,14 @@ public:
     [[nodiscard]] size_t get_size_iteration_result() const { return computation_numbers->size(); }
     LinkedTree* get_results() { return results; }
 
-    explicit twinsmooth(uint64_t s) : smoothness(s), results(new LinkedTree()), computation_numbers(new LinkedList()) { }
+    explicit twinsmooth(size_t s) : smoothness(s), results(new LinkedTree()), computation_numbers(new LinkedList()) { }
     virtual ~twinsmooth() = default;
     [[nodiscard]] LinkedTree* get_results() const { return results; }
     virtual void execute() = 0;
     virtual void terminate() = 0;
     virtual void start();
     void load_files();
-    void init_starting_set();
+    virtual void init_starting_set();
     void save_files();
 
 };

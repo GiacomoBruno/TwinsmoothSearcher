@@ -93,7 +93,7 @@ LinkedList* twinsmooth::create_chunks(LinkedList* input, int chunk_size)
 void twinsmooth::load_files()
 {
 
-    for(uint64_t i = 1; i < smoothness; i++)
+    for(size_t i = 1; i < smoothness; i++)
     {
         CappedFile previously_found_twins = CappedFile(TWINSMOOTH_FN, OUT_FOLDER(i), std::fstream::in, i);
         if(previously_found_twins.exists()) {
@@ -115,7 +115,7 @@ void twinsmooth::save_files()
 }
 
 void twinsmooth::init_starting_set() {
-    for(uint64_t i = 1; i <= smoothness; i++)
+    for(size_t i = 1; i <= smoothness; i++)
     {
         auto num = bigint_new;
         bigint_init(num, i);

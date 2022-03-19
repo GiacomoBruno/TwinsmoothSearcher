@@ -9,9 +9,11 @@ private:
 
     void set_k(double n);
 public:
-    explicit twinsmooth_k_growing(uint64_t s, double startk, double endk, double stepk);
+    explicit twinsmooth_k_growing(size_t s, double startk, double endk, double stepk);
 
     void start() override;
     void execute() override;
     void terminate() override;
+
+    void init_starting_set() override;
 };
