@@ -1,6 +1,6 @@
 #include "twinsmooth_k_growing.h"
 #include "twinsmooth_k.h"
-#include "file_manager.h"
+#include "static_twinsmooth.h"
 
 void print_top_numbers(LinkedTree* tree)
 {
@@ -14,118 +14,114 @@ void print_top_numbers(LinkedTree* tree)
     lg->newline();
 }
 
-twinsmooth_k_growing::twinsmooth_k_growing(size_t s, double startk, double endk, double stepk)
-    : twinsmooth(s), start_k(startk), end_k(endk), step_k(stepk), cur_k(2.0)
-{
+s_twinsmooth_k_growing::s_twinsmooth_k_growing(size_t s, double sk, double ek, double ks) : s_twinsmooth(s), start_k(sk), end_k(ek), step_k(ks) {
     current_k = bigfloat_new;
-    bigfloat_init(current_k, cur_k);
     old_k = bigfloat_new;
-    bigfloat_init(old_k, start_k);
+    bigfloat_init(current_k, 2.0);
+    bigfloat_init(old_k, sk);
+    cur_k = 2.0;
 }
 
+void s_twinsmooth_k_growing::start() {
+    lg->logl("start algorithm [GROWING K OPTIMIZATION] on threads ", NUM_THREADS);
+    lg->log("start K ", start_k);
+    lg->log(" end K ", end_k);
+    lg->log(" step K ", step_k);
+    lg->logl(" first iteration K {2.0}");
+    lg->logl("smoothness ", smoothness);
+    output_file = CappedFile(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
+    load_files();
 
-
-void twinsmooth_k_growing::init_starting_set() {
-    for(size_t i = 1; i <= smoothness; i++)
+    if(S->empty())
     {
-        auto num = bigint_new;
-        bigint_init(num, i);
-        results->insert(num);
+        init_set();
+        LinkedTree* unfilteredN;
+        using st = static_twinsmooth;
+
+
+        unfilteredN = st::k_iteration_S_S(S, current_k);
+        N->clear(); delete N;
+        N = S->merge_return_inserted(unfilteredN);
+        lg->logl("finished FIRST SxS iteration and found ", N->size());
+        cur_k = start_k;
+        bigfloat_set(current_k, start_k);
+        size_t found_numbers = 0;
+        while(!N->empty())
+        {
+            unfilteredN = st::k_iteration_S_N(S, N, current_k);
+            N->clear(); delete N;
+            N = S->merge_return_inserted(unfilteredN);
+            found_numbers += N->size();
+            lg->log("\titeration concluded with k = ", cur_k);
+            lg->logl("found ", N->size());
+        }
+        lg->log("finished FIRST SxN iterations for K ", cur_k);
+        lg->logl(" and found ", found_numbers);
+        print_top_numbers(S);
+        increment_k();
+    }
+    else
+    {
+        lg->logl("found unfinished work, skipping first iteration");
+        cur_k = start_k;
+        bigfloat_set(old_k, start_k - step_k);
+        bigfloat_set(current_k, start_k);
     }
 }
 
-void twinsmooth_k_growing::start() {
-    //do not load from files for this implementation
-    init_starting_set();
-    delete computation_numbers;
-}
-
-void twinsmooth_k_growing::set_k(double n) {
-    cur_k = n;
-    bigfloat_free(old_k);
-    old_k = current_k;
-    current_k = bigfloat_new;
-    bigfloat_init(current_k, n);
-}
-
-void twinsmooth_k_growing::execute() {
-    lg->newline();
-    lg->logl("executing twinsmooth calculation on threads: ", NUM_THREADS);
-    lg->log("mode = growing k optimization with start k = ", start_k);
-    lg->log(" - max k = ", end_k);
-    lg->logl(" - step = ", step_k);
-    lg->logl("smoothness = ", smoothness);
-
-
-    using k = twinsmooth_k;
-    size_t result_counter = 0;
-    CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
-    auto b = benchmark();
-
-    output.save_tree(results);
-    //FIRST ITERATION SxS with K = 2.0
-    auto i_results = k::iteration_S_S(results, current_k);
-    computation_numbers = results->merge_return_inserted(i_results);
-    result_counter += computation_numbers->size();
-    output.save_list(computation_numbers);
-    //N+1 ITERATIONS SxN with K = start
-    set_k(start_k);
-    lg->logl("STARTING - with k = ", cur_k);
-    b.start_bench();
-    do{
-        i_results = k::iteration_S_N(results, computation_numbers, current_k);
-        computation_numbers->clear();
-        delete computation_numbers;
-        computation_numbers = results->merge_return_inserted(i_results);
-        result_counter += computation_numbers->size();
-        output.save_list(computation_numbers);
-    } while(!computation_numbers->empty());
-
-    lg->log("FINISHED - results found: ", result_counter);
-    lg->log(" "); b.conclude_bench();
-    print_top_numbers(results);
-
-
-    while(cur_k <= end_k) {
-        set_k(cur_k + step_k);
-        result_counter = 0;
-        lg->logl("STARTING - with k = ",cur_k);
+void s_twinsmooth_k_growing::execute() {
+    using st = static_twinsmooth;
+    LinkedTree* unfilteredN;
+    do
+    {
+        benchmark b;
         b.start_bench();
-        i_results = k::iteration_S_S_no_oldk(results, current_k, old_k);
-        computation_numbers->clear();
-        delete computation_numbers;
-        computation_numbers = results->merge_return_inserted(i_results);
-        output.save_list(computation_numbers);
-        lg->newline();
+        unfilteredN = st::k_iteration_S_S(S, current_k, old_k);
+        N->clear(); delete N;
+        N = S->merge_return_inserted(unfilteredN);
+        output_file.save_list(N);
+        lg->log("finished SxS iteration for K ", cur_k);
+        lg->log( ", old K ", cur_k - step_k);
+        lg->log(" and found ", N->size()); lg->log(" in ");
+        b.conclude_bench();
 
-        do {
-            auto inner_bench = benchmark();
-            inner_bench.start_bench();
-            i_results = k::iteration_S_N(results, computation_numbers, current_k);
-            computation_numbers->clear();
-            delete computation_numbers;
-            computation_numbers = results->merge_return_inserted(i_results);
-            result_counter += computation_numbers->size();
-            
-            lg->log("\t iteration completed, found: ", computation_numbers->size());
-            lg->log(" "); inner_bench.conclude_bench();
-            output.save_list(computation_numbers);
-        } while (!computation_numbers->empty());
-        lg->newline();
-        lg->log("FINISHED - results found: ",result_counter);
-        lg->log(" "); b.conclude_bench();
-        print_top_numbers(results);
+        b.start_bench();
+        size_t found_numbers = 0;
+        do{
+            benchmark lb;
+            lb.start_bench();
+            unfilteredN = st::k_iteration_S_N(S, N, current_k);
+            N->clear(); delete N;
+            N = S->merge_return_inserted(unfilteredN);
+            output_file.save_list(N);
+            found_numbers += N->size();
+            lg->log("\tfinished iteration SxN and found ", N->size()); lg->log(" in ");
+            lb.conclude_bench();
+        }while(!N->empty());
+        lg->log("finished SxN iterations for K ", cur_k);
+        lg->log(" and found ", found_numbers);
+        lg->log(" in ");
+        b.conclude_bench();
+        print_top_numbers(S);
+        increment_k();
+    }while(cur_k < end_k);
 
-    }
-    output.reorder();
-}
-
-void twinsmooth_k_growing::terminate() {
-    lg->logl("total twinsmooth found: ", results->get_size());
-    results->cleanup();
-    computation_numbers->clear();
-    delete computation_numbers;
     bigfloat_free(current_k);
     bigfloat_free(old_k);
-    delete results;
 }
+
+void s_twinsmooth_k_growing::increment_k() {
+    bigfloat_set(old_k, cur_k);
+    cur_k += step_k;
+    bigfloat_set(current_k, cur_k);
+}
+
+void s_twinsmooth_k_growing::load_files() {
+    CappedFile previously_found_twins = CappedFile(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::in, smoothness);
+    if(previously_found_twins.exists()) {
+        std::cout << "loading file of smoothness = " << smoothness << std::endl;
+        previously_found_twins.load_file(S);
+    }
+}
+
+

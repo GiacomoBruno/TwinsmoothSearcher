@@ -1,20 +1,12 @@
 #pragma once
 #include "twinsmooth.h"
 
-
-LinkedTree* generate_twinsmooth_from_chunks(LinkedList* chunk, int range);
-
-class twinsmooth_range : public twinsmooth {
+class s_twinsmooth_range : public s_twinsmooth {
 protected:
-    int range = 0;
-    LinkedTree* iteration(LinkedList* points);
+    size_t range;
 
 public:
-    explicit twinsmooth_range(size_t s, int _range) : twinsmooth(s), range(_range) {}
+    explicit s_twinsmooth_range(size_t s, size_t r) : s_twinsmooth(s), range(r) {}
+    void start() override;
     void execute() override;
-    void terminate() override;
-    ~twinsmooth_range() override = default;
-
-
-
 };

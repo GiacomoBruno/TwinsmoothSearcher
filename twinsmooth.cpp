@@ -1,140 +1,72 @@
 #include "twinsmooth.h"
-#include "file_manager.h"
-
-void benchmark::start_bench()
-{
-    start_time = CURRENT_TIME;
-    st = clock();
-}
-
-void benchmark::conclude_bench()
-{
-    et = clock();
-    end_time = CURRENT_TIME;
-    lg->log("time in seconds : ", ELAPSED(start_time, end_time));
-    lg->logl(" - CPU time in seconds: ", (double)(et-st)/CLOCKS_PER_SEC);
-}
+#include "static_twinsmooth.h"
 
 
-LinkedTree* twinsmooth::generate_twinsmooth(LinkedList* input)
-{
-    auto d = bigint_new;
-    auto delta = bigint_new;
-    auto m1 = bigint_new;
-    mpz_init2(*d, MPZ_INIT_BITS);
-    mpz_init2(*delta, MPZ_INIT_BITS);
-    mpz_init2(*m1, MPZ_INIT_BITS);
-    auto result = new LinkedTree();
-
-    auto iter = input->begin();
-    while(iter != nullptr)
-    {
-        auto x = VAL(iter); //costante per il ciclo corrente
-        auto y = VAL(iter)->next;
-
-        // (x|y) with y > x
-        while(y != nullptr)
-        {
-            mpz_mul(*m1, *(x->val), *(y->val));
-            mpz_add(*m1, *m1, *(y->val));
-            mpz_sub(*delta, *(y->val), *(x->val));
-            mpz_mod(*d, *m1, *delta);
-
-            if (mpz_cmp_ui(*d, 0) == 0)
-            {
-                auto nv = bigint_new;
-                mpz_init2(*nv, MPZ_INIT_BITS);
-
-                mpz_div(*m1, *m1, *delta);
-                mpz_sub_ui(*nv, *m1, 1);
-
-                result->insert_delete_source(nv);
-            }
-
-            y = y->next;
-        }
-        iter = iter->next;
-    }
-
-    bigint_free(d);
-    bigint_free(delta);
-    bigint_free(m1);
-    return result;
-}
-
-
-LinkedList* twinsmooth::create_chunks(LinkedList* input, int chunk_size)
-{
-    auto chunks = new LinkedList();
-    auto chunk = new LinkedList();
-
-    int counter = 0;
-
-    while(!input->empty())
-    {
-        if(counter > chunk_size)
-        {
-            counter = 0;
-            chunks->push_front(chunk);
-            chunk = new LinkedList();
-        }
-
-        chunk->push_front(input->pop());
-        counter++;
-    }
-
-    //delete input;
-
-    if(counter != 0) chunks->push_front(chunk);
-
-    return chunks;
-}
-
-void twinsmooth::load_files()
-{
-
+void s_twinsmooth::load_files() {
     for(size_t i = 1; i < smoothness; i++)
     {
         CappedFile previously_found_twins = CappedFile(TWINSMOOTH_FN, OUT_FOLDER(i), std::fstream::in, i);
         if(previously_found_twins.exists()) {
             std::cout << "loading file of smoothness = " << i << std::endl;
-            previously_found_twins.load_file(results);
+            previously_found_twins.load_file(S);
         }
     }
 }
 
-void twinsmooth::save_files()
-{
-    auto iter = results->begin();
-    CappedFile output(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::out, smoothness);
-    while(iter != nullptr)
+void s_twinsmooth::init_set() {
+    if(S->get_size() == 0)
     {
-        output.printn("%Zd\n", *iter->val);
-        iter = iter->next;
+        for(size_t i = 1; i < smoothness; i++)
+        {
+            auto num = bigint_new;
+            bigint_init(num, i);
+            S->insert(num);
+        }
     }
-}
-
-void twinsmooth::init_starting_set() {
-    for(size_t i = 1; i <= smoothness; i++)
+    else
     {
-        auto num = bigint_new;
-        bigint_init(num, i);
+        for(size_t i = 1; i <= smoothness; i++)
+        {
+            auto num = bigint_new;
+            bigint_init(num, i);
 
-        auto inserted = results->search(num);
-        if(inserted == nullptr)
-        {
-            computation_numbers->push_front(results->insert(num));
-        }
-        else
-        {
-            computation_numbers->push_front(inserted);
-            bigint_free(num);
+            auto inserted = S->search_delete_source(num);
+            if(inserted == nullptr) inserted = S->insert(num);
+            N->push_front(inserted);
         }
     }
 }
 
-void twinsmooth::start()
-{
+void s_twinsmooth::start() {
+    lg->logl("start algorithm [NO OPTIMIZATIONS] on threads ", NUM_THREADS);
+    lg->logl("smoothness ", smoothness);
+    output_file = CappedFile(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
     load_files();
-    init_starting_set();
+    init_set();
+}
+
+void s_twinsmooth::terminate() {
+    output_file.reorder();
+    output_file.close();
+    delete N;
+
+    lg->logl("found in total: ", S->get_size());
+}
+
+void s_twinsmooth::execute() {
+    using st = static_twinsmooth;
+    //S is ready, N is empty
+    do {
+        LinkedTree* unfilteredN;
+        if(N->empty()) {
+            output_file.save_tree(S);
+            unfilteredN = st::iteration_S_S(S);
+        }
+        else unfilteredN = st::iteration_S_N(N);
+
+        N->clear(); delete N;
+        N = S->merge_return_inserted(unfilteredN);
+        output_file.save_list(N);
+        lg->logl("new twinsmooth found: ", N->size());
+    }while(!N->empty());
 }

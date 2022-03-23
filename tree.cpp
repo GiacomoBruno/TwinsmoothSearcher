@@ -103,192 +103,6 @@ Node node::skip_back(size_t n)
 
 //insertions
 
-/// inserts key in tree, returns new root
-/// \param nd node used for searching where to place key
-/// \param key value to store in tree
-/// \return root of the resulting tree after insertion
-Node LinkedTree::fast_insert_node(Node nd, bigint key) {
-    if(nd == nullptr)
-    {
-        auto res = new struct node(key);
-        first_element = res;
-        last_element = res;
-        size++;
-        return res;
-    }
-
-    int cmp = mpz_cmp(*key, *(nd->val));
-
-
-    if (cmp < 0)
-        if(nd->left == nullptr)
-        {
-            size++;
-            //insert on left node
-            auto new_node = new struct node(key);
-
-            new_node->next = nd;
-            new_node->prev = nd->prev;
-
-            nd->left = new_node;
-
-            nd->prev = new_node;
-
-            if(new_node->prev == nullptr) first_element = new_node;
-            else new_node->prev->next = new_node;
-
-        }
-        else nd->left = fast_insert_node(nd->left, key);
-    else if (cmp > 0)
-        if(nd->right == nullptr)
-        {
-            size++;
-
-            auto new_node = new struct node(key);
-
-            new_node->next = nd->next;
-            new_node->prev = nd;
-
-            nd->right = new_node;
-
-            nd->next = new_node;
-            if(new_node->next == nullptr) last_element = new_node;
-            else new_node->next->prev = new_node;
-        }
-        else nd->right = fast_insert_node(nd->right, key);
-    else
-    {
-        return nd;
-    }
-
-
-    // Update the balance factor of each node and
-    // balance the tree
-    nd->height = int8_t(1 + std::max(get_height(nd->left),get_height(nd->right)));
-
-    int8_t balanceFactor = balance_factor(nd);
-
-    if (balanceFactor > 1)
-    {
-        cmp = mpz_cmp(*key, *(nd->left->val));
-        if (cmp < 0) {
-            return nd->rotate_right();
-        }
-        else if (cmp > 0)
-        {
-            nd->left = nd->left->rotate_left();
-            return nd->rotate_right();
-        }
-    }
-
-    if (balanceFactor < -1) {
-        cmp = mpz_cmp(*key, *(nd->right->val));
-        if (cmp > 0)
-        {
-            return nd->rotate_left();
-        }
-        else if (cmp < 0) {
-            nd->right = nd->right->rotate_right();
-            return nd->rotate_left();
-        }
-    }
-    return nd;
-}
-
-/// inserts key in tree, if key already present then deletes key from memory
-/// \param nd node used for searching where to place key
-/// \param key value to store in tree
-/// \return root of the resulting tree after insertion
-Node LinkedTree::fast_insert_node_delete_source(Node nd, bigint key) {
-    if(nd == nullptr)
-    {
-        auto res = new struct node(key);
-        first_element = res;
-        last_element = res;
-        size++;
-        return res;
-    }
-
-    int cmp = mpz_cmp(*key, *(nd->val));
-
-
-    if (cmp < 0)
-        if(nd->left == nullptr)
-        {
-            size++;
-            //insert on left node
-            auto new_node = new struct node(key);
-
-            new_node->next = nd;
-            new_node->prev = nd->prev;
-
-            nd->left = new_node;
-
-            nd->prev = new_node;
-
-            if(new_node->prev == nullptr) first_element = new_node;
-            else new_node->prev->next = new_node;
-
-        }
-        else nd->left = fast_insert_node_delete_source(nd->left, key);
-    else if (cmp > 0)
-        if(nd->right == nullptr)
-        {
-            size++;
-            auto new_node = new struct node(key);
-
-            new_node->next = nd->next;
-            new_node->prev = nd;
-
-            nd->right = new_node;
-
-            nd->next = new_node;
-            if(new_node->next == nullptr) last_element = new_node;
-            else new_node->next->prev = new_node;
-        }
-        else nd->right = fast_insert_node_delete_source(nd->right, key);
-    else
-    {
-        bigint_free(key);
-        return nd;
-    }
-
-
-    // Update the balance factor of each node and
-    // balance the tree
-    nd->height = (int8_t)(1 + std::max(get_height(nd->left),get_height(nd->right)));
-
-    int8_t balanceFactor = balance_factor(nd);
-
-
-
-    if (balanceFactor > 1)
-    {
-        cmp = mpz_cmp(*key, *(nd->left->val));
-        if (cmp < 0) {
-            return nd->rotate_right();
-        }
-        else if (cmp > 0)
-        {
-            nd->left = nd->left->rotate_left();
-            return nd->rotate_right();
-        }
-    }
-
-    if (balanceFactor < -1) {
-        cmp = mpz_cmp(*key, *(nd->right->val));
-        if (cmp > 0)
-        {
-            return nd->rotate_left();
-        }
-        else if (cmp < 0) {
-            nd->right = nd->right->rotate_right();
-            return nd->rotate_left();
-        }
-    }
-    return nd;
-}
-
 /// inserts key in tree, returns new root, populates inserted_node with the node inserted in the tree
 /// \param nd node used for searching where to place key
 /// \param key value to store in tree
@@ -388,125 +202,6 @@ Node LinkedTree::insert_node(Node nd, bigint key, Node& inserted_node) {
     return nd;
 }
 
-/// inserts key in tree, returns new root, populates inserted_node with the node inserted in the tree.
-/// if key already present then deletes key from memory
-/// \param nd node used for searching where to place key
-/// \param key value to store in tree
-/// \param inserted_node node inserted in the tree, nullptr if nothing was inserted
-/// \return root of the resulting tree after insertion
-Node LinkedTree::insert_node_delete_source(Node nd, bigint key, Node& inserted_node)
-{
-    // Find the correct postion and insert the node
-    if(nd == nullptr)
-    {
-        auto res = new struct node(key);
-        first_element = res;
-        last_element = res;
-        inserted_node = res;
-        size++;
-        return res;
-    }
-
-    int cmp = mpz_cmp(*key, *(nd->val));
-    if (cmp < 0)
-    {
-        if (nd->left == nullptr)
-        {
-            size++;
-            //insert on left node
-            auto new_node = new struct node(key);
-
-            new_node->next = nd;
-            new_node->prev = nd->prev;
-
-            nd->left = new_node;
-
-            nd->prev = new_node;
-
-            if (new_node->prev == nullptr) first_element = new_node;
-            else new_node->prev->next = new_node;
-
-            inserted_node = new_node;
-        }
-        else nd->left = insert_node_delete_source(nd->left, key, inserted_node);
-    }
-    else if (cmp > 0) {
-        if (nd->right == nullptr)
-        {
-            size++;
-            auto new_node = new struct node(key);
-
-            new_node->next = nd->next;
-            new_node->prev = nd;
-
-            nd->right = new_node;
-
-            nd->next = new_node;
-            if (new_node->next == nullptr) last_element = new_node;
-            else new_node->next->prev = new_node;
-            inserted_node = new_node;
-
-        }
-        else nd->right = insert_node_delete_source(nd->right, key, inserted_node);
-    }
-    else
-    {
-        bigint_free(key);
-        inserted_node = nullptr;
-        return nd;
-    }
-
-
-    // Update the balance factor of each node and
-    // balance the tree
-    nd->height = (int8_t)(1 + std::max(get_height(nd->left),get_height(nd->right)));
-
-    int8_t balanceFactor = balance_factor(nd);
-
-
-
-    if (balanceFactor > 1)
-    {
-        cmp = mpz_cmp(*key, *(nd->left->val));
-        if (cmp < 0) {
-            return nd->rotate_right();
-        }
-        else if (cmp > 0)
-        {
-            nd->left = nd->left->rotate_left();
-            return nd->rotate_right();
-        }
-    }
-
-    if (balanceFactor < -1)
-    {
-        cmp = mpz_cmp(*key, *(nd->right->val));
-        if (cmp > 0)
-        {
-            return nd->rotate_left();
-        }
-        else if (cmp < 0) {
-            nd->right = nd->right->rotate_right();
-            return nd->rotate_left();
-        }
-    }
-    return nd;
-}
-
-/// insert key in tree
-/// \param key value to insert
-void LinkedTree::fast_insert(bigint key)
-{
-    root = fast_insert_node(root, key);
-}
-
-/// insert key in tree, deletes key if already present
-/// \param key value to insert
-void LinkedTree::fast_insert_delete_source(bigint key)
-{
-    root = fast_insert_node_delete_source(root, key);
-}
-
 /// insert key in tree, return inserted node
 /// \param key value to insert
 /// \return inserted node (nullptr if none)
@@ -523,7 +218,10 @@ Node LinkedTree::insert(bigint key)
 Node LinkedTree::insert_delete_source(bigint key)
 {
     Node res;
-    root = insert_node_delete_source(root, key, res);
+    root = insert_node(root, key, res);
+    if(res == nullptr) {
+        bigint_free(key);
+    }
     return res;
 }
 
@@ -567,7 +265,16 @@ Node LinkedTree::search_node(Node nd, bigint key)
 Node LinkedTree::search(bigint key) {
     return search_node(root, key);
 }
-
+/// search for key inside the tree, deletes key if key is found
+/// \param key value to search
+/// \return node with value = key in tree or nullptr
+Node LinkedTree::search_delete_source(bigint key) {
+    Node res = search_node(root, key);
+    if(res != nullptr) {
+        bigint_free(key);
+    }
+    return res;
+}
 
 Node LinkedTree::lower_bound_node(Node nd, bigint key) {
     if(nd == nullptr)
@@ -673,7 +380,7 @@ void LinkedTree::merge(LinkedTree* other)
 
     while(iter != nullptr)
     {
-        this->fast_insert_delete_source(iter->val);
+        this->insert_delete_source(iter->val);
         auto tmp = iter->next;
         delete iter;
         iter = tmp;
@@ -701,5 +408,7 @@ LinkedList* LinkedTree::merge_return_inserted(LinkedTree* other) {
     delete other;
     return result;
 }
+
+
 
 

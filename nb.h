@@ -1,12 +1,13 @@
 #pragma once
-#include <gmp.h>
 #include <iostream>
 #include <string>
 #include <cstdint>
 #include <omp.h>
-#include <chrono>
+#include "type_definitions.h"
+#include "logger.h"
 
-#define NUM_THREADS 120
+
+#define NUM_THREADS 8
 #define MPZ_INIT_BITS 128                                           /* Max bit-length for integers at start*/
 #define MEGABYTE 1000000
 #define MAX_FILE_SIZE MEGABYTE*100
@@ -31,9 +32,8 @@
 #define bigfloat_new (bigfloat)malloc(sizeof(mpf_t))
 #define bigfloat_free(n) mpf_clear(*n); free(n)
 #define bigfloat_init(n,m) mpf_init_set_d(*n, m)
+#define bigfloat_set(n,m) mpf_set_d(*n, m)
 
-typedef mpf_t* bigfloat;
-typedef mpz_t* bigint;
 
 #define NULL_INIT_ARRAY(array, size)   \
 for(int i = 0; i < (size); i++) {      \
@@ -42,32 +42,18 @@ for(int i = 0; i < (size); i++) {      \
 
 #define VAL(n) ((Node)((n)->value))
 
-
 #define ELAPSED(START,END) (std::chrono::duration_cast<std::chrono::microseconds>((END) - (START)).count() / (double)1000000)
 #define CURRENT_TIME std::chrono::steady_clock::now()
-typedef std::chrono::steady_clock::time_point t;
 
+class benchmark {
+private:
+    t start_time, end_time;
+    clock_t st, et;
 
+public:
+    void start_bench();
+    void conclude_bench();
 
-
-struct node {
-    node* left = nullptr;
-    node* right = nullptr;
-
-    node* next = nullptr;
-    node* prev = nullptr;
-
-    int8_t height = 1;
-
-    bigint val = nullptr;
-
-    explicit node(bigint v) : val(v){}
-
-    node* rotate_right();
-    node* rotate_left();
-    size_t distance(node* other);
-    node* skip(size_t n);
-    node* skip_back(size_t n);
 };
 
-typedef node* Node;
+

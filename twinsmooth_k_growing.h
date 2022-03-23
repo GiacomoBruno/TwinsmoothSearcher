@@ -1,19 +1,20 @@
 #pragma once
 #include "twinsmooth.h"
 
-class twinsmooth_k_growing : public twinsmooth {
-private:
-    double start_k, end_k, step_k, cur_k;
+class s_twinsmooth_k_growing : public s_twinsmooth {
+protected:
+    double start_k;
+    double end_k;
+    double step_k;
+    double cur_k;
+    bigfloat current_k;
+    bigfloat old_k;
 
-    bigfloat current_k, old_k;
 
-    void set_k(double n);
+    void increment_k();
+    void load_files() override;
 public:
-    explicit twinsmooth_k_growing(size_t s, double startk, double endk, double stepk);
-
+    s_twinsmooth_k_growing(size_t s, double sk, double ek, double ks);
     void start() override;
     void execute() override;
-    void terminate() override;
-
-    void init_starting_set() override;
 };

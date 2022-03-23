@@ -169,7 +169,7 @@ void CappedFile::load_file(LinkedTree* tree)
         mpz_init2(*val, MPZ_INIT_BITS);
         int fail = mpz_set_str(*val, line.c_str(), 10);
         if(!fail)
-            tree->fast_insert_delete_source(val);
+            tree->insert_delete_source(val);
     }
     close();
 }

@@ -24,6 +24,3 @@ public:
     void clear();
     [[nodiscard]] bool empty() const;
 };
-
-
-void print_as_bigint(LinkedList* l);

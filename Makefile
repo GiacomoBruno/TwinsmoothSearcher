@@ -1,5 +1,5 @@
-OPT=-O0
-CFLAGS=$(OPT) -g -Wall -fopenmp -std=c++17
+OPT=-O3
+CFLAGS=$(OPT) -Wall -fopenmp -std=c++17
 CC=gcc
 CXX=g++
 

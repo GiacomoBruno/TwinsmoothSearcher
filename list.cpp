@@ -49,13 +49,3 @@ void LinkedList::clear() {
 }
 
 bool LinkedList::empty() const { return _size == 0; }
-
-void print_as_bigint(LinkedList* l)
-{
-    auto iter = l->begin();
-    while(iter != nullptr)
-    {
-        gmp_printf("%Zd\n", *VAL(iter)->val);
-        iter = iter->next;
-    }
-}
