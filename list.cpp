@@ -49,3 +49,14 @@ void LinkedList::clear() {
 }
 
 bool LinkedList::empty() const { return _size == 0; }
+
+void LinkedList::simple_merge(LinkedList *other) {
+    auto other_start = other->begin();
+    while(other_start != nullptr)
+    {
+        push_front(other_start->value);
+        other_start = other_start->next;
+    }
+    other->clear();
+    delete other;
+}

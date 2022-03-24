@@ -23,6 +23,9 @@ private:
     static LinkedTree* k_generate_twinsmooth(LinkedList *chunk, LinkedTree *S, bigfloat k);
     static LinkedTree* k_generate_twinsmooth(LinkedList *chunk, LinkedTree *S, bigfloat k, bigfloat oldk);
 
+    //prime calculation
+    static LinkedList* generate_primes(LinkedList* chunk);
+
 
 public:
     static LinkedTree* k_iteration_S_S(LinkedTree* S, bigfloat k, bigfloat oldk);
@@ -40,5 +43,5 @@ public:
     static LinkedTree* r_iteration_S_N(LinkedTree* S, LinkedTree* N, size_t range, size_t skip_range);
 
 
-
+    static LinkedList* prime_iteration(LinkedTree* S);
 };

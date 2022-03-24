@@ -811,3 +811,67 @@ LinkedTree *static_twinsmooth::k_iteration_S_N(LinkedTree *S, LinkedList *N, big
     return result_tree;
 }
 
+LinkedList* static_twinsmooth::generate_primes(LinkedList *chunk) {
+    auto result = new LinkedList();
+    auto iter = chunk->begin();
+    while(iter != nullptr)
+    {
+        auto twin = VAL(iter);
+        mpz_mul_2exp(*twin->val, *twin->val, 1);
+        mpz_add_ui(*twin->val, *twin->val, 1);
+        if(mpz_probab_prime_p(*twin->val, 1000))
+        {
+            result->push_front(twin);
+        }
+        iter = iter->next;
+    }
+    return result;
+}
+
+LinkedList *static_twinsmooth::prime_iteration(LinkedTree *S) {
+    LinkedList* chunks = create_chunks(S, CHUNK_SIZE);
+    auto result_list = new LinkedList();
+
+    while(!chunks->empty())
+    {
+        auto results = new LinkedList*[NUM_THREADS];
+        auto points_arr = new LinkedList*[NUM_THREADS];
+        NULL_INIT_ARRAY(points_arr, NUM_THREADS);
+        NULL_INIT_ARRAY(results, NUM_THREADS);
+
+
+        for (int i = 0; i < (NUM_THREADS); i++) {
+            auto pts = (LinkedList*)(chunks->pop());
+            if (pts == nullptr) break;
+            points_arr[i] = pts;
+        }
+
+        #pragma omp parallel num_threads(NUM_THREADS)
+        {
+            int i = omp_get_thread_num();
+
+            if(points_arr[i] != nullptr ) {
+                results[i] = generate_primes(points_arr[i]);
+                points_arr[i]->clear();
+                delete points_arr[i];
+            }
+        }
+
+        for (int i = 0; i < (NUM_THREADS); i++)
+        {
+            if ((results)[i] != nullptr)
+            {
+                (result_list)->simple_merge((results)[i]);
+            }
+        }
+
+        delete[] points_arr;
+        delete[] results;
+
+    }
+    chunks->clear();
+    delete chunks;
+
+    return result_list;
+}
+

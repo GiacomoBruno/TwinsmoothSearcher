@@ -205,5 +205,77 @@ bool CappedFile::exists() {
     return file_exists(get_c_path(_index));
 }
 
+void CappedFile::inverse_reorder() {
+    auto ordered_tree = new LinkedTree();
+
+    auto mode = this->openmode;
+    auto wbytes = this->written_bytes;
+    auto cindex = this->_index;
+
+    openmode = std::fstream::in;
+    written_bytes = 0;
+    _index = 0;
+
+    load_file(ordered_tree);
+    load_all_subfiles();
+    delete_all_subfiles();
+    openmode = std::fstream::out;
+    _index = 0;
+
+    save_tree_inverted(ordered_tree);
+    ordered_tree->cleanup();
+    delete ordered_tree;
+
+    openmode = mode;
+    written_bytes = wbytes;
+    _index = cindex;
+}
+
+void CappedFile::save_tree_inverted(LinkedTree *tree) {
+    open();
+    auto iter = tree->end();
+    while(iter != nullptr)
+    {
+        printn("%Zd\n", *iter->val);
+        iter = iter->prev;
+    }
+    close();
+}
+
+void CappedFile::load_file(LinkedTree *tree, size_t lines) {
+    open();
+    string line;
+    size_t counter = 0;
+    while(this->getline(line) && counter < lines)
+    {
+        auto val = bigint_new;
+        mpz_init2(*val, MPZ_INIT_BITS);
+        int fail = mpz_set_str(*val, line.c_str(), 10);
+        if(!fail)
+            tree->insert_delete_source(val);
+        counter++;
+    }
+    close();
+}
+
+bigint CappedFile::get_bigint() {
+    //assumption file is open
+    string line;
+    if(this->getline(line))
+    {
+        auto val = bigint_new;
+        mpz_init2(*val, MPZ_INIT_BITS);
+        int fail = mpz_set_str(*val, line.c_str(), 10);
+        if(!fail) {
+            return val;
+        }
+        else
+        {
+            bigint_free(val);
+        }
+    }
+    return nullptr;
+}
+
 
 CappedFile::CappedFile()= default;

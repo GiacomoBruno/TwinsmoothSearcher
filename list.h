@@ -23,4 +23,5 @@ public:
     [[nodiscard]] LNode begin() const;
     void clear();
     [[nodiscard]] bool empty() const;
+    void simple_merge(LinkedList* other);
 };

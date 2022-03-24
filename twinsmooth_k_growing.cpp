@@ -27,7 +27,7 @@ void s_twinsmooth_k_growing::start() {
     lg->log("start K ", start_k);
     lg->log(" end K ", end_k);
     lg->log(" step K ", step_k);
-    lg->logl(" first iteration K {2.0}");
+    lg->logl(" first iteration K [ 2.0 ]");
     lg->logl("smoothness ", smoothness);
     output_file = CappedFile(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
     load_files();

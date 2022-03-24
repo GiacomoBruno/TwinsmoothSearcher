@@ -30,6 +30,7 @@ class CappedFile {
         CappedFile();
         void printn(const char* fmt, mpz_t n);
         bool getline(std::string& line);
+        bigint get_bigint();
         bool is_open();
         void open();
         bool has_successor();
@@ -39,9 +40,12 @@ class CappedFile {
         void load_all_subfiles();
         void delete_all_subfiles();
         void load_file(LinkedTree* tree);
+        void load_file(LinkedTree* tree, size_t lines);
         void save_tree(LinkedTree* tree);
+        void save_tree_inverted(LinkedTree* tree);
         void save_list(LinkedList* list);
         void reorder();
+        void inverse_reorder();
         bool exists();
         std::string get_c_path(int n);
 };
