@@ -56,7 +56,8 @@ int main(int argc, char** argv)
             case 0: s = new s_twinsmooth(smoothness); break;
             case 1: s = new s_twinsmooth_range(smoothness, (int)get_size_t("choose range: ")); break;
             case 2: s = new s_twinsmooth_k(smoothness, get_double("choose k: ")); break;
-            case 3: s = new s_twinsmooth_k_growing(smoothness, get_double("chose start k: "), get_double("chose max k: "),get_double("chose k step: ")); break;
+            case 3: s = new s_twinsmooth_k_growing(smoothness, get_double("chose start k: "), get_double("chose max k: "),get_double("chose k step: "),
+                                                   get_size_t("amount of top twins to log per K: ")); break;
             case 4: s = new prime_calculator(smoothness); break;
             case 5: s = new prime_calculator_top_n(smoothness, (int)get_size_t("choose number of primes to look for: "), get_bool("is the set of twins in reverse order? ")); break;
             default: std::cout << "not a valid option" << std::endl; break;

@@ -190,7 +190,7 @@ LinkedTree *static_twinsmooth::r_generate_twinsmooth(LinkedList *chunk, size_t r
     auto result = new LinkedTree();
 
     auto iter = chunk->begin();
-    int counter = 0;
+    size_t counter = 0;
     while(iter != nullptr)
     {
         auto x = VAL(iter); //costante per il ciclo corrente
@@ -265,7 +265,7 @@ LinkedTree *static_twinsmooth::r_generate_twinsmooth(LinkedList *chunk, size_t r
     // print_as_bigint(chunk);
 
     auto iter = chunk->begin();
-    int counter = 0;
+    size_t counter = 0;
     while(iter != nullptr)
     {
         auto x = VAL(iter); //costante per il ciclo corrente
