@@ -18,4 +18,5 @@ public:
     s_twinsmooth_k_growing(size_t s, double sk, double ek, double ks, size_t top_to_save);
     void start() override;
     void execute() override;
+    void terminate() override;
 };

@@ -5,12 +5,16 @@
 void s_twinsmooth_k_growing::print_top_numbers()
 {
     auto iter = S->end();
+    output_file.open();
     lg->logl("\tTop numbers found:");
     for(int i = 0; i < amount_of_top_twins_to_log && iter != nullptr; i++)
     {
         lg->logl("\t\t", iter->val);
+        output_file.printn("%Zd\n", *iter->val);
         iter = iter->prev;
     }
+    output_file.flush();
+    output_file.close();
     lg->newline();
 }
 
@@ -29,7 +33,7 @@ void s_twinsmooth_k_growing::start() {
     lg->log(" step K ", step_k);
     lg->logl(" first iteration K [ 2.0 ]");
     lg->logl("smoothness ", smoothness);
-    //output_file = CappedFile(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
+    output_file = CappedFile(TWINSMOOTH_FN, OUT_FOLDER(smoothness), std::fstream::app | std::fstream::out, smoothness);
 
     if(S->empty())
     {
@@ -112,6 +116,15 @@ void s_twinsmooth_k_growing::increment_k() {
     bigfloat_set(old_k, cur_k);
     cur_k += step_k;
     bigfloat_set(current_k, cur_k);
+}
+
+void s_twinsmooth_k_growing::terminate() {
+    output_file.inverse_reorder();
+    output_file.close();
+    delete N;
+    lg->logl("found in total: ", S->get_size());
+    S->cleanup();
+    delete S;
 }
 
 

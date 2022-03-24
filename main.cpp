@@ -49,6 +49,7 @@ int main(int argc, char** argv)
     std::endl;
     size_t mode = get_size_t("select: ");
     s_twinsmooth* s = nullptr;
+    std::filesystem::create_directories(OUT_FOLDER(smoothness));
 
     while(s == nullptr)
     {
