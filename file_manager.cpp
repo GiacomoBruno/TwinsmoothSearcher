@@ -135,12 +135,12 @@ void CappedFile::delete_all_subfiles()
     }
 }
 
-void CappedFile::save_list(LinkedList *list) {
+void CappedFile::save_list(LinkedList<Node>* list) {
     open();
-    auto iter = list->begin();
+    auto iter = list->top();
     while(iter != nullptr)
     {
-        printn("%Zd\n", *VAL(iter)->val);
+        printn("%Zd\n", *iter->val);
         iter = iter->next;
     }
     close();

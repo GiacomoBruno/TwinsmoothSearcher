@@ -391,24 +391,18 @@ void LinkedTree::merge(LinkedTree* other)
 /// moves all content of other into the tree, all nodes of other are deleted in the process, returns the inserted nodes
 /// \param other tree to merge in current tree, unusable after completion of merge
 /// \return inserted nodes
-LinkedList* LinkedTree::merge_return_inserted(LinkedTree* other) {
-    auto iter = other->begin();
-    auto result = new LinkedList();
+LinkedList<Node>* LinkedTree::merge_return_inserted(LinkedList<bigint>* other) {
+    auto result = new LinkedList<Node>();
 
-    while (iter != nullptr)
+    while (!other->empty())
     {
-        auto inserted = this->insert_delete_source(iter->val);
-        auto tmp = iter->next;
-        delete iter;
-        iter = tmp;
+        auto inserted = this->insert_delete_source(other->top()); other->pop();
         if(inserted != nullptr)
-            result->push_front(inserted);
+            result->push(inserted);
 
     }
     delete other;
     return result;
 }
-
-
 
 

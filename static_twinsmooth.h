@@ -8,40 +8,42 @@
 
 class static_twinsmooth {
 private:
-    static LinkedList* create_chunks(LinkedList *input, size_t chunk_size);
-    static LinkedList* create_chunks(LinkedTree* input, size_t chunk_size);
+    static LinkedList<Node*>* create_chunks(LinkedList<Node> *input);
+    static LinkedList<Node*>* create_chunks(LinkedTree* input);
 
-    static void k_get_ranges(Node nd, LinkedTree* results, size_t& lower_range, size_t& upper_range, size_t& lower_skip, size_t& upper_skip, bigfloat k, bigfloat oldk);
-    static void k_get_ranges(Node nd, LinkedTree* results, size_t& lower_range, size_t& upper_range, bigfloat k);
+
+    static void k_get_ranges(Node nd, LinkedTree *results, size_t &lower_range, size_t &upper_range, size_t &lower_skip,
+                             size_t &upper_skip, bigfloat k, bigfloat oldk);
+
+    static void k_get_ranges(Node nd, LinkedTree *results, size_t &lower_range, size_t &upper_range, bigfloat k);
 
     //No optimization twinsmooth generation
-    static LinkedTree* generate_twinsmooth(LinkedList* chunk);
+    static LinkedList<bigint>* generate_twinsmooth(Node* chunk, LinkedTree* S);
 
-    static LinkedTree* r_generate_twinsmooth(LinkedList* chunk,  size_t range);
-    static LinkedTree* r_generate_twinsmooth(LinkedList* chunk, size_t range, size_t skip_range);
+    static LinkedList<bigint>* r_generate_twinsmooth(Node* chunk, size_t range, LinkedTree* S);
 
-    static LinkedTree* k_generate_twinsmooth(LinkedList *chunk, LinkedTree *S, bigfloat k);
-    static LinkedTree* k_generate_twinsmooth(LinkedList *chunk, LinkedTree *S, bigfloat k, bigfloat oldk);
+    static LinkedList<bigint>* k_generate_twinsmooth(Node* chunk, LinkedTree *S, bigfloat k);
 
+    static LinkedList<bigint>* k_generate_twinsmooth(Node* chunk, LinkedTree *S, bigfloat k, bigfloat oldk);
     //prime calculation
-    static LinkedList* generate_primes(LinkedList* chunk);
-
+    static LinkedList<bigint>* generate_primes(LinkedList<bigint*>* chunk);
 
 public:
-    static LinkedTree* k_iteration_S_S(LinkedTree* S, bigfloat k, bigfloat oldk);
-    static LinkedTree* k_iteration_S_S(LinkedTree* S, bigfloat k);
-    static LinkedTree* k_iteration_S_N(LinkedTree* S, LinkedList* N, bigfloat k);
+    static LinkedList<Node>* k_iteration_S_S(LinkedTree *S, bigfloat k, bigfloat oldk);
+
+    static LinkedList<Node>* k_iteration_S_S(LinkedTree *S, bigfloat k);
+
+    static LinkedList<Node>* k_iteration_S_N(LinkedTree *S, LinkedList<Node> *N, bigfloat k);
 
     //No optimization SxN single iteration
-    static LinkedTree* iteration_S_N(LinkedList* N);
-    static LinkedTree* iteration_S_S(LinkedTree* S);
+    static LinkedList<Node>* iteration_S_N(LinkedTree* S, LinkedList<Node> *N);
+
+    static LinkedList<Node>* iteration_S_S(LinkedTree *S);
 
     //range optimization SxN single iteration
-    static LinkedTree* r_iteration_S_S(LinkedTree* S, size_t range);
-    static LinkedTree* r_iteration_S_S(LinkedTree* S, size_t range, size_t skip_range);
-    static LinkedTree* r_iteration_S_N(LinkedList* N, size_t range);
-    static LinkedTree* r_iteration_S_N(LinkedTree* S, LinkedTree* N, size_t range, size_t skip_range);
+    static LinkedList<Node>* r_iteration_S_S(LinkedTree *S, size_t range);
+
+    static LinkedList<Node>* r_iteration_S_N(LinkedTree *S, LinkedList<Node> *N, size_t range);
 
 
-    static LinkedList* prime_iteration(LinkedTree* S);
 };

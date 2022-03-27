@@ -9,14 +9,14 @@ class s_twinsmooth{
 protected:
     size_t smoothness;
     LinkedTree* S;
-    LinkedList* N;
+    LinkedList<Node>* N;
     CappedFile output_file;
 
     virtual void load_files();
     void init_set();
 
 public:
-    explicit s_twinsmooth(size_t s) : smoothness(s), S(new LinkedTree), N(new LinkedList) {}
+    explicit s_twinsmooth(size_t s) : smoothness(s), S(new LinkedTree), N(new LinkedList<Node>) {}
     virtual void execute();
     virtual void terminate();
     virtual void start();

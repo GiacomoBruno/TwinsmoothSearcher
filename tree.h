@@ -3,7 +3,9 @@
 #include "type_definitions.h"
 #include "list.h"
 
-struct node {
+struct
+__attribute__((__packed__))
+node {
     node* left = nullptr;
     node* right = nullptr;
 
@@ -53,16 +55,16 @@ public:
 
     Node insert(bigint key);
     Node insert_delete_source(bigint key);
-    void fast_insert(bigint key);
-    void fast_insert_delete_source(bigint key);
     void cleanup();
     Node search(bigint key);
     Node search_delete_source(bigint key);
     Node lower_bound(bigint key);
     Node upper_bound(bigint key);
     void merge(LinkedTree* other);
-    LinkedList* merge_return_inserted(LinkedTree* other);
+    LinkedList<Node>* merge_return_inserted(LinkedList<bigint>* other);
 
 
 
 };
+
+

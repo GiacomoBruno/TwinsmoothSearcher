@@ -43,7 +43,7 @@ class CappedFile {
         void load_file(LinkedTree* tree, size_t lines);
         void save_tree(LinkedTree* tree);
         void save_tree_inverted(LinkedTree* tree);
-        void save_list(LinkedList* list);
+        void save_list(LinkedList<Node>* list);
         void reorder();
         void inverse_reorder();
         bool exists();

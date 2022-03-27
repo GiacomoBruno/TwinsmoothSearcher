@@ -6,7 +6,7 @@
 #include "static_twinsmooth.h"
 void prime_calculator::execute() {
     delete N;
-    N = static_twinsmooth::prime_iteration(S);
+    //N = static_twinsmooth::prime_iteration(S);
 }
 
 void prime_calculator::start() {

@@ -11,15 +11,17 @@ void s_twinsmooth_k::execute() {
     using st = static_twinsmooth;
     //S is ready, N is empty
     do {
-        LinkedTree* unfilteredN;
         if(N->empty()) {
+            N->clear(); delete N;
             output_file.save_tree(S);
-            unfilteredN = st::k_iteration_S_S(S, k);
+            N = st::k_iteration_S_S(S, k);
         }
-        else unfilteredN = st::k_iteration_S_N(S, N, k);
+        else {
+            auto tmp = st::k_iteration_S_N(S, N, k);
+            N->clear(); delete N;
+            N = tmp;
+        }
 
-        N->clear(); delete N;
-        N = S->merge_return_inserted(unfilteredN);
         output_file.save_list(N);
         lg->logl("new twinsmooth found: ", N->size());
     }while(!N->empty());

@@ -7,15 +7,18 @@ void s_twinsmooth_range::execute() {
     using st = static_twinsmooth;
     //S is ready, N is empty
     do {
-        LinkedTree* unfilteredN;
         if(N->empty()) {
             output_file.save_tree(S);
-            unfilteredN = st::r_iteration_S_S(S, range);
+            N->clear(); delete N;
+            N = st::r_iteration_S_S(S, range);
         }
-        else unfilteredN = st::r_iteration_S_N(N, range);
+        else
+        {
+            auto tmp = st::r_iteration_S_N(S, N, range);
+            N->clear(); delete N;
+            N = tmp;
+        }
 
-        N->clear(); delete N;
-        N = S->merge_return_inserted(unfilteredN);
         output_file.save_list(N);
         lg->logl("new twinsmooth found: ", N->size());
     }while(!N->empty());

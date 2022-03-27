@@ -32,7 +32,7 @@ void s_twinsmooth::init_set() {
 
             auto inserted = S->search_delete_source(num);
             if(inserted == nullptr) inserted = S->insert(num);
-            N->push_front(inserted);
+            N->push(inserted);
         }
     }
 }
@@ -48,25 +48,31 @@ void s_twinsmooth::start() {
 void s_twinsmooth::terminate() {
     output_file.reorder();
     output_file.close();
-    delete N;
-
     lg->logl("found in total: ", S->get_size());
+
+    N->clear();
+    delete N;
+    S->cleanup();
+    delete S;
+
 }
 
 void s_twinsmooth::execute() {
     using st = static_twinsmooth;
     //S is ready, N is empty
     do {
-        LinkedTree* unfilteredN;
         if(N->empty()) {
+            N->clear(); delete N;
             output_file.save_tree(S);
-            unfilteredN = st::iteration_S_S(S);
+            N = st::iteration_S_S(S);
         }
-        else unfilteredN = st::iteration_S_N(N);
+        else {
+            auto tmp = st::iteration_S_N(S, N);
+            N->clear(); delete N;
+            N = tmp;
+        }
 
-        N->clear(); delete N;
-        N = S->merge_return_inserted(unfilteredN);
         output_file.save_list(N);
         lg->logl("new twinsmooth found: ", N->size());
-    }while(!N->empty());
+    } while(!N->empty());
 }

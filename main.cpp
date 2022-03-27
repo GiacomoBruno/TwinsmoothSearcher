@@ -37,6 +37,8 @@ double get_double(const std::string& s)
 
 int main(int argc, char** argv)
 {
+
+    std::cout << sizeof(struct node) << std::endl;
     auto smoothness = get_size_t("choose smoothness: ");
     lg = new logger(STATUS_FN, OUT_FOLDER(smoothness), smoothness);
 

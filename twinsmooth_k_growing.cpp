@@ -38,21 +38,19 @@ void s_twinsmooth_k_growing::start() {
     if(S->empty())
     {
         init_set();
-        LinkedTree* unfilteredN;
         using st = static_twinsmooth;
-
-        unfilteredN = st::k_iteration_S_S(S, current_k);
         N->clear(); delete N;
-        N = S->merge_return_inserted(unfilteredN);
+        N = st::k_iteration_S_S(S, current_k);
+
         lg->logl("finished FIRST SxS iteration and found ", N->size());
         cur_k = start_k;
         bigfloat_set(current_k, start_k);
         size_t found_numbers = 0;
         while(!N->empty())
         {
-            unfilteredN = st::k_iteration_S_N(S, N, current_k);
+            auto tmp = st::k_iteration_S_N(S, N, current_k);
             N->clear(); delete N;
-            N = S->merge_return_inserted(unfilteredN);
+            N = tmp;
             found_numbers += N->size();
             lg->log("\titeration concluded with k = ", cur_k);
             lg->logl("found ", N->size());
@@ -73,14 +71,12 @@ void s_twinsmooth_k_growing::start() {
 
 void s_twinsmooth_k_growing::execute() {
     using st = static_twinsmooth;
-    LinkedTree* unfilteredN;
     do
     {
         benchmark b;
         b.start_bench();
-        unfilteredN = st::k_iteration_S_S(S, current_k, old_k);
         N->clear(); delete N;
-        N = S->merge_return_inserted(unfilteredN);
+        N = st::k_iteration_S_S(S, current_k, old_k);
         //output_file.save_list(N);
         lg->log("finished SxS iteration for K ", cur_k);
         lg->log( ", old K ", cur_k - step_k);
@@ -92,9 +88,9 @@ void s_twinsmooth_k_growing::execute() {
         do{
             benchmark lb;
             lb.start_bench();
-            unfilteredN = st::k_iteration_S_N(S, N, current_k);
+            auto tmp = st::k_iteration_S_N(S, N, current_k);
             N->clear(); delete N;
-            N = S->merge_return_inserted(unfilteredN);
+            N = tmp;
             //output_file.save_list(N);
             found_numbers += N->size();
             lg->log("\tfinished iteration SxN and found ", N->size()); lg->log(" in ");
@@ -121,7 +117,7 @@ void s_twinsmooth_k_growing::increment_k() {
 void s_twinsmooth_k_growing::terminate() {
     output_file.inverse_reorder();
     output_file.close();
-    delete N;
+    N->clear(); delete N;
     lg->logl("found in total: ", S->get_size());
     S->cleanup();
     delete S;

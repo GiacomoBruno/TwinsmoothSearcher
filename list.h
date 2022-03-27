@@ -2,26 +2,99 @@
 #include "nb.h"
 
 
+template<typename T>
 struct LLNode {
-    void* value = nullptr;
+    T value = nullptr;
     LLNode* next = nullptr;
-    explicit LLNode(void* n) : value(n) {}
+    explicit LLNode(T n) : value(n) {}
 };
 
-typedef LLNode* LNode;
+template<class T>
+using LNode = LLNode<T>*;
 
+template<typename T>
 class LinkedList {
-    LNode first = nullptr;
-
+    LNode<T> first = nullptr;
     size_t _size = 0;
 public:
 
-    void push_front(void* n);
-    void remove_first();
-    void* pop();
+    void push(T n);
+    void push(LinkedList<T>* l);
+
+    void pop();
+    T top();
+    LNode<T> last();
     [[nodiscard]] size_t size() const { return _size; }
-    [[nodiscard]] LNode begin() const;
     void clear();
     [[nodiscard]] bool empty() const;
-    void simple_merge(LinkedList* other);
 };
+
+
+//actually push front
+template<class T>
+void LinkedList<T>::push(T n) {
+    _size++;
+
+    if(first == nullptr){
+        first = new LLNode(n);
+    }
+    else
+    {
+        auto tmp = new LLNode(n);
+        tmp->next = first;
+        first = tmp;
+    }
+}
+
+
+
+template<class T>
+void LinkedList<T>::pop()
+{
+    if(first == nullptr) return;
+
+    _size--;
+    auto tmp = first->next;
+    delete first;
+    first = tmp;
+}
+
+template<class T>
+T LinkedList<T>::top()
+{
+    if(first == nullptr) return nullptr;
+    return first->value;
+}
+
+template<class T>
+void LinkedList<T>::clear() {
+    while(first != nullptr)
+    {
+        auto tmp = first->next;
+        delete first;
+        first = tmp;
+    }
+    _size = 0;
+
+}
+
+template<class T>
+bool LinkedList<T>::empty() const { return _size == 0; }
+
+template<class T>
+LNode<T> LinkedList<T>::last() {
+    auto iter = first;
+    while(iter != nullptr && iter->next != nullptr)
+        iter = iter->next;
+    return iter;
+}
+
+template<class T>
+void LinkedList<T>::push(LinkedList<T>* l) {
+    auto last = l->last();
+    if(last == nullptr) return;
+    last->next = first;
+    first = l->first;
+    _size = _size + l->size();
+    delete l;
+}
