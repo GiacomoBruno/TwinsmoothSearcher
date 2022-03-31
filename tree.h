@@ -31,23 +31,25 @@ typedef node* Node;
 void printTree(Node root, std::string indent, bool last);
 class LinkedTree {
 private:
-    size_t      size            = 0;
+    size_t      _size            = 0;
     Node        last_element    = nullptr;
     Node        first_element   = nullptr;
+    Node        root            = nullptr;
+
 
     Node insert_node(Node nd, bigint key, Node& insterted_node);
     static Node search_node(Node nd, bigint key);
     Node lower_bound_node(Node nd, bigint key);
     Node upper_bound_node(Node nd, bigint key);
-
+    Node delete_node(Node root, bigint key,int cmp, const bool& del);
 
 public:
-    explicit LinkedTree() : size(0) { }
+    explicit LinkedTree() : _size(0) { }
     ~LinkedTree() = default;
     [[nodiscard]]
-    size_t get_size() const { return size; }
+    size_t size() const { return _size; }
     [[nodiscard]]
-    bool empty() const { return size == 0;}
+    bool empty() const { return _size == 0;}
     [[nodiscard]]
     Node begin() const { return first_element; }
     [[nodiscard]]
@@ -65,9 +67,7 @@ public:
 
     void remove(bigint key);
     void remove_del(bigint key);
-
-
-    Node        root            = nullptr;
+    
 };
 
 

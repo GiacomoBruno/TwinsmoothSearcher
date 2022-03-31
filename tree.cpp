@@ -115,7 +115,7 @@ Node LinkedTree::insert_node(Node nd, bigint key, Node& inserted_node) {
         auto res = new struct node(key);
         first_element = res;
         last_element = res;
-        size++;
+        _size++;
         inserted_node = res;
         return res;
     }
@@ -126,7 +126,7 @@ Node LinkedTree::insert_node(Node nd, bigint key, Node& inserted_node) {
     if (cmp < 0)
         if(nd->left == nullptr)
         {
-            size++;
+            _size++;
             //insert on left node
             auto new_node = new struct node(key);
 
@@ -146,7 +146,7 @@ Node LinkedTree::insert_node(Node nd, bigint key, Node& inserted_node) {
     else if (cmp > 0)
         if(nd->right == nullptr)
         {
-            size++;
+            _size++;
 
             auto new_node = new struct node(key);
 
@@ -237,7 +237,7 @@ void LinkedTree::cleanup()
     }
     first_element =nullptr;
     last_element = nullptr;
-    size = 0;
+    _size = 0;
 }
 
 Node LinkedTree::search_node(Node nd, bigint key)
@@ -407,7 +407,7 @@ LinkedList<Node>* LinkedTree::merge_return_inserted(LinkedList<bigint>* other) {
 
 
 
-Node deleteNode(Node root, bigint key,int cmp, const bool& del) {
+Node LinkedTree::delete_node(Node root, bigint key,int cmp, const bool& del) {
     // Find the node and delete it
     //if (root == nullptr)
     //    return root;
@@ -427,8 +427,9 @@ Node deleteNode(Node root, bigint key,int cmp, const bool& del) {
             rt = root->left;
             if(del) { bigint_free(ndleft->val); }
             delete ndleft;
+            _size--;
         }
-        else return deleteNode(root->left, key, cmp1, del);
+        else return delete_node(root->left, key, cmp1, del);
     }
     else if(cmp > 0) {
         auto ndright = root->right;
@@ -443,8 +444,9 @@ Node deleteNode(Node root, bigint key,int cmp, const bool& del) {
 
             if (del) { bigint_free(ndright->val); }
             delete ndright;
+            _size--;
 
-        } else return deleteNode(root->right, key, cmp1, del);
+        } else return delete_node(root->right, key, cmp1, del);
     }
 
     if (rt == nullptr)
@@ -475,6 +477,7 @@ Node deleteNode(Node root, bigint key,int cmp, const bool& del) {
 
 
 void LinkedTree::remove(bigint key) {
+    if(root == nullptr) return;
     int cmp = mpz_cmp(*key, *root->val);
     if(cmp == 0)
     {
@@ -483,12 +486,14 @@ void LinkedTree::remove(bigint key) {
         if(root->prev != nullptr) root->prev->next = root->next;
 
         delete root;
+        _size--;
         root = temp;
     }
-    else deleteNode(root, key, cmp, false);
+    else delete_node(root, key, cmp, false);
 }
 
 void LinkedTree::remove_del(bigint key) {
+    if(root == nullptr) return;
     int cmp = mpz_cmp(*key, *root->val);
     if(cmp == 0)
     {
@@ -498,6 +503,7 @@ void LinkedTree::remove_del(bigint key) {
 
         bigint_free(root->val);
         delete root;
+        _size--;
         root = temp;
     }
-    else deleteNode(root, key, cmp, true);}
+    else delete_node(root, key, cmp, true);}

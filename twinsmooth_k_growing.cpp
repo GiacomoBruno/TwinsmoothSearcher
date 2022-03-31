@@ -129,7 +129,7 @@ void s_twinsmooth_k_growing::terminate() {
     output_file.inverse_reorder();
     output_file.close();
     N->clear(); delete N;
-    lg->logl("found in total: ", S->get_size());
+    lg->logl("found in total: ", S->size());
     S->cleanup();
     delete S;
 }

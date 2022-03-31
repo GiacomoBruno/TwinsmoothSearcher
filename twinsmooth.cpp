@@ -14,7 +14,7 @@ void s_twinsmooth::load_files() {
 }
 
 void s_twinsmooth::init_set() {
-    if(S->get_size() == 0)
+    if(S->size() == 0)
     {
         for(size_t i = 1; i < smoothness; i++)
         {
@@ -48,7 +48,7 @@ void s_twinsmooth::start() {
 void s_twinsmooth::terminate() {
     output_file.reorder();
     output_file.close();
-    lg->logl("found in total: ", S->get_size());
+    lg->logl("found in total: ", S->size());
 
     N->clear();
     delete N;
