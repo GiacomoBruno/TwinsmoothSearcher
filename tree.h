@@ -13,6 +13,7 @@ node {
     node* prev = nullptr;
 
     int8_t height = 1;
+    int16_t twins_found = 0;
 
     bigint val = nullptr;
 
@@ -33,7 +34,6 @@ private:
     size_t      size            = 0;
     Node        last_element    = nullptr;
     Node        first_element   = nullptr;
-    Node        root            = nullptr;
 
     Node insert_node(Node nd, bigint key, Node& insterted_node);
     static Node search_node(Node nd, bigint key);
@@ -63,8 +63,11 @@ public:
     void merge(LinkedTree* other);
     LinkedList<Node>* merge_return_inserted(LinkedList<bigint>* other);
 
+    void remove(bigint key);
+    void remove_del(bigint key);
 
 
+    Node        root            = nullptr;
 };
 
 

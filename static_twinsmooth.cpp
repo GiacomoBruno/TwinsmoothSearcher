@@ -161,7 +161,10 @@ LinkedList<bigint>* static_twinsmooth::generate_twinsmooth(Node* chunk, LinkedTr
                 mpz_sub_ui(*nv, *m1, 1);
 
                 if(S->search(nv) == nullptr)
+                {
                     result->push(nv);
+                    x->twins_found++;
+                }
                 else
                 {
                     bigint_free(nv);
@@ -188,7 +191,10 @@ LinkedList<bigint>* static_twinsmooth::generate_twinsmooth(Node* chunk, LinkedTr
                 mpz_sub_ui(*nv, *m1, 1);
 
                 if(S->search(nv) == nullptr)
+                {
                     result->push(nv);
+                    x->twins_found++;
+                }
                 else
                 {
                     bigint_free(nv);
@@ -242,7 +248,10 @@ LinkedList<bigint>* static_twinsmooth::r_generate_twinsmooth(Node* chunk, size_t
                 mpz_sub_ui(*nv, *m1, 1);
 
                 if(S->search(nv) == nullptr)
+                {
                     result->push(nv);
+                    x->twins_found++;
+                }
                 else
                 {
                     bigint_free(nv);
@@ -271,7 +280,10 @@ LinkedList<bigint>* static_twinsmooth::r_generate_twinsmooth(Node* chunk, size_t
                 mpz_sub_ui(*nv, *m1, 1);
 
                 if(S->search(nv) == nullptr)
+                {
                     result->push(nv);
+                    x->twins_found++;
+                }
                 else
                 {
                     bigint_free(nv);
@@ -301,7 +313,6 @@ LinkedList<bigint>* static_twinsmooth::k_generate_twinsmooth(Node* chunk, Linked
     size_t lower_range, upper_range;
 
     k_get_ranges(chunk[0], S, lower_range, upper_range, k);
-
     size_t counter = 0;
     int i = 0;
     while(i < CHUNK_SIZE && chunk[i] != nullptr)
@@ -327,7 +338,10 @@ LinkedList<bigint>* static_twinsmooth::k_generate_twinsmooth(Node* chunk, Linked
                 mpz_sub_ui(*nv, *m1, 1);
 
                 if(S->search(nv) == nullptr)
+                {
                     result->push(nv);
+                    x->twins_found++;
+                }
                 else
                 {
                     bigint_free(nv);
@@ -356,7 +370,10 @@ LinkedList<bigint>* static_twinsmooth::k_generate_twinsmooth(Node* chunk, Linked
                 mpz_sub_ui(*nv, *m1, 1);
 
                 if(S->search(nv) == nullptr)
+                {
                     result->push(nv);
+                    x->twins_found++;
+                }
                 else
                 {
                     bigint_free(nv);
@@ -386,8 +403,9 @@ LinkedList<bigint>* static_twinsmooth::k_generate_twinsmooth(Node* chunk, Linked
     auto result = new LinkedList<bigint>();
 
     size_t lower_range, upper_range, lower_skip, upper_skip;
-
     k_get_ranges(chunk[0], S, lower_range, upper_range, lower_skip, upper_skip, k, oldk);
+    //std::cout << lower_range << "|" << lower_skip << "|" << upper_range << "|" << upper_skip << std::endl;
+
     int i = 0;
     size_t counter = 0;
     while(i < CHUNK_SIZE && chunk[i] != nullptr)
@@ -413,7 +431,10 @@ LinkedList<bigint>* static_twinsmooth::k_generate_twinsmooth(Node* chunk, Linked
                 mpz_sub_ui(*nv, *m1, 1);
 
                 if(S->search(nv) == nullptr)
+                {
                     result->push(nv);
+                    x->twins_found++;
+                }
                 else
                 {
                     bigint_free(nv);
@@ -442,7 +463,10 @@ LinkedList<bigint>* static_twinsmooth::k_generate_twinsmooth(Node* chunk, Linked
                 mpz_sub_ui(*nv, *m1, 1);
 
                 if(S->search(nv) == nullptr)
+                {
                     result->push(nv);
+                    x->twins_found++;
+                }
                 else
                 {
                     bigint_free(nv);
@@ -665,8 +689,9 @@ LinkedList<Node>* static_twinsmooth::k_iteration_S_S(LinkedTree *S, bigfloat k, 
         }
 
         #pragma omp parallel num_threads(NUM_THREADS)
+        //for(int i = 0; i < NUM_THREADS; i++)
         {
-            int i = omp_get_thread_num();
+             int i = omp_get_thread_num();
 
             if(points_arr[i] != nullptr ) {
                 results[i] = k_generate_twinsmooth(points_arr[i], S, k, oldk);

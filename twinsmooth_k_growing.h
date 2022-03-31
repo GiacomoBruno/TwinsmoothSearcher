@@ -12,6 +12,7 @@ protected:
     size_t amount_of_top_twins_to_log;
 
     void print_top_numbers();
+    void prepare_secondary_set();
 
     void increment_k();
 public:

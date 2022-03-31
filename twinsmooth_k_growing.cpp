@@ -69,6 +69,17 @@ void s_twinsmooth_k_growing::start() {
     }
 }
 
+void s_twinsmooth_k_growing::prepare_secondary_set()
+{
+    auto iter = S->begin();
+    while(iter != nullptr)
+    {
+        if(iter->twins_found > 10)
+            N->push(iter);
+        iter = iter->next;
+    }
+}
+
 void s_twinsmooth_k_growing::execute() {
     using st = static_twinsmooth;
     do
@@ -76,7 +87,7 @@ void s_twinsmooth_k_growing::execute() {
         benchmark b;
         b.start_bench();
         N->clear(); delete N;
-        N = st::k_iteration_S_S(S, current_k, old_k);
+        N = st::k_iteration_S_S(S, current_k);
         //output_file.save_list(N);
         lg->log("finished SxS iteration for K ", cur_k);
         lg->log( ", old K ", cur_k - step_k);

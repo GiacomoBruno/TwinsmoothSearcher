@@ -6,6 +6,7 @@
 #include "twinsmooth_k_growing.h"
 #include "prime_calculator.h"
 #include "prime_calculator_top_n.h"
+#include "twinsmooth_test.h"
 
 bool get_bool(const std::string& s)
 {
@@ -37,7 +38,6 @@ double get_double(const std::string& s)
 
 int main(int argc, char** argv)
 {
-
     std::cout << sizeof(struct node) << std::endl;
     auto smoothness = get_size_t("choose smoothness: ");
     lg = new logger(STATUS_FN, OUT_FOLDER(smoothness), smoothness);
@@ -48,6 +48,7 @@ int main(int argc, char** argv)
     std::endl << "(3) increasing k optimization" <<
     std::endl << "(4) calculate primes" <<
     std::endl << "(5) calculate top primes" <<
+    std::endl << "(6) test" <<
     std::endl;
     size_t mode = get_size_t("select: ");
     s_twinsmooth* s = nullptr;
@@ -63,6 +64,7 @@ int main(int argc, char** argv)
                                                    get_size_t("amount of top twins to log per K: ")); break;
             case 4: s = new prime_calculator(smoothness); break;
             case 5: s = new prime_calculator_top_n(smoothness, (int)get_size_t("choose number of primes to look for: "), get_bool("is the set of twins in reverse order? ")); break;
+            case 6: s = new twinsmooth_test(smoothness); break;
             default: std::cout << "not a valid option" << std::endl; break;
         }
     }

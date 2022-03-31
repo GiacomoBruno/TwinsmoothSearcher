@@ -88,7 +88,6 @@ Node node::skip(size_t n)
     return iter;
 }
 
-
 Node node::skip_back(size_t n)
 {
     size_t counter = 0;
@@ -406,3 +405,99 @@ LinkedList<Node>* LinkedTree::merge_return_inserted(LinkedList<bigint>* other) {
 }
 
 
+
+
+Node deleteNode(Node root, bigint key,int cmp, const bool& del) {
+    // Find the node and delete it
+    //if (root == nullptr)
+    //    return root;
+    Node rt = nullptr;
+    //int cmp = mpz_cmp(*key, *root->val);
+    if(cmp < 0) {
+        //key is smaller than current node
+        auto ndleft = root->left;
+        if(ndleft == nullptr) return nullptr;
+
+        int cmp1 = mpz_cmp(*key, *ndleft->val);
+        if(cmp1 == 0)
+        {
+            if(ndleft->next != nullptr) ndleft->next->prev = ndleft->prev;
+            if(ndleft->prev != nullptr) ndleft->prev->next = ndleft->next;
+            root->left = ndleft->left ? ndleft->left : ndleft->right;
+            rt = root->left;
+            if(del) { bigint_free(ndleft->val); }
+            delete ndleft;
+        }
+        else return deleteNode(root->left, key, cmp1, del);
+    }
+    else if(cmp > 0) {
+        auto ndright = root->right;
+        if(ndright == nullptr) return nullptr;
+
+        int cmp1 = mpz_cmp(*key, *ndright->val);
+        if(cmp1 == 0) {
+            if (ndright->next != nullptr) ndright->next->prev = ndright->prev;
+            if (ndright->prev != nullptr) ndright->prev->next = ndright->next;
+            root->right = ndright->right ? ndright->right : ndright->left;
+            rt = root->right;
+
+            if (del) { bigint_free(ndright->val); }
+            delete ndright;
+
+        } else return deleteNode(root->right, key, cmp1, del);
+    }
+
+    if (rt == nullptr)
+        return rt;
+
+    // Update the balance factor of each node and
+    // balance the tree
+    rt->height = std::max(get_height(rt->left), get_height(rt->right)) + 1;
+    int8_t balanceFactor = balance_factor(rt);
+    if (balanceFactor > 1) {
+        if (balance_factor(rt->left) >= 0) {
+            return rt->rotate_right();
+        } else {
+            rt->left = rt->left->rotate_left();
+            return rt->rotate_right();
+        }
+    }
+    if (balanceFactor < -1) {
+        if (balance_factor(rt->right) <= 0) {
+            return rt->rotate_left();
+        } else {
+            rt->right = rt->right->rotate_right();
+            return rt->rotate_left();
+        }
+    }
+    return rt;
+}
+
+
+void LinkedTree::remove(bigint key) {
+    int cmp = mpz_cmp(*key, *root->val);
+    if(cmp == 0)
+    {
+        auto temp = root->left ? root->left : root->right;
+        if(root->next != nullptr) root->next->prev = root->prev;
+        if(root->prev != nullptr) root->prev->next = root->next;
+
+        delete root;
+        root = temp;
+    }
+    else deleteNode(root, key, cmp, false);
+}
+
+void LinkedTree::remove_del(bigint key) {
+    int cmp = mpz_cmp(*key, *root->val);
+    if(cmp == 0)
+    {
+        auto temp = root->left ? root->left : root->right;
+        if(root->next != nullptr) root->next->prev = root->prev;
+        if(root->prev != nullptr) root->prev->next = root->next;
+
+        bigint_free(root->val);
+        delete root;
+        root = temp;
+    }
+    else deleteNode(root, key, cmp, true);}
