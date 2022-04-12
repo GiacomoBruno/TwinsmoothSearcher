@@ -20,6 +20,7 @@ public:
 
     void push(T n);
     void push(LinkedList<T>* l);
+    void push_back(T n);
 
     void pop();
     T top();
@@ -97,4 +98,12 @@ void LinkedList<T>::push(LinkedList<T>* l) {
     first = l->first;
     _size = _size + l->size();
     delete l;
+}
+
+template<typename T>
+void LinkedList<T>::push_back(T n) {
+    auto l = last();
+    if(l == nullptr) return push(n);
+    l->next = new LLNode(n);
+    _size++;
 }

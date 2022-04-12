@@ -127,6 +127,7 @@ void static_twinsmooth::k_get_ranges(Node nd, LinkedTree *results, size_t &lower
 }
 
 
+
 LinkedList<bigint>* static_twinsmooth::generate_twinsmooth(Node* chunk, LinkedTree* S) {
     auto d = bigint_new;
     auto delta = bigint_new;
@@ -213,7 +214,7 @@ LinkedList<bigint>* static_twinsmooth::generate_twinsmooth(Node* chunk, LinkedTr
     return result;
 }
 
-LinkedList<bigint>* static_twinsmooth::r_generate_twinsmooth(Node* chunk, size_t range, LinkedTree* S) {
+LinkedList<bigint>* static_twinsmooth::r_generate_twinsmooth(Node* chunk, LinkedTree* S, size_t range) {
     auto d = bigint_new;
     auto delta = bigint_new;
     auto m1 = bigint_new;
@@ -292,6 +293,96 @@ LinkedList<bigint>* static_twinsmooth::r_generate_twinsmooth(Node* chunk, size_t
             z = z->prev;
             counter++;
         }
+        i++;
+    }
+
+    bigint_free(d);
+    bigint_free(delta);
+    bigint_free(m1);
+    return result;
+}
+
+LinkedList<bigint>* static_twinsmooth::r_generate_twinsmooth(Node* chunk, LinkedTree* S, size_t range, size_t old_range)
+{
+    auto d = bigint_new;
+    auto delta = bigint_new;
+    auto m1 = bigint_new;
+    mpz_init2(*d, MPZ_INIT_BITS);
+    mpz_init2(*delta, MPZ_INIT_BITS);
+    mpz_init2(*m1, MPZ_INIT_BITS);
+    auto result = new LinkedList<bigint>();
+
+    int i = 0;
+    size_t counter = 0;
+    while(i < CHUNK_SIZE && chunk[i] != nullptr)
+    {
+        auto x = chunk[i]; //costante per il ciclo corrente
+        auto y = chunk[i]->skip(old_range + (old_range == 0));
+        auto z = chunk[i]->skip_back(old_range + (old_range ==0));
+
+        // (x|y) with y > x
+        while(counter < range - old_range && y != nullptr)
+        {
+            mpz_mul(*m1, *(x->val), *(y->val));
+            mpz_add(*m1, *m1, *(y->val));
+            mpz_sub(*delta, *(y->val), *(x->val));
+            mpz_mod(*d, *m1, *delta);
+
+            if (mpz_cmp_ui(*d, 0) == 0)
+            {
+                auto nv = bigint_new;
+                mpz_init2(*nv, MPZ_INIT_BITS);
+
+                mpz_div(*m1, *m1, *delta);
+                mpz_sub_ui(*nv, *m1, 1);
+
+                if(S->search(nv) == nullptr)
+                {
+                    result->push(nv);
+                    x->twins_found++;
+                }
+                else
+                {
+                    bigint_free(nv);
+                }
+            }
+
+            y = y->next;
+            counter++;
+        }
+
+        counter = 0;
+        // (x|z) with x > z
+        while(counter < range-old_range && z != nullptr)
+        {
+            mpz_mul(*m1, *(z->val), *(x->val));
+            mpz_add(*m1, *m1, *(x->val));
+            mpz_sub(*delta, *(x->val), *(z->val));
+            mpz_mod(*d, *m1, *delta);
+
+            if (mpz_cmp_ui(*d, 0) == 0)
+            {
+                auto nv = bigint_new;
+                mpz_init2(*nv, MPZ_INIT_BITS);
+
+                mpz_div(*m1, *m1, *delta);
+                mpz_sub_ui(*nv, *m1, 1);
+
+                if(S->search(nv) == nullptr)
+                {
+                    result->push(nv);
+                    x->twins_found++;
+                }
+                else
+                {
+                    bigint_free(nv);
+                }
+            }
+
+            z = z->prev;
+            counter++;
+        }
+
         i++;
     }
 
@@ -601,7 +692,7 @@ LinkedList<Node>* static_twinsmooth::r_iteration_S_S(LinkedTree *S, size_t range
             int i = omp_get_thread_num();
 
             if(points_arr[i] != nullptr ) {
-                results[i] = r_generate_twinsmooth(points_arr[i], range, S);
+                results[i] = r_generate_twinsmooth(points_arr[i], S, range);
                 delete[] points_arr[i];
             }
         }
@@ -647,7 +738,7 @@ LinkedList<Node>* static_twinsmooth::r_iteration_S_N(LinkedTree *S, LinkedList<N
             int i = omp_get_thread_num();
 
             if(points_arr[i] != nullptr ) {
-                results[i] = r_generate_twinsmooth(points_arr[i], range, S);
+                results[i] = r_generate_twinsmooth(points_arr[i], S, range);
                 delete[] points_arr[i];
             }
         }
@@ -669,6 +760,52 @@ LinkedList<Node>* static_twinsmooth::r_iteration_S_N(LinkedTree *S, LinkedList<N
 
     return result;
 }
+
+LinkedList<Node> *static_twinsmooth::r_iteration_S_S(LinkedTree *S, size_t range, size_t old_range) {
+    auto chunks = create_chunks(S);
+    auto result = new LinkedList<Node>();
+
+    while(!chunks->empty())
+    {
+        auto results = new LinkedList<bigint>*[NUM_THREADS];
+        auto points_arr = new Node*[NUM_THREADS];
+        NULL_INIT_ARRAY(points_arr, NUM_THREADS);
+        NULL_INIT_ARRAY(results, NUM_THREADS);
+
+
+        for (int i = 0; i < (NUM_THREADS) && !chunks->empty(); i++) {
+            auto pts = chunks->top(); chunks->pop();
+            if (pts == nullptr) break;
+            points_arr[i] = pts;
+        }
+
+        #pragma omp parallel num_threads(NUM_THREADS)
+        //for(int i = 0; i < NUM_THREADS; i++)
+        {
+            int i = omp_get_thread_num();
+
+            if(points_arr[i] != nullptr ) {
+                results[i] = r_generate_twinsmooth(points_arr[i], S, range, old_range);
+                delete[] points_arr[i];
+            }
+        }
+
+        for (int i = 0; i < (NUM_THREADS); i++)
+        {
+            if ((results)[i] != nullptr)
+            {
+                result->push(S->merge_return_inserted(results[i]));
+            }
+        }
+
+        delete[] points_arr;
+        delete[] results;
+
+    }
+    chunks->clear();
+    delete chunks;
+
+    return result;}
 
 LinkedList<Node>* static_twinsmooth::k_iteration_S_S(LinkedTree *S, bigfloat k, bigfloat oldk) {
     auto chunks = create_chunks(S);
@@ -826,6 +963,8 @@ LinkedList<bigint>* static_twinsmooth::generate_primes(LinkedList<bigint*>* chun
     }
     return result;
 }
+
+
 
 /*LinkedList *static_twinsmooth::prime_iteration(LinkedTree *S) {
     LinkedList* chunks = create_chunks(S, CHUNK_SIZE);

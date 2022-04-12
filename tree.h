@@ -13,7 +13,7 @@ node {
     node* prev = nullptr;
 
     int8_t height = 1;
-    int16_t twins_found = 0;
+    uint16_t twins_found = 0;
 
     bigint val = nullptr;
 
@@ -38,10 +38,11 @@ private:
 
 
     Node insert_node(Node nd, bigint key, Node& insterted_node);
+    Node delete_node(Node root, bigint key,int cmp, const bool& del);
+
     static Node search_node(Node nd, bigint key);
     Node lower_bound_node(Node nd, bigint key);
     Node upper_bound_node(Node nd, bigint key);
-    Node delete_node(Node root, bigint key,int cmp, const bool& del);
 
 public:
     explicit LinkedTree() : _size(0) { }
@@ -67,7 +68,12 @@ public:
 
     void remove(bigint key);
     void remove_del(bigint key);
-    
+
+    bool remove_first_conditional(const std::function<bool(Node)>& f,  const bool& del);
+    bool delete_first_conditional(Node nd, const std::function<bool(Node)>& f,const bool& del);
+
+
+    void bfs(const std::function<void(Node)>& f);
 };
 
 

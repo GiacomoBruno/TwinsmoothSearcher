@@ -20,7 +20,9 @@ private:
     //No optimization twinsmooth generation
     static LinkedList<bigint>* generate_twinsmooth(Node* chunk, LinkedTree* S);
 
-    static LinkedList<bigint>* r_generate_twinsmooth(Node* chunk, size_t range, LinkedTree* S);
+    static LinkedList<bigint>* r_generate_twinsmooth(Node* chunk, LinkedTree* S, size_t range);
+
+    static LinkedList<bigint>* r_generate_twinsmooth(Node* chunk, LinkedTree* S, size_t range, size_t old_range);
 
     static LinkedList<bigint>* k_generate_twinsmooth(Node* chunk, LinkedTree *S, bigfloat k);
 
@@ -42,6 +44,8 @@ public:
 
     //range optimization SxN single iteration
     static LinkedList<Node>* r_iteration_S_S(LinkedTree *S, size_t range);
+
+    static LinkedList<Node>* r_iteration_S_S(LinkedTree* S, size_t range, size_t old_range);
 
     static LinkedList<Node>* r_iteration_S_N(LinkedTree *S, LinkedList<Node> *N, size_t range);
 

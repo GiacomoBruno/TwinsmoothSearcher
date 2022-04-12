@@ -69,17 +69,6 @@ void s_twinsmooth_k_growing::start() {
     }
 }
 
-void s_twinsmooth_k_growing::prepare_secondary_set()
-{
-    auto iter = S->begin();
-    while(iter != nullptr)
-    {
-        if(iter->twins_found > 10)
-            N->push(iter);
-        iter = iter->next;
-    }
-}
-
 void s_twinsmooth_k_growing::execute() {
     using st = static_twinsmooth;
     do
@@ -132,6 +121,24 @@ void s_twinsmooth_k_growing::terminate() {
     lg->logl("found in total: ", S->size());
     S->cleanup();
     delete S;
+}
+
+void s_twinsmooth_k_growing::get_good_twins(uint16_t threshold) {
+
+    auto iter = S->end();
+    N->clear();
+    delete N;
+    N = new LinkedList<Node>;
+
+    while(iter != nullptr)
+    {
+        if(iter->twins_found > threshold)
+        {
+            N->push(iter);
+        }
+        iter = iter->prev;
+    }
+
 }
 
 

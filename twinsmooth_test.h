@@ -1,9 +1,4 @@
-//
-// Created by Giacomo Bruno on 27/03/22.
-//
-
-#ifndef BSMOOTH_TWINSMOOTH_TEST_H
-#define BSMOOTH_TWINSMOOTH_TEST_H
+#pragma once
 #include "twinsmooth.h"
 
 class twinsmooth_test : public s_twinsmooth {
@@ -14,6 +9,3 @@ public:
     void execute() override;
 
 };
-
-
-#endif //BSMOOTH_TWINSMOOTH_TEST_H

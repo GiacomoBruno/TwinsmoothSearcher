@@ -407,15 +407,10 @@ LinkedList<Node>* LinkedTree::merge_return_inserted(LinkedList<bigint>* other) {
 
 
 
-Node LinkedTree::delete_node(Node root, bigint key,int cmp, const bool& del) {
-    // Find the node and delete it
-    //if (root == nullptr)
-    //    return root;
+Node LinkedTree::delete_node(Node _root, bigint key,int cmp, const bool& del) {
     Node rt = nullptr;
-    //int cmp = mpz_cmp(*key, *root->val);
     if(cmp < 0) {
-        //key is smaller than current node
-        auto ndleft = root->left;
+        auto ndleft = _root->left;
         if(ndleft == nullptr) return nullptr;
 
         int cmp1 = mpz_cmp(*key, *ndleft->val);
@@ -423,30 +418,30 @@ Node LinkedTree::delete_node(Node root, bigint key,int cmp, const bool& del) {
         {
             if(ndleft->next != nullptr) ndleft->next->prev = ndleft->prev;
             if(ndleft->prev != nullptr) ndleft->prev->next = ndleft->next;
-            root->left = ndleft->left ? ndleft->left : ndleft->right;
-            rt = root->left;
+            _root->left = ndleft->left ? ndleft->left : ndleft->right;
+            rt = _root->left;
             if(del) { bigint_free(ndleft->val); }
             delete ndleft;
             _size--;
         }
-        else return delete_node(root->left, key, cmp1, del);
+        else return delete_node(_root->left, key, cmp1, del);
     }
     else if(cmp > 0) {
-        auto ndright = root->right;
+        auto ndright = _root->right;
         if(ndright == nullptr) return nullptr;
 
         int cmp1 = mpz_cmp(*key, *ndright->val);
         if(cmp1 == 0) {
             if (ndright->next != nullptr) ndright->next->prev = ndright->prev;
             if (ndright->prev != nullptr) ndright->prev->next = ndright->next;
-            root->right = ndright->right ? ndright->right : ndright->left;
-            rt = root->right;
+            _root->right = ndright->right ? ndright->right : ndright->left;
+            rt = _root->right;
 
             if (del) { bigint_free(ndright->val); }
             delete ndright;
             _size--;
 
-        } else return delete_node(root->right, key, cmp1, del);
+        } else return delete_node(_root->right, key, cmp1, del);
     }
 
     if (rt == nullptr)
@@ -506,4 +501,97 @@ void LinkedTree::remove_del(bigint key) {
         _size--;
         root = temp;
     }
-    else delete_node(root, key, cmp, true);}
+    else delete_node(root, key, cmp, true);
+}
+
+void LinkedTree::bfs(const std::function<void(Node)>& f) {
+    LinkedList<Node> n;
+    n.push(root);
+
+    while(!n.empty())
+    {
+        auto v = n.top(); n.pop();
+        f(v);
+        if(v->left != nullptr) n.push_back(v->left);
+        if(v->right != nullptr) n.push_back(v->right);
+    }
+}
+
+bool LinkedTree::remove_first_conditional(const std::function<bool(Node)>& f, const bool& del)
+{
+    if(f(root))
+    {
+        auto temp = root->left ? root->left : root->right;
+        if(root->next != nullptr) root->next->prev = root->prev;
+        if(root->prev != nullptr) root->prev->next = root->next;
+
+        bigint_free(root->val);
+        delete root;
+        _size--;
+        root = temp;
+        return true;
+    }
+    else return delete_first_conditional(root,f, del);
+}
+
+bool LinkedTree::delete_first_conditional(Node nd, const std::function<bool(Node)>& f, const bool& del)
+{
+    Node rt = nullptr;
+    bool found_l = false;
+    bool found_r = false;
+    if(nd->left != nullptr && (found_l = f(nd->left)))
+    {
+        auto ndleft = nd->left;
+        if (ndleft->next != nullptr) ndleft->next->prev = ndleft->prev;
+        if (ndleft->prev != nullptr) ndleft->prev->next = ndleft->next;
+        nd->left = ndleft->left ? ndleft->left : ndleft->right;
+        rt = nd->left;
+        if (del) { bigint_free(ndleft->val); }
+        delete ndleft;
+        _size--;
+    }
+    else if(nd->right != nullptr && (found_r = f(nd->right)))
+    {
+        auto ndright = nd->right;
+        if (ndright->next != nullptr) ndright->next->prev = ndright->prev;
+        if (ndright->prev != nullptr) ndright->prev->next = ndright->next;
+        nd->right = ndright->right ? ndright->right : ndright->left;
+        rt = nd->right;
+
+        if (del) { bigint_free(ndright->val); }
+        delete ndright;
+        _size--;
+    }
+    else
+    {
+        if(nd->left != nullptr) return delete_first_conditional(nd->left, f, del);
+        if(nd->right != nullptr) return delete_first_conditional(nd->right, f, del);
+    }
+
+
+
+    if (rt == nullptr)
+        return rt;
+
+    // Update the balance factor of each node and
+    // balance the tree
+    rt->height = std::max(get_height(rt->left), get_height(rt->right)) + 1;
+    int8_t balanceFactor = balance_factor(rt);
+    if (balanceFactor > 1) {
+        if (balance_factor(rt->left) >= 0) {
+            return rt->rotate_right();
+        } else {
+            rt->left = rt->left->rotate_left();
+            return rt->rotate_right();
+        }
+    }
+    if (balanceFactor < -1) {
+        if (balance_factor(rt->right) <= 0) {
+            return rt->rotate_left();
+        } else {
+            rt->right = rt->right->rotate_right();
+            return rt->rotate_left();
+        }
+    }
+    return rt;
+}
