@@ -7,7 +7,7 @@ void s_twinsmooth_k_growing::print_top_numbers()
     auto iter = S->end();
     output_file.open();
     lg->logl("\tTop numbers found:");
-    for(int i = 0; i < amount_of_top_twins_to_log && iter != nullptr; i++)
+    for(size_t i = 0; i < amount_of_top_twins_to_log && iter != nullptr; i++)
     {
         lg->logl("\t\t", iter->val);
         output_file.printn("%Zd\n", *iter->val);
@@ -41,7 +41,7 @@ void s_twinsmooth_k_growing::start() {
         using st = static_twinsmooth;
         N->clear(); delete N;
         N = st::k_iteration_S_S(S, current_k);
-
+        //update_threshold();
         lg->logl("finished FIRST SxS iteration and found ", N->size());
         cur_k = start_k;
         bigfloat_set(current_k, start_k);
@@ -49,6 +49,7 @@ void s_twinsmooth_k_growing::start() {
         while(!N->empty())
         {
             auto tmp = st::k_iteration_S_N(S, N, current_k);
+            //update_threshold(N);
             N->clear(); delete N;
             N = tmp;
             found_numbers += N->size();
@@ -77,6 +78,7 @@ void s_twinsmooth_k_growing::execute() {
         b.start_bench();
         N->clear(); delete N;
         N = st::k_iteration_S_S(S, current_k);
+        //get_good_twins();
         //output_file.save_list(N);
         lg->log("finished SxS iteration for K ", cur_k);
         lg->log( ", old K ", cur_k - step_k);
@@ -89,6 +91,7 @@ void s_twinsmooth_k_growing::execute() {
             benchmark lb;
             lb.start_bench();
             auto tmp = st::k_iteration_S_N(S, N, current_k);
+            //update_threshold(N);
             N->clear(); delete N;
             N = tmp;
             //output_file.save_list(N);
@@ -123,12 +126,38 @@ void s_twinsmooth_k_growing::terminate() {
     delete S;
 }
 
-void s_twinsmooth_k_growing::get_good_twins(uint16_t threshold) {
+void s_twinsmooth_k_growing::update_threshold(LinkedList<Node>* nodes)
+{
+    auto iter = nodes->begin();
+
+    while(iter != nullptr)
+    {
+        if(iter->value->twins_found > threshold) threshold = iter->value->twins_found;
+        iter = iter->next;
+    }
+}
+
+void s_twinsmooth_k_growing::update_threshold()
+{
+    auto iter = S->begin();
+
+    while(iter != nullptr)
+    {
+        if(iter->twins_found > threshold) threshold = iter->twins_found;
+        iter = iter->next;
+    }
+}
+
+
+void s_twinsmooth_k_growing::get_good_twins() {
 
     auto iter = S->end();
     N->clear();
     delete N;
     N = new LinkedList<Node>;
+
+    int t = threshold - 10;
+    t = t > threshold ? 0 : t;
 
     while(iter != nullptr)
     {

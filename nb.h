@@ -7,7 +7,7 @@
 #include "logger.h"
 
 
-#define NUM_THREADS 8
+#define NUM_THREADS 64
 #define MPZ_INIT_BITS 128                                           /* Max bit-length for integers at start*/
 #define MEGABYTE 1000000
 #define MAX_FILE_SIZE MEGABYTE*100

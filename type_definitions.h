@@ -6,6 +6,7 @@
 #define BSMOOTH_TYPE_DEFINITIONS_H
 #include <chrono>
 #include <gmp.h>
+#include <functional>
 
 typedef mpf_t* bigfloat;
 typedef mpz_t* bigint;

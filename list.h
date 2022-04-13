@@ -24,7 +24,8 @@ public:
 
     void pop();
     T top();
-    LNode<T> last();
+    LNode<T> end();
+    LNode<T> begin();
     [[nodiscard]] size_t size() const { return _size; }
     void clear();
     [[nodiscard]] bool empty() const;
@@ -83,11 +84,16 @@ template<class T>
 bool LinkedList<T>::empty() const { return _size == 0; }
 
 template<class T>
-LNode<T> LinkedList<T>::last() {
+LNode<T> LinkedList<T>::end() {
     auto iter = first;
     while(iter != nullptr && iter->next != nullptr)
         iter = iter->next;
     return iter;
+}
+
+template<class T>
+LNode<T> LinkedList<T>::begin() {
+    return first;
 }
 
 template<class T>
@@ -102,7 +108,7 @@ void LinkedList<T>::push(LinkedList<T>* l) {
 
 template<typename T>
 void LinkedList<T>::push_back(T n) {
-    auto l = last();
+    auto l = end();
     if(l == nullptr) return push(n);
     l->next = new LLNode(n);
     _size++;

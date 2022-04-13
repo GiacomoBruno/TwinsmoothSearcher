@@ -10,9 +10,12 @@ protected:
     bigfloat current_k;
     bigfloat old_k;
     size_t amount_of_top_twins_to_log;
+    uint16_t threshold;
 
     void print_top_numbers();
-    void get_good_twins(uint16_t threshold);
+    void update_threshold(LinkedList<Node>* nodes);
+    void update_threshold();
+    void get_good_twins();
 
     void increment_k();
 public:
