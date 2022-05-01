@@ -6,7 +6,7 @@
 # It is included in the main 'build.ninja'.
 
 # =============================================================================
-# Project: BSmooth
+# Project: twinsmooth_searcher
 # Configurations: Debug
 # =============================================================================
 # =============================================================================
@@ -22,7 +22,7 @@ rule CUSTOM_COMMAND
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__BSmooth_Debug
+rule CXX_COMPILER__twinsmooth_searcher_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = /opt/homebrew/opt/llvm/bin/clang++ $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -32,7 +32,7 @@ rule CXX_COMPILER__BSmooth_Debug
 #############################################
 # Rule for linking CXX executable.
 
-rule CXX_EXECUTABLE_LINKER__BSmooth_Debug
+rule CXX_EXECUTABLE_LINKER__twinsmooth_searcher_Debug
   command = $PRE_LINK && /opt/homebrew/opt/llvm/bin/clang++ $FLAGS -Wl,-search_paths_first -Wl,-headerpad_max_install_names $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT

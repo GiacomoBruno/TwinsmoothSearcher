@@ -155,7 +155,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=BSmooth
+CMAKE_PROJECT_NAME:STATIC=twinsmooth_searcher
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/ranlib
@@ -218,6 +218,15 @@ CMAKE_STRIP:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/strip
 // during the make.  This is useful for debugging only. With Visual
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
+
+//Value Computed by CMake
+twinsmooth_searcher_BINARY_DIR:STATIC=/Users/giacomobruno/CLionProjects/BSmooth/cmake-build-debug
+
+//Value Computed by CMake
+twinsmooth_searcher_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+twinsmooth_searcher_SOURCE_DIR:STATIC=/Users/giacomobruno/CLionProjects/BSmooth
 
 
 ########################
