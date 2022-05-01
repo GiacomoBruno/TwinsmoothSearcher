@@ -53,19 +53,19 @@ bigint operator*(const bigint& number, const bigint &other) {
 }
 
 
-int bigint::operator<=>(const bigint &other) const {
+int bigint::operator<(const bigint &other) const {
     return mpz_cmp(number, other.number);
 }
 
-int bigint::operator<=>(long long int other) const {
+int bigint::operator<(long long int other) const {
     return mpz_cmp_ui(number, other);
 }
 
-int bigint::operator<=>(int other) const {
+int bigint::operator<(int other) const {
     return mpz_cmp_si(number, other);
 }
 
-int bigint::operator<=>(const mpz_t& other) const {
+int bigint::operator<(const mpz_t& other) const {
     return mpz_cmp(number, other);
 }
 

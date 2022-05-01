@@ -34,10 +34,11 @@ public:
     bigint& operator-=(int other);
     bigint& operator+=(int other);
 
-    int operator<=>(const bigint& other) const;
-    int operator<=>(long long other) const;
-    int operator<=>(int other) const;
-    int operator<=>(const mpz_t& other) const;
+    int operator<(const bigint& other) const;
+    int operator<(long long other) const;
+    int operator<(int other) const;
+    int operator<(const mpz_t& other) const;
+
 
     bigint& operator=(bigint&& num) noexcept;
     bigint& operator=(const bigint& num);

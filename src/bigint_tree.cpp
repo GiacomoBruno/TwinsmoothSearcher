@@ -125,7 +125,7 @@ TreeNode bigint_tree::insert_node(TreeNode nd, bigint* key, TreeNode& inserted_n
         return res;
     }
 
-    int cmp = key->operator<=>(*nd->val);//mpz_cmp(*key, *(nd->val));
+    int cmp = *key < *nd->val;//mpz_cmp(*key, *(nd->val));
 
 
     if (cmp < 0)
@@ -181,7 +181,7 @@ TreeNode bigint_tree::insert_node(TreeNode nd, bigint* key, TreeNode& inserted_n
 
     if (balanceFactor > 1)
     {
-        cmp = key->operator<=>(*nd->left->val);//mpz_cmp(*key, *(nd->left->val));
+        cmp = *key < (*nd->left->val);//mpz_cmp(*key, *(nd->left->val));
         if (cmp < 0) {
             return nd->rotate_right();
         }
@@ -193,7 +193,7 @@ TreeNode bigint_tree::insert_node(TreeNode nd, bigint* key, TreeNode& inserted_n
     }
 
     if (balanceFactor < -1) {
-        cmp = key->operator<=>(*nd->right->val);//mpz_cmp(*key, *(nd->right->val));
+        cmp = *key < (*nd->right->val);//mpz_cmp(*key, *(nd->right->val));
         if (cmp > 0)
         {
             return nd->rotate_left();
@@ -250,7 +250,7 @@ TreeNode bigint_tree::search_node(TreeNode nd, bigint* key)
 {
     if(nd == nullptr) return nullptr;
     //assumption tree is not empty
-    int cmp = nd->val->operator<=>(*key);//mpz_cmp(*nd->val, *key);
+    int cmp = *nd->val < (*key);//mpz_cmp(*nd->val, *key);
 
     if(cmp > 0)
     {
@@ -285,7 +285,7 @@ TreeNode bigint_tree::search_delete_source(bigint* key) {
 TreeNode bigint_tree::lower_bound_node(TreeNode nd, bigint* key) {
     if(nd == nullptr)
         return first_element;
-    int cmp = nd->val->operator<=>(*key);//mpz_cmp(*nd->val, *key);
+    int cmp = *nd->val < (*key);//mpz_cmp(*nd->val, *key);
     if(cmp > 0)
     {
         if(nd->prev == nullptr) return nd;
@@ -294,7 +294,7 @@ TreeNode bigint_tree::lower_bound_node(TreeNode nd, bigint* key) {
             auto iter = nd->prev;
             while(iter != nullptr)
             {
-                int cmp2 = iter->val->operator<=>(*key);//mpz_cmp(*iter->val, *key);
+                int cmp2 = *iter->val < (*key);//mpz_cmp(*iter->val, *key);
                 if(cmp2 < 0) return iter;
                 else if(cmp == 0) return iter->prev ? iter->prev : iter;
 
@@ -311,7 +311,7 @@ TreeNode bigint_tree::lower_bound_node(TreeNode nd, bigint* key) {
             auto iter = nd->next;
             while(iter != nullptr)
             {
-                int cmp2 = iter->val->operator<=>(*key);//mpz_cmp(*iter->val, *key);
+                int cmp2 = *iter->val < (*key);//mpz_cmp(*iter->val, *key);
                 if(cmp2 > 0) return iter;
                 else if(cmp == 0) return iter->prev;
                 iter = iter->next;
@@ -329,7 +329,7 @@ TreeNode bigint_tree::lower_bound_node(TreeNode nd, bigint* key) {
 
 TreeNode bigint_tree::upper_bound_node(TreeNode nd, bigint* key) {
     if(nd == nullptr) return last_element;
-    int cmp = nd->val->operator<=>(*key);//mpz_cmp(*nd->val, *key);
+    int cmp = *nd->val < (*key);//mpz_cmp(*nd->val, *key);
     if(cmp > 0)
     {
         if(nd->prev == nullptr) return nd;
@@ -338,7 +338,7 @@ TreeNode bigint_tree::upper_bound_node(TreeNode nd, bigint* key) {
             auto iter = nd->prev;
             while(iter != nullptr)
             {
-                int cmp2 = iter->val->operator<=>(*key);//mpz_cmp(*iter->val, *key);
+                int cmp2 = *iter->val < (*key);//mpz_cmp(*iter->val, *key);
                 if(cmp2 < 0) return iter;
                 else if(cmp == 0) return iter->next;
                 iter = iter->prev;
@@ -354,7 +354,7 @@ TreeNode bigint_tree::upper_bound_node(TreeNode nd, bigint* key) {
             auto iter = nd->next;
             while(iter != nullptr)
             {
-                int cmp2 = iter->val->operator<=>(*key);//mpz_cmp(*iter->val, *key);
+                int cmp2 = *iter->val < (*key);//mpz_cmp(*iter->val, *key);
                 if(cmp2 > 0) return iter;
                 else if (cmp == 0) return iter->next ? iter->next : iter;
                 iter = iter->next;
@@ -421,7 +421,7 @@ TreeNode bigint_tree::delete_node(TreeNode _root, bigint* key, int cmp, const bo
         auto ndleft = _root->left;
         if(ndleft == nullptr) return nullptr;
 
-        int cmp1 = key->operator<=>(*ndleft->val);//mpz_cmp(*key, *ndleft->val);
+        int cmp1 = *key < (*ndleft->val);//mpz_cmp(*key, *ndleft->val);
         if(cmp1 == 0)
         {
             if(ndleft->next != nullptr) ndleft->next->prev = ndleft->prev;
@@ -438,7 +438,7 @@ TreeNode bigint_tree::delete_node(TreeNode _root, bigint* key, int cmp, const bo
         auto ndright = _root->right;
         if(ndright == nullptr) return nullptr;
 
-        int cmp1 = key->operator<=>(*ndright->val);//mpz_cmp(*key, *ndright->val);
+        int cmp1 = *key < (*ndright->val);//mpz_cmp(*key, *ndright->val);
         if(cmp1 == 0) {
             if (ndright->next != nullptr) ndright->next->prev = ndright->prev;
             if (ndright->prev != nullptr) ndright->prev->next = ndright->next;
@@ -480,7 +480,7 @@ TreeNode bigint_tree::delete_node(TreeNode _root, bigint* key, int cmp, const bo
 
 void bigint_tree::remove(bigint* key) {
     if(root == nullptr) return;
-    int cmp = key->operator<=>(*root->val);//mpz_cmp(*key, *root->val);
+    int cmp = *key < (*root->val);//mpz_cmp(*key, *root->val);
     if(cmp == 0)
     {
         auto temp = root->left ? root->left : root->right;
@@ -496,7 +496,7 @@ void bigint_tree::remove(bigint* key) {
 
 void bigint_tree::remove_del(bigint* key) {
     if(root == nullptr) return;
-    int cmp = key->operator<=>(*root->val);//mpz_cmp(*key, *root->val);
+    int cmp = *key < (*root->val);//mpz_cmp(*key, *root->val);
     if(cmp == 0)
     {
         auto temp = root->left ? root->left : root->right;
@@ -515,7 +515,7 @@ void bigint_tree::remove_del(bigint* key) {
 TreeNode bigint_tree::search_node(TreeNode nd, const mpz_t& key) {
     if(nd == nullptr) return nullptr;
     //assumption tree is not empty
-    int cmp = nd->val->operator<=>(key);//mpz_cmp(*nd->val, *key);
+    int cmp = *nd->val < (key);//mpz_cmp(*nd->val, *key);
 
     if(cmp > 0)
     {

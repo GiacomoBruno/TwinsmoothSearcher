@@ -46,7 +46,7 @@ namespace twinsmooth {
                 *delta = (*y->val) - (*x->val);//(*delta, *(y->val), *(x->val));
                 *d = *m1 % *delta;//mpz_mod(*d, *m1, *delta);
 
-                if (d->operator<=>(0) == 0) {
+                if ((*d < 0) == 0) {
                     *m1 /= *delta; //mpz_div(*m1, *m1, *delta);
                     auto nv = new bigint(*m1);
                     *nv -= 1; //mpz_sub_ui(*nv, *m1, 1);
@@ -69,7 +69,7 @@ namespace twinsmooth {
                 *delta = (*x->val) - (*z->val);//mpz_sub(*delta, *(x->val), *(z->val));
                 *d = *m1 % *delta; //mpz_mod(*d, *m1, *delta);
 
-                if (d->operator<=>(0) == 0) {
+                if ((*d < 0) == 0) {
                     *m1 /= *delta; //mpz_div(*m1, *m1, *delta);
                     auto nv = new bigint(*m1);
                     *nv -= 1;//mpz_sub_ui(*nv, *m1, 1);
@@ -115,7 +115,7 @@ namespace twinsmooth {
                 *delta = (*y->val) - (*x->val);//(*delta, *(y->val), *(x->val));
                 *d = *m1 % *delta;//mpz_mod(*d, *m1, *delta);
 
-                if (d->operator<=>(0) == 0) {
+                if ((*d < 0) == 0) {
                     *m1 /= *delta; //mpz_div(*m1, *m1, *delta);
                     auto nv = new bigint(*m1);
                     *nv -= 1; //mpz_sub_ui(*nv, *m1, 1);
@@ -138,7 +138,7 @@ namespace twinsmooth {
                 *delta = (*x->val) - (*z->val);//mpz_sub(*delta, *(x->val), *(z->val));
                 *d = *m1 % *delta; //mpz_mod(*d, *m1, *delta);
 
-                if (d->operator<=>(0) == 0) {
+                if ((*d < 0) == 0) {
                     *m1 /= *delta; //mpz_div(*m1, *m1, *delta);
                     auto nv = new bigint(*m1);
                     *nv -= 1;//mpz_sub_ui(*nv, *m1, 1);
@@ -189,7 +189,7 @@ namespace twinsmooth {
                 *delta = (*y->val) - (*x->val);//(*delta, *(y->val), *(x->val));
                 *d = *m1 % *delta;//mpz_mod(*d, *m1, *delta);
 
-                if (d->operator<=>(0) == 0) {
+                if ((*d < 0) == 0) {
                     *m1 /= *delta; //mpz_div(*m1, *m1, *delta);
                     auto nv = new bigint(*m1);
                     *nv -= 1; //mpz_sub_ui(*nv, *m1, 1);
@@ -212,7 +212,7 @@ namespace twinsmooth {
                 *delta = (*x->val) - (*z->val);//mpz_sub(*delta, *(x->val), *(z->val));
                 *d = *m1 % *delta; //mpz_mod(*d, *m1, *delta);
 
-                if (d->operator<=>(0) == 0) {
+                if ((*d < 0) == 0) {
                     *m1 /= *delta; //mpz_div(*m1, *m1, *delta);
                     auto nv = new bigint(*m1);
                     *nv -= 1;//mpz_sub_ui(*nv, *m1, 1);
