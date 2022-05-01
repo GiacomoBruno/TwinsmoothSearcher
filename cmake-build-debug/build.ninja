@@ -72,103 +72,124 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 
 build cmake_object_order_depends_target_BSmooth: phony || CMakeFiles/BSmooth.dir
 
-build CMakeFiles/BSmooth.dir/main.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/main.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/main.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/main.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/main.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/main.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src
 
-build CMakeFiles/BSmooth.dir/tree.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/tree.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/tree.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/file_manager.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/file_manager.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/file_manager.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src
 
-build CMakeFiles/BSmooth.dir/file_manager.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/file_manager.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/file_manager.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/logger.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/logger.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/logger.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src
 
-build CMakeFiles/BSmooth.dir/twinsmooth.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/twinsmooth.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/twinsmooth.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/bigint.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/bigint.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/bigint.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src
 
-build CMakeFiles/BSmooth.dir/twinsmooth_range.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_range.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/twinsmooth_range.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/bigint_tree.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/bigint_tree.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/bigint_tree.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src
 
-build CMakeFiles/BSmooth.dir/nb.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/nb.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/nb.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/twinsmooth/generators.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/generators.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/twinsmooth/generators.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src/twinsmooth
 
-build CMakeFiles/BSmooth.dir/twinsmooth_k_growing.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_k_growing.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/twinsmooth_k_growing.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/twinsmooth/iterators.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/iterators.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/twinsmooth/iterators.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src/twinsmooth
 
-build CMakeFiles/BSmooth.dir/twinsmooth_k.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_k.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/twinsmooth_k.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/twinsmooth/chunkers.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/chunkers.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/twinsmooth/chunkers.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src/twinsmooth
 
-build CMakeFiles/BSmooth.dir/logger.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/logger.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/logger.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/bigfloat.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/bigfloat.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/bigfloat.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src
 
-build CMakeFiles/BSmooth.dir/static_twinsmooth.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/static_twinsmooth.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/static_twinsmooth.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/utilities.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/utilities.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/utilities.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src
 
-build CMakeFiles/BSmooth.dir/prime_calculator.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/prime_calculator.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/prime_calculator.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/twinsmooth/searcher.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/searcher.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/twinsmooth/searcher.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src/twinsmooth
 
-build CMakeFiles/BSmooth.dir/prime_calculator_top_n.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/prime_calculator_top_n.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/prime_calculator_top_n.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/twinsmooth/standard_searcher.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/standard_searcher.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/twinsmooth/standard_searcher.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src/twinsmooth
 
-build CMakeFiles/BSmooth.dir/twinsmooth_test.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_test.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/twinsmooth_test.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/twinsmooth/range_searcher.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/range_searcher.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/twinsmooth/range_searcher.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src/twinsmooth
 
-build CMakeFiles/BSmooth.dir/twinsmooth_range_growing.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_range_growing.cpp || cmake_object_order_depends_target_BSmooth
-  DEP_FILE = CMakeFiles/BSmooth.dir/twinsmooth_range_growing.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3 -std=gnu++20
+build CMakeFiles/BSmooth.dir/src/twinsmooth/k_searcher.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/k_searcher.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/twinsmooth/k_searcher.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/BSmooth.dir
-  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src/twinsmooth
+
+build CMakeFiles/BSmooth.dir/src/twinsmooth/all_searchers.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/all_searchers.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/twinsmooth/all_searchers.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
+  INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
+  OBJECT_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src/twinsmooth
+
+build CMakeFiles/BSmooth.dir/src/benchmark.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/benchmark.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/benchmark.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
+  INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
+  OBJECT_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src
+
+build CMakeFiles/BSmooth.dir/src/twinsmooth/growing_k_searcher.cpp.o: CXX_COMPILER__BSmooth_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/growing_k_searcher.cpp || cmake_object_order_depends_target_BSmooth
+  DEP_FILE = CMakeFiles/BSmooth.dir/src/twinsmooth/growing_k_searcher.cpp.o.d
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -std=gnu++20
+  INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/BSmooth -I/opt/homebrew/include
+  OBJECT_DIR = CMakeFiles/BSmooth.dir
+  OBJECT_FILE_DIR = CMakeFiles/BSmooth.dir/src/twinsmooth
 
 
 # =============================================================================
@@ -178,8 +199,8 @@ build CMakeFiles/BSmooth.dir/twinsmooth_range_growing.cpp.o: CXX_COMPILER__BSmoo
 #############################################
 # Link the executable BSmooth
 
-build BSmooth: CXX_EXECUTABLE_LINKER__BSmooth_Debug CMakeFiles/BSmooth.dir/main.cpp.o CMakeFiles/BSmooth.dir/tree.cpp.o CMakeFiles/BSmooth.dir/file_manager.cpp.o CMakeFiles/BSmooth.dir/twinsmooth.cpp.o CMakeFiles/BSmooth.dir/twinsmooth_range.cpp.o CMakeFiles/BSmooth.dir/nb.cpp.o CMakeFiles/BSmooth.dir/twinsmooth_k_growing.cpp.o CMakeFiles/BSmooth.dir/twinsmooth_k.cpp.o CMakeFiles/BSmooth.dir/logger.cpp.o CMakeFiles/BSmooth.dir/static_twinsmooth.cpp.o CMakeFiles/BSmooth.dir/prime_calculator.cpp.o CMakeFiles/BSmooth.dir/prime_calculator_top_n.cpp.o CMakeFiles/BSmooth.dir/twinsmooth_test.cpp.o CMakeFiles/BSmooth.dir/twinsmooth_range_growing.cpp.o
-  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.3
+build BSmooth: CXX_EXECUTABLE_LINKER__BSmooth_Debug CMakeFiles/BSmooth.dir/src/main.cpp.o CMakeFiles/BSmooth.dir/src/file_manager.cpp.o CMakeFiles/BSmooth.dir/src/logger.cpp.o CMakeFiles/BSmooth.dir/src/bigint.cpp.o CMakeFiles/BSmooth.dir/src/bigint_tree.cpp.o CMakeFiles/BSmooth.dir/src/twinsmooth/generators.cpp.o CMakeFiles/BSmooth.dir/src/twinsmooth/iterators.cpp.o CMakeFiles/BSmooth.dir/src/twinsmooth/chunkers.cpp.o CMakeFiles/BSmooth.dir/src/bigfloat.cpp.o CMakeFiles/BSmooth.dir/src/utilities.cpp.o CMakeFiles/BSmooth.dir/src/twinsmooth/searcher.cpp.o CMakeFiles/BSmooth.dir/src/twinsmooth/standard_searcher.cpp.o CMakeFiles/BSmooth.dir/src/twinsmooth/range_searcher.cpp.o CMakeFiles/BSmooth.dir/src/twinsmooth/k_searcher.cpp.o CMakeFiles/BSmooth.dir/src/twinsmooth/all_searchers.cpp.o CMakeFiles/BSmooth.dir/src/benchmark.cpp.o CMakeFiles/BSmooth.dir/src/twinsmooth/growing_k_searcher.cpp.o
+  FLAGS = -fopenmp -O0 -Wall -fsanitize=address -g -arch arm64
   LINK_LIBRARIES = -Wl,-rpath,/opt/homebrew/lib  -lgmp
   LINK_PATH = -L/opt/homebrew/lib
   OBJECT_DIR = CMakeFiles/BSmooth.dir

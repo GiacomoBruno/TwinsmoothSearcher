@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
 project(BSmooth)
-
-set(CMAKE_OSX_SYSROOT /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk)
-set(CMAKE_OSX_DEPLOYMENT_TARGET "12.3")
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
 set(CMAKE_CXX_STANDARD 20)
 
 set(GMP_INCLUDE_DIR "/opt/homebrew/include" )
@@ -15,7 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 
 link_directories(${GMP_LIBRARY_DIR})
-add_executable(BSmooth main.cpp tree.cpp file_manager.cpp file_manager.h tree.h nb.h twinsmooth.h twinsmooth.cpp list.h twinsmooth_range.cpp twinsmooth_range.h nb.cpp twinsmooth_k_growing.cpp twinsmooth_k_growing.h twinsmooth_k.cpp twinsmooth_k.h logger.cpp logger.h static_twinsmooth.cpp static_twinsmooth.h type_definitions.h prime_calculator.cpp prime_calculator.h prime_calculator_top_n.cpp prime_calculator_top_n.h twinsmooth_test.cpp twinsmooth_test.h twinsmooth_range_growing.cpp twinsmooth_range_growing.h)
+add_executable(BSmooth src/main.cpp src/file_manager.cpp include/file_manager.h include/list.h src/logger.cpp include/logger.h src/bigint.cpp include/bigint.h src/bigint_tree.cpp include/bigint_tree.h src/twinsmooth/generators.cpp include/twinsmooth/generators.h src/twinsmooth/iterators.cpp include/twinsmooth/iterators.h src/twinsmooth/chunkers.cpp include/twinsmooth/chunkers.h src/bigfloat.cpp include/bigfloat.h src/utilities.cpp include/utilities.h src/twinsmooth/searcher.cpp include/twinsmooth/searcher.h src/twinsmooth/standard_searcher.cpp include/twinsmooth/standard_searcher.h src/twinsmooth/range_searcher.cpp include/twinsmooth/range_searcher.h src/twinsmooth/k_searcher.cpp include/twinsmooth/k_searcher.h src/twinsmooth/all_searchers.cpp include/twinsmooth/all_searchers.h src/benchmark.cpp include/benchmark.h src/twinsmooth/growing_k_searcher.cpp include/twinsmooth/growing_k_searcher.h)
 
 
 
