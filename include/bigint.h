@@ -10,6 +10,7 @@ public:
 
     explicit bigint(int num);
     explicit bigint(long long num);
+    explicit bigint(unsigned long long num);
     explicit bigint(mpf_t* num);
     bigint(const bigint& num);
 

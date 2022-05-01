@@ -20,6 +20,10 @@ bigint::bigint(long long num) {
     mpz_init_set_ui(number, num);
 }
 
+bigint::bigint(unsigned long long num) {
+    mpz_init_set_ui(number, num);
+}
+
 bigint::bigint(mpf_t *num) {
     mpz_init2(number, MPZ_INIT_BITS);
     mpz_set_f(number, *num);

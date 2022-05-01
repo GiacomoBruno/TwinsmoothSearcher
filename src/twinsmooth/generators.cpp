@@ -6,7 +6,7 @@
 #include "../../include/bigfloat.h"
 #include "../../include/twinsmooth/chunkers.h"
 
-void get_ranges(TreeNode nd, bigint_tree *S, size_t &lower_range, size_t &upper_range, const bigfloat& k)
+void get_ranges(TreeNode nd, bigint_tree *S, unsigned long long &lower_range, unsigned long long &upper_range, const bigfloat& k)
 {
     bigfloat flnum{*nd->val};
 
@@ -169,7 +169,7 @@ namespace twinsmooth {
         auto delta = new bigint();
         auto m1 = new bigint();
         auto result = new LinkedList<bigint *>();
-        size_t lower_range, upper_range;
+        unsigned long long lower_range, upper_range;
 
         if(chunk[0] != nullptr)
             get_ranges(chunk[0], S, lower_range, upper_range, k);
@@ -180,7 +180,7 @@ namespace twinsmooth {
             auto x = chunk[i]; //costante per il ciclo corrente
             auto y = chunk[i]->next;
             auto z = chunk[i]->prev;
-            int counter = 0;
+            unsigned long long counter = 0;
             // (x|y) with y > x
             while (y != nullptr && counter < upper_range) {
                 *m1 = (*x->val) * (*y->val);//            mpz_mul(*m1, *(x->val), *(y->val));

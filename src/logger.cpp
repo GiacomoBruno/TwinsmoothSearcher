@@ -6,6 +6,8 @@
 
 #include <string>
 #include <iostream>
+#include <iomanip>
+#include <filesystem>
 
 constexpr unsigned long long MEGABYTE = 1000000;
 constexpr unsigned long long MAX_FILE_SIZE = MEGABYTE*50;
@@ -31,7 +33,7 @@ center_helper<std::string::value_type, std::string::traits_type> centered(const 
 template<typename charT, typename traits>
 std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& s, const center_helper<charT, traits>& c) {
     std::streamsize w = s.width();
-    if (w > c.str_.length()) {
+    if ((unsigned long)w > c.str_.length()) {
         std::streamsize left = (w + c.str_.length()) / 2;
         s.width(left);
         s << c.str_;
@@ -49,7 +51,7 @@ std::string logger::get_path(const std::string& fl, const std::string& fd, uint6
     else return (fd + "/" + fl +"_"+std::to_string(sm)+".txt");
 }
 
-logger::logger(const std::string& filename, const std::string& folder, uint64_t smoothness)
+logger::logger(const std::string& filename, const std::string& folder, unsigned long long smoothness)
     : _filename(filename), _folder(folder), _smoothness(smoothness)
 {
     path = get_path(filename, folder, smoothness);

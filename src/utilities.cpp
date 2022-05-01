@@ -6,6 +6,7 @@
 #include <iostream>
 #include <thread>
 #include <omp.h>
+#include <filesystem>
 
 namespace utilities {
 

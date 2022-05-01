@@ -12,7 +12,7 @@ namespace twinsmooth {
 
         S = new bigint_tree;
 
-        for (int i = 1; i < SMOOTHNESS; i++) {
+        for (unsigned long long i = 1; i < SMOOTHNESS; i++) {
             S->insert(new bigint(i));
         }
     }
