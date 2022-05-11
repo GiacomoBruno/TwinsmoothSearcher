@@ -72,6 +72,29 @@ void logger::log_top_of_tree(bigint_tree* tree, int n)
     }
 }
 
+void logger::f_log_top_of_tree(bigint_tree* tree, int n)
+{
+    auto iter = tree->end();
+    for(int i = 0; i < n && iter != nullptr; i++)
+    {
+        f_log(*iter->val);
+        f_log("\n");
+        iter = iter->prev;
+    }
+}
+
+void logger::f_log_tree(bigint_tree* tree)
+{
+    auto iter = tree->begin();
+    while(iter != nullptr)
+    {
+        f_log(*iter->val);
+        f_log("\n");
+        iter = iter->next;
+    }
+    log_file.flush();
+}
+
 void logger::log(const std::string& s) {
     log_file << s;
     std::cout << s;

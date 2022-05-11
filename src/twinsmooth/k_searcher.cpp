@@ -45,7 +45,10 @@ namespace twinsmooth {
     }
 
     void k_searcher::dispose() {
+        LG->logl("total twinsmooths found: ", S->size());
         LG->log_top_of_tree(S, TOP_NUMBERS_AMOUNT);
+        if(SAVE_ALL_TWINSMOOTHS)
+            TWINSMOOTH_OUTPUT->f_log_tree(S);
         N->clear(); delete N;
         S->cleanup(); delete S;
     }

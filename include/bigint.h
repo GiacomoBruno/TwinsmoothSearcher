@@ -7,7 +7,6 @@ constexpr int MPZ_INIT_BITS = 128;
 class bigint {
 public:
     mpz_t number{};
-
     explicit bigint(int num);
     explicit bigint(long long num);
     explicit bigint(unsigned long long num);

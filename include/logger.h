@@ -23,10 +23,12 @@ private:
     unsigned long long _smoothness;
 public:
     logger(const std::string& filename, const std::string& folder, unsigned long long smoothness);
-
+    ~logger() {std::cout.flush(); log_file.flush(); log_file.close(); }
     void newline();
 
     void log_top_of_tree(bigint_tree* tree, int n);
+    void f_log_top_of_tree(bigint_tree* tree, int n);
+    void f_log_tree(bigint_tree* tree);
 
     void log(const std::string& s);
     void log(int n);

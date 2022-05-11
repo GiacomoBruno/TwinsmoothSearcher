@@ -3,6 +3,7 @@
 //
 
 #include "../include/bigint_tree.h"
+#include "../include/utilities.h"
 
 //node functions
 void printTree(TreeNode root, std::string indent, bool last) {
@@ -21,6 +22,24 @@ void printTree(TreeNode root, std::string indent, bool last) {
         printTree(root->right, indent, true);
     }
 }
+
+int maxDepth(treenode* node)
+{
+    if (node == nullptr)
+        return -1;
+    else
+    {
+        /* compute the depth of each subtree */
+        int lDepth = maxDepth(node->left);
+        int rDepth = maxDepth(node->right);
+
+        /* use the larger one */
+        if (lDepth > rDepth)
+            return(lDepth + 1);
+        else return(rDepth + 1);
+    }
+}
+
 
 int8_t get_height(TreeNode n)
 {
@@ -236,8 +255,7 @@ void bigint_tree::cleanup()
     while(cursor != nullptr)
     {
         TreeNode tmp = cursor->next;
-        //delete &(cursor->val);
-        //bigint_free(cursor->val);
+
         delete cursor;
         cursor = tmp;
     }
@@ -532,4 +550,229 @@ TreeNode bigint_tree::search_node(TreeNode nd, const mpz_t& key) {
 
 TreeNode bigint_tree::search(const mpz_t& key) const {
     return search_node(root, key);
+}
+
+LinkedList<bigint*>* bigint_tree::extract_values(TreeNode nd,const std::function<bool(TreeNode)>& check)
+{
+    if(nd == nullptr) return nullptr;
+
+    auto* res = new LinkedList<bigint*>();
+
+    auto left = nd->left;
+    auto right = nd->right;
+
+    if(check(nd))
+    {
+        //extract value and then delete node
+        res->push(new bigint{*nd->val});
+    }
+    delete nd;
+    LinkedList<bigint*>* left_res = extract_values(left, check);
+    LinkedList<bigint*>* right_res = extract_values(right, check);
+
+    if(left_res != nullptr)
+        res->push(left_res);
+
+    if(right_res != nullptr)
+        res->push(right_res);
+
+    return res;
+}
+
+LinkedList<bigint *>* bigint_tree::multithread_extract_values(TreeNode nd,const std::function<bool(TreeNode)>& check, int& thread_count) {
+    if(nd == nullptr) return nullptr;
+
+    auto* res = new LinkedList<bigint*>();
+
+    auto left = nd->left;
+    auto right = nd->right;
+
+    if(check(nd))
+    {
+        //extract value and then delete node
+        res->push(new bigint{*nd->val});
+    }
+    delete nd;
+    LinkedList<bigint*>* left_res;
+    LinkedList<bigint*>* right_res;
+
+    if(thread_count < utilities::NUM_THREADS) {
+        thread_count += 2;
+        #pragma omp parallel num_threads(3)
+        {
+            #pragma omp single
+            {
+                #pragma omp task
+                {
+                    left_res = multithread_extract_values(left, check, thread_count);
+                }
+
+                #pragma omp task
+                {
+                    right_res = multithread_extract_values(right, check, thread_count);
+                }
+            }
+            #pragma omp taskwait
+        }
+    }
+    else
+    {
+        left_res = extract_values(left, check);
+        right_res = extract_values(right, check);
+    }
+
+    if(left_res != nullptr)
+        res->push(left_res);
+
+    if(right_res != nullptr)
+        res->push(right_res);
+
+    return res;
+}
+
+LinkedList<bigint *> *bigint_tree::extract(const std::function<bool(TreeNode)>& check) {
+    int n = 0;
+    return multithread_extract_values(root, check, n);
+}
+
+
+
+LinkedList<TreeNode>* bigint_tree::copy_nodes(TreeNode nd,const std::function<bool(TreeNode)>& check)
+{
+    if(nd == nullptr) return nullptr;
+
+    auto* res = new LinkedList<TreeNode>();
+
+    auto left = nd->left;
+    auto right = nd->right;
+
+    if(check(nd))
+    {
+        res->push(nd);
+    }
+    LinkedList<TreeNode>* left_res = copy_nodes(left, check);
+    LinkedList<TreeNode>* right_res = copy_nodes(right, check);
+
+    if(left_res != nullptr)
+        res->push(left_res);
+
+    if(right_res != nullptr)
+        res->push(right_res);
+
+    return res;
+}
+
+LinkedList<TreeNode>* bigint_tree::multithread_copy_nodes(TreeNode nd,const std::function<bool(TreeNode)>& check, int& thread_count) {
+    if(nd == nullptr) return nullptr;
+
+    auto* res = new LinkedList<TreeNode>();
+
+    auto left = nd->left;
+    auto right = nd->right;
+
+    if(check(nd))
+    {
+        res->push(nd);
+    }
+    LinkedList<TreeNode>* left_res;
+    LinkedList<TreeNode>* right_res;
+
+    if(thread_count < utilities::NUM_THREADS) {
+        thread_count += 2;
+#pragma omp parallel num_threads(3)
+        {
+#pragma omp single
+            {
+#pragma omp task
+                {
+                    left_res = multithread_copy_nodes(left, check, thread_count);
+                }
+
+#pragma omp task
+                {
+                    right_res = multithread_copy_nodes(right, check, thread_count);
+                }
+            }
+#pragma omp taskwait
+        }
+    }
+    else
+    {
+        left_res = copy_nodes(left, check);
+        right_res = copy_nodes(right, check);
+    }
+
+    if(left_res != nullptr)
+        res->push(left_res);
+
+    if(right_res != nullptr)
+        res->push(right_res);
+
+    return res;
+}
+
+LinkedList<TreeNode> *bigint_tree::copy(const std::function<bool(TreeNode)>& check) {
+    int n = 0;
+    return multithread_copy_nodes(root, check, n);
+    //return copy_nodes(root, check);
+}
+
+
+
+
+void bigint_tree::visit_values(TreeNode nd,const std::function<void(TreeNode)>& action)
+{
+    if(nd == nullptr) return;
+
+
+    auto left = nd->left;
+    auto right = nd->right;
+
+    action(nd);
+
+    visit_values(left, action);
+    visit_values(right, action);
+
+}
+
+void bigint_tree::multithread_visit_values(TreeNode nd,const std::function<void(TreeNode)>& action, int& thread_count) {
+    if(nd == nullptr) return;
+
+    auto left = nd->left;
+    auto right = nd->right;
+
+    #pragma omp critical
+    action(nd);
+
+
+    if(thread_count < utilities::NUM_THREADS) {
+        thread_count += 2;
+        #pragma omp parallel num_threads(3)
+        {
+            #pragma omp single
+            {
+                #pragma omp task
+                {
+                    multithread_visit_values(left, action, thread_count);
+                }
+
+                #pragma omp task
+                {
+                    multithread_visit_values(right, action, thread_count);
+                }
+            }
+            #pragma omp taskwait
+        }
+    }
+    else
+    {
+         visit_values(left, action);
+         visit_values(right, action);
+    }
+
+}
+
+void bigint_tree::visit(const std::function<void(TreeNode)>& check) {
+    int n = 0;
+    return multithread_visit_values(root, check, n);
 }

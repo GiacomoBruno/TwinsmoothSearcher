@@ -17,6 +17,7 @@ namespace utilities {
     extern logger* LG;
     extern logger* TWINSMOOTH_OUTPUT;
     extern logger* PRIMES_OUTPUT;
+    extern bool SAVE_ALL_TWINSMOOTHS;
 
     bool get_bool(const char *s);
 

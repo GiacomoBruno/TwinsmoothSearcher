@@ -4,7 +4,6 @@
 #include "../../include/twinsmooth/k_searcher.h"
 #include "../../include/twinsmooth/growing_k_searcher.h"
 
-
 using namespace utilities;
 
 namespace twinsmooth {

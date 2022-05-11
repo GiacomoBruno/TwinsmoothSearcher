@@ -12,8 +12,9 @@ using LNode = LLNode<T>*;
 
 template<typename T>
 class LinkedList {
-    LNode<T> first = nullptr;
-    unsigned long long _size = 0;
+    LNode<T> first{nullptr};
+    LNode<T> last{nullptr};
+    unsigned long long _size{0};
 public:
 
     void push(T n);
@@ -37,6 +38,7 @@ void LinkedList<T>::push(T n) {
 
     if(first == nullptr){
         first = new LLNode(n);
+        last = first;
     }
     else
     {
@@ -74,6 +76,7 @@ void LinkedList<T>::clear() {
         delete first;
         first = tmp;
     }
+    last = nullptr;
     _size = 0;
 
 }
@@ -83,10 +86,7 @@ bool LinkedList<T>::empty() const { return _size == 0; }
 
 template<class T>
 LNode<T> LinkedList<T>::end() {
-    auto iter = first;
-    while(iter != nullptr && iter->next != nullptr)
-        iter = iter->next;
-    return iter;
+    return last;
 }
 
 template<class T>
@@ -96,11 +96,15 @@ LNode<T> LinkedList<T>::begin() {
 
 template<class T>
 void LinkedList<T>::push(LinkedList<T>* l) {
-    auto last = l->end();
-    if(last == nullptr) return;
-    last->next = first;
+
+    if(l->empty()) return;
+
+    auto l_last = l->end();
+
+    l_last->next = first;
     first = l->first;
     _size = _size + l->size();
+    if(last == nullptr) last = l->last;
     delete l;
 }
 
@@ -109,5 +113,6 @@ void LinkedList<T>::push_back(T n) {
     auto l = end();
     if(l == nullptr) return push(n);
     l->next = new LLNode(n);
+    last = l->next;
     _size++;
 }

@@ -6,6 +6,11 @@
 
 using namespace utilities;
 
+bool check(TreeNode nd)
+{
+    return nd->twins_found > 10;
+}
+
 namespace twinsmooth {
 
     void range_searcher::initialize() {
@@ -43,12 +48,19 @@ namespace twinsmooth {
         }
     }
 
-    void range_searcher::dispose() {
 
+
+    void range_searcher::dispose() {
+        LG->logl("total twinsmooths found: ", S->size());
         LG->log_top_of_tree(S, TOP_NUMBERS_AMOUNT);
 
+
+        if(SAVE_ALL_TWINSMOOTHS)
+            TWINSMOOTH_OUTPUT->f_log_tree(S);
         N->clear(); delete N;
-        S->cleanup(); delete S;
+       // S->cleanup();
+        delete S;
     }
 
 }
+

@@ -1,15 +1,10 @@
-//
-// Created by Giacomo Bruno on 21/04/22.
-//
-
-#include "../../include/twinsmooth/generators.h"
 #include "../../include/bigfloat.h"
+#include "../../include/twinsmooth/generators.h"
 #include "../../include/twinsmooth/chunkers.h"
 
 void get_ranges(TreeNode nd, bigint_tree *S, unsigned long long &lower_range, unsigned long long &upper_range, const bigfloat& k)
 {
     bigfloat flnum{*nd->val};
-
     flnum /= k;
 
     bigint num{&flnum.number};
@@ -51,9 +46,11 @@ namespace twinsmooth {
                     auto nv = new bigint(*m1);
                     *nv -= 1; //mpz_sub_ui(*nv, *m1, 1);
 
+
                     if (S->search(nv) == nullptr) {
                         result->push(nv);
-                        //x->twins_found++;
+                        x->twins_found++;
+                        y->twins_found++;
                     } else {
                         delete nv;
                     }
@@ -76,7 +73,8 @@ namespace twinsmooth {
 
                     if (S->search(nv) == nullptr) {
                         result->push(nv);
-                        //x->twins_found++;
+                        x->twins_found++;
+                        z->twins_found++;
                     } else {
                         delete nv;
                     }
@@ -122,7 +120,8 @@ namespace twinsmooth {
 
                     if (S->search(nv) == nullptr) {
                         result->push(nv);
-                        //x->twins_found++;
+                        x->twins_found++;
+                        y->twins_found++;
                     } else {
                         delete nv;
                     }
@@ -145,7 +144,8 @@ namespace twinsmooth {
 
                     if (S->search(nv) == nullptr) {
                         result->push(nv);
-                        //x->twins_found++;
+                        x->twins_found++;
+                        z->twins_found++;
                     } else {
                         delete nv;
                     }
@@ -193,10 +193,11 @@ namespace twinsmooth {
                     *m1 /= *delta; //mpz_div(*m1, *m1, *delta);
                     auto nv = new bigint(*m1);
                     *nv -= 1; //mpz_sub_ui(*nv, *m1, 1);
-
+                    x->twins_found++;
+                    y->twins_found++;
                     if (S->search(nv) == nullptr) {
                         result->push(nv);
-                        //x->twins_found++;
+
                     } else {
                         delete nv;
                     }
@@ -216,10 +217,11 @@ namespace twinsmooth {
                     *m1 /= *delta; //mpz_div(*m1, *m1, *delta);
                     auto nv = new bigint(*m1);
                     *nv -= 1;//mpz_sub_ui(*nv, *m1, 1);
-
+                    x->twins_found++;
+                    z->twins_found++;
                     if (S->search(nv) == nullptr) {
                         result->push(nv);
-                        //x->twins_found++;
+
                     } else {
                         delete nv;
                     }

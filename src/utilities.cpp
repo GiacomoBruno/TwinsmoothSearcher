@@ -1,7 +1,3 @@
-//
-// Created by Giacomo Bruno on 30/04/22.
-//
-
 #include "../include/utilities.h"
 #include <iostream>
 #include <thread>
@@ -13,6 +9,7 @@ namespace utilities {
     unsigned long long SMOOTHNESS;
     int NUM_THREADS;
     int TOP_NUMBERS_AMOUNT;
+    bool SAVE_ALL_TWINSMOOTHS;
     logger* LG;
     logger* TWINSMOOTH_OUTPUT;
     logger* PRIMES_OUTPUT;
@@ -57,6 +54,7 @@ namespace utilities {
     {
         NUM_THREADS = (int)std::thread::hardware_concurrency();
         SMOOTHNESS = get_ulong("choose smoothness: ");
+        SAVE_ALL_TWINSMOOTHS = get_bool("save all twinsmooth found?(1 = yes, 0 = no) :");
         TOP_NUMBERS_AMOUNT = get_int("how many top numbers to log: ");
         LG = new logger(STATUS_FN, get_out_folder(), SMOOTHNESS);
         TWINSMOOTH_OUTPUT = new logger(TWINSMOOTHS_FN, get_out_folder(), SMOOTHNESS);

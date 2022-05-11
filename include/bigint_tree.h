@@ -8,18 +8,19 @@
 
 
 struct treenode {
-    treenode* left = nullptr;
-    treenode* right = nullptr;
+    treenode* left{nullptr};
+    treenode* right{nullptr};
 
-    treenode* next = nullptr;
-    treenode* prev = nullptr;
+    treenode* next{nullptr};
+    treenode* prev{nullptr};
 
-    int8_t height = 1;
-    //uint16_t twins_found = 0;
+    int8_t height{1};
+    unsigned short twins_found{0};
 
-    bigint* val;
+    bigint* val {nullptr};
 
     explicit treenode(bigint* v) : val(v){}
+
     ~treenode() {
         delete val;
     }
@@ -31,15 +32,14 @@ struct treenode {
     treenode* skip_back(size_t n);
 };
 
-
 using TreeNode =  treenode*;
 
 void printTree(TreeNode root, std::string indent, bool last);
 class bigint_tree {
 private:
-    size_t      _size            = 0;
-    TreeNode        last_element    = nullptr;
-    TreeNode        first_element   = nullptr;
+    unsigned long long      _size               = 0;
+    TreeNode                last_element        = nullptr;
+    TreeNode                first_element       = nullptr;
 
 
     TreeNode insert_node(TreeNode nd, bigint* key, TreeNode& insterted_node);
@@ -50,11 +50,20 @@ private:
     TreeNode lower_bound_node(TreeNode nd, bigint* key);
     TreeNode upper_bound_node(TreeNode nd, bigint* key);
 
+    LinkedList<bigint*>* extract_values(TreeNode nd, const std::function<bool(TreeNode)>& check);
+    LinkedList<bigint*>* multithread_extract_values(TreeNode nd,const std::function<bool(TreeNode)>& check, int& thread_count);
+
+    LinkedList<TreeNode>* copy_nodes(TreeNode nd, const std::function<bool(TreeNode)>& check);
+    LinkedList<TreeNode>* multithread_copy_nodes(TreeNode nd,const std::function<bool(TreeNode)>& check, int& thread_count);
+
+    void visit_values(TreeNode, const std::function<void(TreeNode)>& action);
+    void multithread_visit_values(TreeNode nd, const std::function<void(TreeNode)>& action, int& thread_count);
+
 public:
     explicit bigint_tree() : _size(0) { }
     ~bigint_tree() = default;
     [[nodiscard]]
-    size_t size() const { return _size; }
+    unsigned long long size() const { return _size; }
     [[nodiscard]]
     bool empty() const { return _size == 0;}
     [[nodiscard]]
@@ -76,7 +85,12 @@ public:
     void remove(bigint* key);
     void remove_del(bigint* key);
 
-    TreeNode        root            = nullptr;
+    LinkedList<bigint*>* extract(const std::function<bool(TreeNode)>& check);
+    LinkedList<TreeNode>* copy(const std::function<bool(TreeNode)>& check);
+    void visit(const std::function<void(TreeNode)>& check);
+
+    TreeNode                root                = nullptr;
 };
 
+int maxDepth(treenode* node);
 

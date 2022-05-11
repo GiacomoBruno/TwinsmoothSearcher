@@ -33,6 +33,9 @@ namespace twinsmooth {
             N->clear(); delete N;
             N = new_N;
 
+
+
+
             LG->log("SxN iteration completed, found: ", N->size());
             LG->log(" - "); bench.conclude_bench();
             LG->newline();
@@ -40,7 +43,12 @@ namespace twinsmooth {
     }
 
     void standard_searcher::dispose() {
+        LG->logl("total twinsmooths found: ", S->size());
+
         LG->log_top_of_tree(S, TOP_NUMBERS_AMOUNT);
+        if(SAVE_ALL_TWINSMOOTHS)
+            TWINSMOOTH_OUTPUT->f_log_tree(S);
+
         N->clear(); delete N;
         S->cleanup(); delete S;
     }
