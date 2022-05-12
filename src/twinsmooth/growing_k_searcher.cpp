@@ -4,8 +4,8 @@
 #include "../../include/utilities.h"
 #include "../../include/benchmark.h"
 #include <map>
-#include <iostream>
-#include <iomanip>
+//#include <iostream>
+//#include <iomanip>
 using namespace utilities;
 
 
@@ -19,19 +19,18 @@ namespace twinsmooth {
         unsigned long long avg2;
         unsigned long long med2;
     };
-
+    /*
     std::ostream& operator<<(std::ostream& stream, const twins_stats& stats)
-{
-    stream << "MIN[" << std::setw(5) << stats.min << "]\n"
-    << "MAX[" << std::setw(5) << stats.max <<"]\n"
-    << "AVG[" << std::setw(5) << stats.avg << "]\n"
-    << "MED[" << std::setw(5) << stats.med << "]\n"
-    << "AV2[" << std::setw(5) << stats.avg2 << "]\n"
-    << "ME2[" << std::setw(5) << stats.med2 << "]\n";
+    {
+        stream << "MIN[" << std::setw(5) << stats.min << "]\n"
+        << "MAX[" << std::setw(5) << stats.max <<"]\n"
+        << "AVG[" << std::setw(5) << stats.avg << "]\n"
+        << "MED[" << std::setw(5) << stats.med << "]\n"
+        << "AV2[" << std::setw(5) << stats.avg2 << "]\n"
+        << "ME2[" << std::setw(5) << stats.med2 << "]\n";
 
-    return stream;
-
-}
+        return stream;
+    }*/
 
 
     twins_stats max_twins_found(bigint_tree* S)
@@ -144,7 +143,7 @@ namespace twinsmooth {
 
             //N = iteration_S_S(S, k);
             auto stats = max_twins_found(S);
-            std::cout << stats << std::endl;
+            //std::cout << stats << std::endl;
             auto avg = stats.avg2;
             //LG->log("stats: \n");
             //LG->logl("MIN = ", stats.min);
