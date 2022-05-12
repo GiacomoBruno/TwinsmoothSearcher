@@ -6,7 +6,7 @@
 #include "../bigint_tree.h"
 #include "../list.h"
 
-constexpr int CHUNK_SIZE = 100;
+constexpr int CHUNK_SIZE = 200;
 
 namespace twinsmooth {
 
