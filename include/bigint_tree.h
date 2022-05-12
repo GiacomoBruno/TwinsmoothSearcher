@@ -5,6 +5,7 @@
 #pragma once
 #include "list.h"
 #include "bigint.h"
+#include <functional>
 
 
 struct treenode {

@@ -105,7 +105,7 @@ namespace twinsmooth {
 
             //N = iteration_S_S(S, k);
             auto stats = max_twins_found(S);
-            auto avg = stats.med;
+            auto avg = stats.avg;
             //LG->log("stats: \n");
             //LG->logl("MIN = ", stats.min);
             //LG->logl("MAX = ", stats.max);
