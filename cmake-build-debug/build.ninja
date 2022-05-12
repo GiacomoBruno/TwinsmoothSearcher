@@ -74,112 +74,112 @@ build cmake_object_order_depends_target_twinsmooth_searcher: phony || CMakeFiles
 
 build CMakeFiles/twinsmooth_searcher.dir/src/main.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/main.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/main.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src
 
 build CMakeFiles/twinsmooth_searcher.dir/src/logger.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/logger.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/logger.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src
 
 build CMakeFiles/twinsmooth_searcher.dir/src/bigint.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/bigint.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/bigint.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src
 
 build CMakeFiles/twinsmooth_searcher.dir/src/bigint_tree.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/bigint_tree.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/bigint_tree.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src
 
 build CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/generators.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/generators.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/generators.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth
 
 build CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/iterators.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/iterators.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/iterators.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth
 
 build CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/chunkers.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/chunkers.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/chunkers.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth
 
 build CMakeFiles/twinsmooth_searcher.dir/src/bigfloat.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/bigfloat.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/bigfloat.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src
 
 build CMakeFiles/twinsmooth_searcher.dir/src/utilities.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/utilities.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/utilities.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src
 
 build CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/searcher.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/searcher.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/searcher.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth
 
 build CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/standard_searcher.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/standard_searcher.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/standard_searcher.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth
 
 build CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/range_searcher.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/range_searcher.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/range_searcher.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth
 
 build CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/k_searcher.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/k_searcher.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/k_searcher.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth
 
 build CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/all_searchers.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/all_searchers.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/all_searchers.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth
 
 build CMakeFiles/twinsmooth_searcher.dir/src/benchmark.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/benchmark.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/benchmark.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src
 
 build CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/growing_k_searcher.cpp.o: CXX_COMPILER__twinsmooth_searcher_Debug /Users/giacomobruno/CLionProjects/BSmooth/src/twinsmooth/growing_k_searcher.cpp || cmake_object_order_depends_target_twinsmooth_searcher
   DEP_FILE = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/growing_k_searcher.cpp.o.d
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64 -std=gnu++20
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64 -std=gnu++20
   INCLUDES = -I/Users/giacomobruno/CLionProjects/BSmooth/twinsmooth_searcher -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
   OBJECT_FILE_DIR = CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth
@@ -193,7 +193,7 @@ build CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/growing_k_searcher.cpp.o
 # Link the executable twinsmooth_searcher
 
 build twinsmooth_searcher: CXX_EXECUTABLE_LINKER__twinsmooth_searcher_Debug CMakeFiles/twinsmooth_searcher.dir/src/main.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/logger.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/bigint.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/bigint_tree.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/generators.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/iterators.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/chunkers.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/bigfloat.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/utilities.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/searcher.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/standard_searcher.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/range_searcher.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/k_searcher.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/all_searchers.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/benchmark.cpp.o CMakeFiles/twinsmooth_searcher.dir/src/twinsmooth/growing_k_searcher.cpp.o
-  FLAGS = -fopenmp -O0 -Wall -g -arch arm64
+  FLAGS = -fopenmp -O3 -Wall -g -arch arm64
   LINK_LIBRARIES = -Wl,-rpath,/opt/homebrew/lib  -lgmp
   LINK_PATH = -L/opt/homebrew/lib
   OBJECT_DIR = CMakeFiles/twinsmooth_searcher.dir
