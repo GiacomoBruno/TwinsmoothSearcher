@@ -4,16 +4,34 @@
 #include "../../include/utilities.h"
 #include "../../include/benchmark.h"
 #include <map>
+#include <iostream>
 using namespace utilities;
 
-namespace twinsmooth {
 
+
+namespace twinsmooth {
     struct twins_stats{
         unsigned long long min;
         unsigned long long max;
         unsigned long long avg;
         unsigned long long med;
+        unsigned long long avg2;
+        unsigned long long med2;
     };
+
+    std::ostream& operator<<(std::ostream& stream, const twins_stats& stats)
+{
+    stream << "MIN[" << std::setw(5) << stats.min << "]\n"
+    << "MAX[" << std::setw(5) << stats.max <<"]\n"
+    << "AVG[" << std::setw(5) << stats.avg << "]\n"
+    << "MED[" << std::setw(5) << stats.med << "]\n"
+    << "AV2[" << std::setw(5) << stats.avg2 << "]\n"
+    << "ME2[" << std::setw(5) << stats.med2 << "]\n";
+
+    return stream;
+
+}
+
 
     twins_stats max_twins_found(bigint_tree* S)
     {
@@ -37,6 +55,8 @@ namespace twinsmooth {
 
         unsigned long long average = 0;
         unsigned long long tot = 0;
+
+
         for(auto&& a : stats)
         {
             tot += a.second;
@@ -46,18 +66,36 @@ namespace twinsmooth {
         unsigned long long median_point = tot / 2;
         unsigned long long counter = 0;
         unsigned long long med = 0;
+
+        unsigned long long second_average = 0;
+        unsigned long long second_tot = 0;
+        unsigned long long second_med = 0;
+
+        unsigned long long quarter = tot / 2 + median_point / 2;
+        average /= tot;
         for(auto&& a : stats)
         {
             counter += a.second;
-            if(counter >= median_point) {
+            if(counter >= median_point && med == 0) {
                 med = a.first;
-                break;
+            }
+
+            if(counter >= quarter && second_med == 0)
+            {
+                second_med = a.first;
+            }
+
+            if(a.first > average)
+            {
+                second_tot += a.second;
+                second_average = (a.first * a.second) + second_average;
             }
         }
 
-        average /= tot;
 
-        return twins_stats{min, max, average, med};
+        second_average /= second_tot;
+
+        return twins_stats{min, max, average, med, second_average, second_med};
     }
 
     void growing_k_searcher::initialize() {
@@ -105,7 +143,8 @@ namespace twinsmooth {
 
             //N = iteration_S_S(S, k);
             auto stats = max_twins_found(S);
-            auto avg = stats.avg;
+            std::cout << stats << std::endl;
+            auto avg = stats.avg2;
             //LG->log("stats: \n");
             //LG->logl("MIN = ", stats.min);
             //LG->logl("MAX = ", stats.max);
