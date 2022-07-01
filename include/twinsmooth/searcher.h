@@ -7,8 +7,7 @@ namespace twinsmooth {
 
     class searcher {
     protected:
-
-
+    
         virtual void initialize()   = 0;
         virtual void run()          = 0;
         virtual void dispose()      = 0;
