@@ -12,6 +12,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 add_executable(twinsmooth_searcher)
 
 target_sources(twinsmooth_searcher
+    PRIVATE ${PROJECT_SOURCE_DIR}/src/logger.cpp
     PRIVATE ${PROJECT_SOURCE_DIR}/src/avl_tree.cpp
     PRIVATE ${PROJECT_SOURCE_DIR}/src/twins/base_searcher.cpp
     PRIVATE ${PROJECT_SOURCE_DIR}/src/twins/standard_searcher.cpp

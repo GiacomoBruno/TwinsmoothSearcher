@@ -86,7 +86,7 @@ namespace twins
 
             io.vec->clear();
 
-            for (int i = 0; i < batches->size(); i++)
+            for (decltype(batches->size()) i = 0; i < batches->size(); i++)
             {
                 for (const auto &r : *results[i].vec)
                 {
@@ -109,10 +109,6 @@ namespace twins
             std_searcher_util::iteration(res, S);
             std::cout << "found new twinsmooth: " << res.vec->size() << std::endl; 
         }
-
-        //for(auto& n : *S)
-        {
-            //std::cout << n.get_str() << std::endl;
-        }
     }
+
 }

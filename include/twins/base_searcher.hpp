@@ -3,6 +3,7 @@
 #include <vector>
 #include <array>
 #include <iostream>
+
 namespace twins
 {
     class base_searcher

@@ -1,210 +1,176 @@
-//
-// Created by Giacomo Bruno on 18/03/22.
-//
+/**
+ * @file logger.cpp
+ * @author Giacomo Bruno
+ * @brief logger implementation (not including generic methods)
+ * @version 0.1
+ * @date 2022-06-25
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
+#include "logger.hpp"
 
-#include "../include/logger.h"
+#include <gmpxx.h> //mpz_class
 
-#include <string>
-#include <iostream>
-#include <iomanip>
-#include <filesystem>
+#include <filesystem> //std::create_directories
+#include <iomanip>    //std::setw
+#include <iostream>   //std::cout
+#include <string>     //std::to_string
 
-constexpr unsigned long long MEGABYTE = 1000000;
-constexpr unsigned long long MAX_FILE_SIZE = MEGABYTE*50;
-
-template<typename charT, typename traits = std::char_traits<charT> >
-class center_helper {
-    std::basic_string<charT, traits> str_;
-public:
-    explicit center_helper(std::basic_string<charT, traits> str) : str_(std::move(str)) {}
-    template<typename a, typename b>
-    friend std::basic_ostream<a, b>& operator<<(std::basic_ostream<a, b>& s, const center_helper<a, b>& c);
-};
-
-template<typename charT, typename traits = std::char_traits<charT> >
-[[maybe_unused]] center_helper<charT, traits> centered(std::basic_string<charT, traits> str) {
-    return center_helper<charT, traits>(str);
-}
-
-center_helper<std::string::value_type, std::string::traits_type> centered(const std::string& str) {
-    return center_helper<std::string::value_type, std::string::traits_type>(str);
-}
-
-template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& s, const center_helper<charT, traits>& c) {
-    std::streamsize w = s.width();
-    if ((unsigned long)w > c.str_.length()) {
-        std::streamsize left = (w + c.str_.length()) / 2;
-        s.width(left);
-        s << c.str_;
-        s.width(w - left);
-        s << "";
-    } else {
-        s << c.str_;
-    }
-    return s;
-}
-
-std::string logger::get_path(const std::string& fl, const std::string& fd, uint64_t sm) const
+namespace twins
 {
-    if(file_number > 0) return (fd + "/" + fl +"_"+std::to_string(sm)+"_" + std::to_string(file_number) + ".txt");
-    else return (fd + "/" + fl +"_"+std::to_string(sm)+".txt");
-}
 
-logger::logger(const std::string& filename, const std::string& folder, unsigned long long smoothness)
-    : _filename(filename), _folder(folder), _smoothness(smoothness)
-{
-    path = get_path(filename, folder, smoothness);
-    std::filesystem::create_directories(folder);
-    std::cout.precision(5);
-    log_file.precision(5);
-    log_file.open(path, std::fstream::out);
-}
-
-void logger::log_top_of_tree(bigint_tree* tree, int n)
-{
-    auto iter = tree->end();
-    for(int i = 0; i < n && iter != nullptr; i++)
+    namespace logger_utilities
     {
-        log(*iter->val);
-        newline();
-        iter = iter->prev;
-    }
-}
+        static std::string get_path(const std::string &path, uint64_t smoothness, int n)
+        {
+            if (n >= 0)
+                return (std::string(output_path) + "_" + std::to_string(smoothness) + "/" + path + "_" + std::to_string(n) +
+                        ".txt");
+            else
+                return (std::string(output_path) + "_" + std::to_string(smoothness) + "/" + path + ".txt");
+        }
 
-void logger::f_log_top_of_tree(bigint_tree* tree, int n)
-{
-    auto iter = tree->end();
-    for(int i = 0; i < n && iter != nullptr; i++)
+        template <typename charT, typename traits = std::char_traits<charT>>
+        [[maybe_unused]] center_helper<charT, traits> centered(std::basic_string<charT, traits> str)
+        {
+            return center_helper<charT, traits>(str);
+        }
+
+        center_helper<std::string::value_type, std::string::traits_type> centered(const std::string &str)
+        {
+            return center_helper<std::string::value_type, std::string::traits_type>(str);
+        }
+
+        template <typename charT, typename traits>
+        std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &s,
+                                                      const center_helper<charT, traits> &c)
+        {
+            std::streamsize w = s.width();
+            if ((unsigned long)w > c.str_.length())
+            {
+                std::streamsize left = (w + c.str_.length()) / 2;
+                s.width(left);
+                s << c.str_;
+                s.width(w - left);
+                s << "";
+            }
+            else
+            {
+                s << c.str_;
+            }
+            return s;
+        }
+
+    } // namespace logger_utilities
+
+    logger_files::logger_files(int smoothness) : _smoothness(smoothness)
     {
-        f_log(*iter->val);
-        f_log("\n");
-        iter = iter->prev;
+        std::filesystem::create_directories(std::string(output_path) + "_" +
+        std::to_string(smoothness) + "/");
+        log->open(logger_utilities::get_path(log_file_name, smoothness, -1), std::fstream::out);
+        twins->open(logger_utilities::get_path(twins_file_name, smoothness, 0), std::fstream::out);
+        primes->open(logger_utilities::get_path(primes_file_name, smoothness, 0), std::fstream::out);
     }
-}
 
-void logger::f_log_tree(bigint_tree* tree)
-{
-    auto iter = tree->begin();
-    while(iter != nullptr)
+    void logger_files::twin_size_control()
     {
-        f_log(*iter->val);
-        f_log("\n");
-        iter = iter->next;
+        if (twins_fbytes > file_size)
+        {
+            twins_fbytes = 0;
+            twins_fcounter++;
+            twins->close();
+            twins->open(logger_utilities::get_path(twins_file_name, _smoothness, twins_fcounter), std::fstream::out);
+        }
     }
-    log_file.flush();
-}
 
-void logger::log(const std::string& s) {
-    log_file << s;
-    std::cout << s;
-}
-
-void logger::log(double d) {
-    std::string s = std::to_string(d);
-    log_file << std::fixed << "[" << std::setw(10) << centered(s) << "]";
-    std::cout << std::fixed << "[" << std::setw(10) << centered(s) << "]";
-
-}
-
-void logger::log(int n) {
-    std::string s = std::to_string(n);
-    log_file << "[" <<std::setw(10) << centered(s) << "]";
-    std::cout << "[" << std::setw(5) << centered(s) << "]";
-}
-
-void logger::log(unsigned long long n) {
-    std::string s = std::to_string(n);
-    log_file << "[" <<std::setw(10) << centered(s) << "]";
-    std::cout  << "[" <<std::setw(10) << centered(s) << "]";
-}
-
-void logger::log(const bigint& n)
-{
-    std::string s = mpz_get_str(nullptr, 10, n.number);
-    log_file <<"[" << std::setw(50) << centered(s) << "]";
-    std::cout  <<"[" << std::setw(50) << centered(s) << "]";
-}
-
-void logger::log(const bigfloat& n)
-{
-    char buf[1024];
-    gmp_sprintf(buf, "%Ff", n.number);
-    log_file << "[" << std::setw(10) << centered(buf) << "]";
-    std::cout << "[" << std::setw(10) << centered(buf) << "]";
-}
-
-void logger::newline() {
-    log_file << std::endl;
-    std::cout << std::endl;
-}
-
-void logger::f_log(const std::string& s) {
-    log_file << s;
-    bytes_written += s.length();
-    check_file_size();
-
-}
-
-void logger::f_log(double d) {
-    log_file  <<  d;
-    bytes_written += sizeof(double);
-    check_file_size();
-
-
-}
-
-void logger::f_log(int n) {
-    log_file << n;
-    bytes_written += sizeof(int);
-    check_file_size();
-
-}
-
-void logger::f_log(unsigned long long n) {
-    log_file  << n;
-    bytes_written += sizeof(unsigned long long);
-    check_file_size();
-
-}
-
-void logger::f_log(const bigint& n)
-{
-    std::string s = mpz_get_str(nullptr, 10, n.number);
-    log_file  << s;
-    bytes_written += s.length();
-    check_file_size();
-}
-
-void logger::f_log(const bigfloat& n)
-{
-    char buf[1024];
-    gmp_sprintf(buf, "%Ff", n.number);
-    log_file << buf;
-    bytes_written += std::string(buf).length();
-    check_file_size();
-}
-
-void logger::f_log(bigint_tree* tree)
-{
-    auto iter = tree->begin();
-    while(iter != nullptr)
+    void logger_files::prime_size_control()
     {
-        f_log(*iter->val);
-        f_log("\n");
-        iter = iter->next;
+        if (primes_fbytes > file_size)
+        {
+            primes_fbytes = 0;
+            primes_fcounter++;
+            primes->close();
+            primes->open(logger_utilities::get_path(primes_file_name, _smoothness, primes_fcounter), std::fstream::out);
+        }
     }
-}
 
-
-void logger::check_file_size() {
-    if(bytes_written > MAX_FILE_SIZE)
+    logger_files::~logger_files()
     {
-        bytes_written = 0;
-        log_file.close();
-        file_number++;
-        auto cur_path = get_path(_filename, _folder, _smoothness);
-        log_file.open(cur_path, std::fstream::out);
-    }
-}
+        log->flush();
+        primes->flush();
+        twins->flush();
 
+        log->close();
+        primes->close();
+        twins->close();
+
+        delete log;
+        delete primes;
+        delete twins;
+    }
+
+    logger &logger::get()
+    {
+        static logger instance; // gets freed at the end of program execution
+        return instance;
+    }
+
+    logger::~logger()
+    {
+        for (auto &file : log_files)
+        {
+            delete file.second;
+            file.second = nullptr;
+        }
+
+        log_files.clear();
+    }
+
+    template <>
+    void logger::_print(const mpz_class &n, logger_files *files, int width)
+    {
+        *files->log << "[" << std::setw(width) << logger_utilities::centered(n.get_str()) << "]";
+        std::cout << "[" << std::setw(width) << logger_utilities::centered(n.get_str()) << "]";
+    }
+
+    template <>
+    void logger::_print<std::string>(const std::string &str, logger_files *files, int)
+    {
+        *files->log << str;
+        std::cout << str;
+    }
+
+    template <class T>
+    void logger::_save_twin(const T &n, logger_files *files) { *files->twins << n << "\n"; }
+
+    template <>
+    void logger::_save_twin<mpz_class>(const mpz_class &n, logger_files *files)
+    {
+        *files->twins << n.get_str() << "\n";
+    }
+
+    template <class T>
+    void logger::_save_prime(const T &n, logger_files *files) { *files->primes << n << "\n"; }
+
+    template <>
+    void logger::_save_prime<mpz_class>(const mpz_class &n, logger_files *files)
+    {
+        *files->primes << n.get_str() << "\n";
+    }
+
+    template <class T>
+    void logger::_print(const T &n, logger_files *files, int width)
+    {
+        *files->log << "[" << std::setw(width) << logger_utilities::centered(std::to_string(n)) << "]";
+        if (!is_silent)
+            std::cout << "[" << std::setw(width) << logger_utilities::centered(std::to_string(n)) << "]";
+    }
+
+
+
+    template void logger::_save_twin<int>(const int &, logger_files *);
+    template void logger::_save_twin<unsigned long long>(const unsigned long long &, logger_files *);
+    template void logger::_save_prime<int>(const int &, logger_files *);
+    template void logger::_save_prime<unsigned long long>(const unsigned long long &, logger_files *);
+} // namespace twins
