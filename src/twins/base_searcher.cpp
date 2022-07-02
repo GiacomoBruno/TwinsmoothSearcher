@@ -75,8 +75,7 @@ namespace twins
 
             return output;
         }
-    
-        
+      
     }
 
     void base_searcher::initialize()

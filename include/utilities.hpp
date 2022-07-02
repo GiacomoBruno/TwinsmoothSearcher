@@ -1,6 +1,6 @@
 #pragma once
 
-#include "logger.h"
+#include "logger.hpp"
 
 constexpr char const* OUTPUT_FOLDER = "./results/outputs";
 constexpr char const* STATUS_FN = "stats";
@@ -11,12 +11,9 @@ constexpr char const* PRIMES_FN = "primes";
 
 namespace utilities {
 
-    extern unsigned long long SMOOTHNESS;
+    extern int SMOOTHNESS;
     extern int NUM_THREADS;
     extern int TOP_NUMBERS_AMOUNT;
-    extern logger* LG;
-    extern logger* TWINSMOOTH_OUTPUT;
-    extern logger* PRIMES_OUTPUT;
     extern bool SAVE_ALL_TWINSMOOTHS;
 
     bool get_bool(const char *s);

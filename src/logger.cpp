@@ -31,35 +31,9 @@ namespace twins
                 return (std::string(output_path) + "_" + std::to_string(smoothness) + "/" + path + ".txt");
         }
 
-        template <typename charT, typename traits = std::char_traits<charT>>
-        [[maybe_unused]] center_helper<charT, traits> centered(std::basic_string<charT, traits> str)
-        {
-            return center_helper<charT, traits>(str);
-        }
-
         center_helper<std::string::value_type, std::string::traits_type> centered(const std::string &str)
         {
             return center_helper<std::string::value_type, std::string::traits_type>(str);
-        }
-
-        template <typename charT, typename traits>
-        std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &s,
-                                                      const center_helper<charT, traits> &c)
-        {
-            std::streamsize w = s.width();
-            if ((unsigned long)w > c.str_.length())
-            {
-                std::streamsize left = (w + c.str_.length()) / 2;
-                s.width(left);
-                s << c.str_;
-                s.width(w - left);
-                s << "";
-            }
-            else
-            {
-                s << c.str_;
-            }
-            return s;
         }
 
     } // namespace logger_utilities
@@ -67,7 +41,7 @@ namespace twins
     logger_files::logger_files(int smoothness) : _smoothness(smoothness)
     {
         std::filesystem::create_directories(std::string(output_path) + "_" +
-        std::to_string(smoothness) + "/");
+                                            std::to_string(smoothness) + "/");
         log->open(logger_utilities::get_path(log_file_name, smoothness, -1), std::fstream::out);
         twins->open(logger_utilities::get_path(twins_file_name, smoothness, 0), std::fstream::out);
         primes->open(logger_utilities::get_path(primes_file_name, smoothness, 0), std::fstream::out);
@@ -141,33 +115,17 @@ namespace twins
         std::cout << str;
     }
 
-    template <class T>
-    void logger::_save_twin(const T &n, logger_files *files) { *files->twins << n << "\n"; }
-
     template <>
     void logger::_save_twin<mpz_class>(const mpz_class &n, logger_files *files)
     {
         *files->twins << n.get_str() << "\n";
     }
 
-    template <class T>
-    void logger::_save_prime(const T &n, logger_files *files) { *files->primes << n << "\n"; }
-
     template <>
     void logger::_save_prime<mpz_class>(const mpz_class &n, logger_files *files)
     {
         *files->primes << n.get_str() << "\n";
     }
-
-    template <class T>
-    void logger::_print(const T &n, logger_files *files, int width)
-    {
-        *files->log << "[" << std::setw(width) << logger_utilities::centered(std::to_string(n)) << "]";
-        if (!is_silent)
-            std::cout << "[" << std::setw(width) << logger_utilities::centered(std::to_string(n)) << "]";
-    }
-
-
 
     template void logger::_save_twin<int>(const int &, logger_files *);
     template void logger::_save_twin<unsigned long long>(const unsigned long long &, logger_files *);

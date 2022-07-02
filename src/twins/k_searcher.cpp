@@ -1,4 +1,5 @@
 #include "twins/searchers.hpp"
+#include "utilities.hpp"
 #include <omp.h>
 namespace twins
 {
@@ -92,7 +93,7 @@ namespace twins
             auto *batches = util::generate_batches(io);
             util::vector_mover<mpz_class> results[batches->size()];
 
-#pragma omp parallel num_threads(12)
+#pragma omp parallel num_threads(utilities::NUM_THREADS)
             {
 #pragma omp for
                 for (decltype(batches->size()) i = 0; i < batches->size(); i++)

@@ -12,6 +12,8 @@
 #include <fstream>  //std::fstream
 #include <map>      //std::map
 #include <iostream> //std::cout
+#include <iomanip>  //std::setw
+#include <string>   //std::to_string
 /**
  * @brief project namespace
  */
@@ -289,7 +291,23 @@ namespace twins
              * @return std::basic_ostream<a, b>& stream
              */
             template <typename a, typename b>
-            friend std::basic_ostream<a, b> &operator<<(std::basic_ostream<a, b> &s, const center_helper<a, b> &c);
+            friend std::basic_ostream<a, b> &operator<<(std::basic_ostream<a, b> &s, const center_helper<a, b> &c)
+            {
+                std::streamsize w = s.width();
+                if ((unsigned long)w > c.str_.length())
+                {
+                    std::streamsize left = (w + c.str_.length()) / 2;
+                    s.width(left);
+                    s << c.str_;
+                    s.width(w - left);
+                    s << "";
+                }
+                else
+                {
+                    s << c.str_;
+                }
+                return s;
+            }
         };
 
         /**
@@ -301,7 +319,10 @@ namespace twins
          * @return center_helper<charT, traits> a center_helper responsible for centering the string
          */
         template <typename charT, typename traits>
-        [[maybe_unused]] center_helper<charT, traits> centered(std::basic_string<charT, traits> str);
+        [[maybe_unused]] center_helper<charT, traits> centered(std::basic_string<charT, traits> str)
+        {
+            return center_helper<charT, traits>(str);
+        }
 
         /**
          * @brief function that center a std::string
@@ -310,6 +331,7 @@ namespace twins
          * @return center_helper<std::string::value_type, std::string::traits_type> a center_helper responsible for centering the string
          */
         center_helper<std::string::value_type, std::string::traits_type> centered(const std::string &str);
+
         // fine codice trovato
     } // namespace logger_utilities
 
@@ -368,4 +390,19 @@ namespace twins
         if (!is_silent)
             std::cout << s;
     }
+
+    template <class T>
+    void logger::_save_twin(const T &n, logger_files *files) { *files->twins << n << "\n"; }
+
+    template <class T>
+    void logger::_save_prime(const T &n, logger_files *files) { *files->primes << n << "\n"; }
+
+    template <class T>
+    void logger::_print(const T &n, logger_files *files, int width)
+    {
+        *files->log << "[" << std::setw(width) << logger_utilities::centered(std::to_string(n)) << "]";
+        if (!is_silent)
+            std::cout << "[" << std::setw(width) << logger_utilities::centered(std::to_string(n)) << "]";
+    }
+
 } // namespace twins

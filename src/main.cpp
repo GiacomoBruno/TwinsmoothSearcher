@@ -1,17 +1,15 @@
 #include "twins/searchers.hpp"
 #include "logger.hpp"
+#include "utilities.hpp"
+#include "twins/searcher_menu.hpp"
+
 int main(int argc, char** argv)
 {
 
-    twins::std_searcher src{10};
+    utilities::init_machine();
 
-    src.execute();
-
-    //auto s = twinsmooth::get_searcher();
-    //s->execute();
-    auto& log = twins::logger::get();
-
-    log.print("Hello there!", 10);
+    auto s = twins::get_searcher();
+    s->execute();
 
     return 0;
 

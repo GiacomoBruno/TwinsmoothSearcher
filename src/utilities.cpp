@@ -1,4 +1,4 @@
-#include "../include/utilities.h"
+#include "utilities.hpp"
 #include <iostream>
 #include <thread>
 #include <omp.h>
@@ -6,13 +6,10 @@
 
 namespace utilities {
 
-    unsigned long long SMOOTHNESS;
+    int SMOOTHNESS;
     int NUM_THREADS;
     int TOP_NUMBERS_AMOUNT;
     bool SAVE_ALL_TWINSMOOTHS;
-    logger* LG;
-    logger* TWINSMOOTH_OUTPUT;
-    logger* PRIMES_OUTPUT;
 
     bool get_bool(const char *s) {
         std::cout << s;
@@ -53,18 +50,20 @@ namespace utilities {
     void init_machine()
     {
         NUM_THREADS = (int)std::thread::hardware_concurrency();
-        SMOOTHNESS = get_ulong("choose smoothness: ");
+        SMOOTHNESS = get_int("choose smoothness: ");
         SAVE_ALL_TWINSMOOTHS = get_bool("save all twinsmooth found?(1 = yes, 0 = no) :");
         TOP_NUMBERS_AMOUNT = get_int("how many top numbers to log: ");
-        LG = new logger(STATUS_FN, get_out_folder(), SMOOTHNESS);
-        TWINSMOOTH_OUTPUT = new logger(TWINSMOOTHS_FN, get_out_folder(), SMOOTHNESS);
-        PRIMES_OUTPUT = new logger(PRIMES_FN, get_out_folder(), SMOOTHNESS);
 
         omp_set_dynamic(0);
         omp_set_num_threads(NUM_THREADS);
+        twins::simple_logger log(SMOOTHNESS);
 
-        LG->logl("detected available threads: ", NUM_THREADS);
-        LG->logl("smoothness: ", SMOOTHNESS);
+        log.print("detected available threads: ");
+        log.print(NUM_THREADS);
+
+        log.print("\nsmoothness: ");
+        log.print(SMOOTHNESS);
+        log.print("\n");
         std::filesystem::create_directories(get_out_folder());
     }
 
