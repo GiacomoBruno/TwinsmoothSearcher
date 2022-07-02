@@ -14,8 +14,11 @@ namespace twins
 
     class rng_searcher : public base_searcher
     {
+    protected:
+        int range{};
+
     public:
-        rng_searcher(int s) : base_searcher{s} {}
+        rng_searcher(int s, int r) : base_searcher{s}, range{r} {}
 
     protected:
         void run() override;
@@ -24,9 +27,11 @@ namespace twins
     class kvl_searcher : public base_searcher
     {
     public:
-        kvl_searcher(int s) : base_searcher{s} {}
+        kvl_searcher(int s, double _k) : base_searcher{s}, k{_k} {}
 
     protected:
         void run() override;
+
+        double k{};
     };
 }
