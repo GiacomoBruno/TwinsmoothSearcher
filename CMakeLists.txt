@@ -17,8 +17,9 @@ target_sources(twinsmooth_searcher
     PRIVATE ${PROJECT_SOURCE_DIR}/src/avl_tree.cpp
     PRIVATE ${PROJECT_SOURCE_DIR}/src/twins/base_searcher.cpp
     PRIVATE ${PROJECT_SOURCE_DIR}/src/twins/standard_searcher.cpp
-    PRIVATE ${PROJECT_SOURCE_DIR}/src/twins/range_searcher.cpp
-    PRIVATE ${PROJECT_SOURCE_DIR}/src/twins/k_searcher.cpp
+    PRIVATE ${PROJECT_SOURCE_DIR}/src/twins/rng_searcher.cpp
+    PRIVATE ${PROJECT_SOURCE_DIR}/src/twins/kvl_searcher.cpp
+    PRIVATE ${PROJECT_SOURCE_DIR}/src/twins/kgw_searcher.cpp
     PRIVATE ${PROJECT_SOURCE_DIR}/src/twins/searcher_menu.cpp
     PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp
 )

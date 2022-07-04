@@ -5,7 +5,9 @@
 
 int main(int argc, char** argv)
 {
+    std::cout << sizeof(twins::avl_node) << std::endl;
 
+    
     utilities::init_machine();
 
     auto s = twins::get_searcher();

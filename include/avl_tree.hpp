@@ -52,6 +52,12 @@ namespace twins
         short height{1};
 
         /**
+         * @brief available extra space due to memory alignment
+         * 
+         */
+        char extra_space[6];
+
+        /**
          * @brief rotate node to the right
          * @return the node at the old position of the current node
          */

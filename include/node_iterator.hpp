@@ -11,6 +11,7 @@ namespace twins
         std::is_same_v<decltype(obj.next), T*>;
         std::is_same_v<decltype(obj.prev), T*>;
         std::is_same_v<decltype(obj.val), mpz_class>;
+        std::is_same_v<decltype(obj.extra_space), char[6]>;
     };
 
     template <TreeNode T>

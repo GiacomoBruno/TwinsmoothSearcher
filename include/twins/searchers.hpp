@@ -34,4 +34,17 @@ namespace twins
 
         double k{};
     };
+
+    class kgw_searcher : public base_searcher
+    {
+    public:
+        kgw_searcher(int s, double start, double end, double delta) : base_searcher{s}, k_start{start}, k_end{end}, k_delta{delta} {}
+
+    protected:
+        void run() override;
+
+        double k_start{};
+        double k_end{};
+        double k_delta{};
+    };
 }
