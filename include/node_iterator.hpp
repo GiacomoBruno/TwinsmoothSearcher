@@ -1,20 +1,20 @@
 #pragma once
 #include <gmpxx.h>
 #include <type_traits>
-#include <concepts>
+//#include <concepts>
 namespace twins
 {
-
+/*
     template <typename T>
-    concept TreeNode = requires(T obj)
+    concept typename = requires(T obj)
     {
         std::is_same_v<decltype(obj.next), T*>;
         std::is_same_v<decltype(obj.prev), T*>;
         std::is_same_v<decltype(obj.val), mpz_class>;
         std::is_same_v<decltype(obj.extra_space), char[6]>;
     };
-
-    template <TreeNode T>
+*/
+    template <typename T>
     struct node_iterator
     {
         /**
@@ -145,37 +145,37 @@ namespace twins
 namespace twins
 {
 
-    template <TreeNode T>
+    template <typename T>
     node_iterator<T>::node_iterator(const node_iterator<T> &it) : node{it.node}
     {
     }
 
-    template <TreeNode T>
+    template <typename T>
     node_iterator<T>::node_iterator(T *nd) : node{nd} {}
 
-    template <TreeNode T>
+    template <typename T>
     node_iterator<T>::node_iterator() = default;
 
-    template <TreeNode T>
+    template <typename T>
     node_iterator<T>::~node_iterator() { node = nullptr; };
 
-    template <TreeNode T>
+    template <typename T>
     node_iterator<T> &node_iterator<T>::operator=(const node_iterator<T> &it)
     {
         node = it.node;
         return *this;
     }
 
-    template <TreeNode T>
+    template <typename T>
     mpz_class &node_iterator<T>::operator*() { return node->val; }
 
-    template <TreeNode T>
+    template <typename T>
     bool node_iterator<T>::operator==(const node_iterator<T> &it)
     {
         return node == it.node;
     }
 
-    template <TreeNode T>
+    template <typename T>
     bool node_iterator<T>::operator!=(const node_iterator<T> &it)
     {
         return node != it.node;
@@ -189,7 +189,7 @@ namespace twins
      * @return true iterator was empty
      * @return false iterator was not empty
      */
-    template <TreeNode T>
+    template <typename T>
     bool operator==(const node_iterator<T> &it, std::nullptr_t) { return it.node == nullptr; }
 
     /**
@@ -201,17 +201,17 @@ namespace twins
      * @return true iterator was not empty
      * @return false iterator was empty
      */
-    template <TreeNode T>
+    template <typename T>
     bool operator!=(const node_iterator<T> &it, std::nullptr_t) { return it.node != nullptr; }
 
-    template <TreeNode T>
+    template <typename T>
     node_iterator<T> &node_iterator<T>::operator++()
     {
         node = node->next;
         return *this;
     }
 
-    template <TreeNode T>
+    template <typename T>
     node_iterator<T> node_iterator<T>::operator++(int)
     {
         auto tmp = *this;
@@ -220,14 +220,14 @@ namespace twins
         return tmp;
     }
 
-    template <TreeNode T>
+    template <typename T>
     node_iterator<T> &node_iterator<T>::operator--()
     {
         node = node->prev;
         return *this;
     }
 
-    template <TreeNode T>
+    template <typename T>
     node_iterator<T> node_iterator<T>::operator--(int)
     {
         auto tmp = *this;
@@ -235,7 +235,7 @@ namespace twins
         return tmp;
     }
 
-    template <TreeNode T>
+    template <typename T>
     typename node_iterator<T>::difference_type
     node_iterator<T>::operator-(const node_iterator<T> &other) const
     {

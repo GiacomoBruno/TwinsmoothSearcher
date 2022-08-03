@@ -91,7 +91,7 @@ namespace twins
         // here save the results
         for(const auto& num : *S )
         {
-            if(mpz_sizeinbase(num.get_mpz_t(), 2) > utilities::TOP_NUMBERS_AMOUNT)
+            if(static_cast<int>(mpz_sizeinbase(num.get_mpz_t(), 2)) > utilities::TOP_NUMBERS_AMOUNT)
                 logger::get().save_twin(num.get_str(), smoothness);
 
             mpz_class prime;
