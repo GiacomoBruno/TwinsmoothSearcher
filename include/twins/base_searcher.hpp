@@ -47,23 +47,23 @@ namespace twins
                 // std::cout << "vector_mover()" << std::endl; 
                 }
 
-            vector_mover(const vector_mover &o) : vec{new std::vector<T>(*o.vec)}
+            vector_mover(const vector_mover<T> &o) : vec{new std::vector<T>(*o.vec)}
             {
                 
                 //std::cout << "vector_mover(const&)" << std::endl;
             }
 
-            vector_mover(vector_mover &&o) : vec{o.vec}
+            vector_mover(vector_mover<T> &&o) : vec{o.vec}
             {
                 o.vec = nullptr;
                 //std::cout << "vector_mover(&&)" << std::endl;
             }
 
-            auto operator==(const vector_mover& o){ return o.vec == vec; }
+            auto operator==(const vector_mover<T>& o){ return o.vec == vec; }
 
-            auto operator!=(const vector_mover& o){ return !(*this == o); }
+            auto operator!=(const vector_mover<T>& o){ return !(*this == o); }
 
-            auto operator=(const vector_mover& o) 
+            auto operator=(const vector_mover<T>& o) 
             {
                 //std::cout << "operator=const&" << std::endl;
                 if(o != *this) 
@@ -74,7 +74,7 @@ namespace twins
                 return *this;
             }
 
-            auto operator=(vector_mover&& o)
+            auto operator=(vector_mover<T>&& o)
             {
                 //std::cout << "operator=&&" << std::endl;
                 vec = o.vec;
