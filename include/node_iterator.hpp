@@ -205,6 +205,9 @@ namespace twins
     bool operator!=(const node_iterator<T> &it, std::nullptr_t) { return it.node != nullptr; }
 
     template <typename T>
+    bool operator!=(const node_iterator<T>&lhs,  const node_iterator<T>&rhs) {return lhs.node != rhs.node;}
+
+    template <typename T>
     node_iterator<T> &node_iterator<T>::operator++()
     {
         node = node->next;
