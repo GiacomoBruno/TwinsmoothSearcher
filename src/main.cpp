@@ -13,6 +13,8 @@ int main(int argc, char** argv)
     auto s = twins::get_searcher();
     s->execute();
 
+    delete s;
+
     return 0;
 
 }

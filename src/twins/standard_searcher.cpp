@@ -1,4 +1,5 @@
 #include "twins/searchers.hpp"
+#include "logger.hpp"
 #include <omp.h>
 namespace twins
 {
@@ -104,11 +105,20 @@ namespace twins
     {
         auto res = util::generate_twinsmooths(S);
 
+        simple_logger log(smoothness);
+
+
         while(!res.vec->empty())
         {
             std_searcher_util::iteration(res, S);
-            std::cout << "found new twinsmooth: " << res.vec->size() << std::endl; 
+            log.print("found new twinsmooth: ");
+            log.print(res.vec->size());
+            log.print("\n");
         }
+
+        log.print("found in total: ");
+        log.print(S->size());
+        log.print(" smooth numbers\n");
     }
 
 }

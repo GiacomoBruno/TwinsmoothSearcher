@@ -1,5 +1,5 @@
 #include "twins/base_searcher.hpp"
-
+#include "utilities.hpp"
 namespace twins 
 {
     namespace util 
@@ -89,6 +89,30 @@ namespace twins
     void base_searcher::dispose()
     {
         // here save the results
+        for(const auto& num : *S )
+        {
+            if(mpz_sizeinbase(num.get_mpz_t(), 2) > utilities::TOP_NUMBERS_AMOUNT)
+                logger::get().save_twin(num.get_str(), smoothness);
+
+            mpz_class prime;
+           // if(utilities::is_prime_1(num, prime))
+            {
+            //    std::cout << "PRIME OF TYPE 1 FOUND: " << prime.get_str() << std::endl;
+            }
+            //if(utilities::is_prime_2(num, prime))
+            {
+            //    std::cout << "PRIME OF TYPE 2 FOUND: " << prime.get_str() << std::endl;
+            }
+
+           // if(utilities::is_prime_3(num, prime))
+            {
+            //    std::cout << "PRIME OF TYPE 3 FOUND: " << prime.get_str() << std::endl;
+            }
+           //if(utilities::is_prime_4(num, prime))
+            {
+            //    std::cout << "PRIME OF TYPE 4 FOUND: " << prime.get_str() << std::endl;
+            }
+        }
 
         delete S;
     }

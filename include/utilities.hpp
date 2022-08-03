@@ -1,7 +1,7 @@
 #pragma once
 
 #include "logger.hpp"
-
+#include <gmpxx.h>
 constexpr char const* OUTPUT_FOLDER = "./results/outputs";
 constexpr char const* STATUS_FN = "stats";
 constexpr char const* TWINSMOOTHS_FN = "twinsmooths";
@@ -27,5 +27,13 @@ namespace utilities {
     void init_machine();
 
     std::string get_out_folder();
+
+    bool is_prime_1(const mpz_class &num, mpz_class &output);
+
+    bool is_prime_2(const mpz_class &num, mpz_class &output);
+
+    bool is_prime_3(const mpz_class &num, mpz_class &output);
+
+    bool is_prime_4(const mpz_class &num, mpz_class &output);
 
 }

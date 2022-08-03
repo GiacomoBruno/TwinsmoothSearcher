@@ -5,9 +5,11 @@ namespace twins
 {
     namespace kgw_searcher_util
     {
-        template <class T> T multiply_double(const T &n, double d) { return static_cast<T>(n * d); }
+        template <class T>
+        T multiply_double(const T &n, double d) { return static_cast<T>(n * d); }
 
-        template <> mpz_class multiply_double<mpz_class>(const mpz_class &n, double d)
+        template <>
+        mpz_class multiply_double<mpz_class>(const mpz_class &n, double d)
         {
             mpf_class _d = d;
             mpf_class _n = n;
@@ -122,11 +124,19 @@ namespace twins
     {
         auto res = util::generate_twinsmooths(S);
 
-        while(!res.vec->empty())
+        simple_logger log(smoothness);
+
+        while (!res.vec->empty())
         {
             kgw_searcher_util::iteration(res, S, k_start);
-            std::cout << "found new twinsmooth: " << res.vec->size() << std::endl; 
+            log.print("found new twinsmooth: ");
+            log.print(res.vec->size());
+            log.print("\n");
         }
+
+        log.print("found in total: ");
+        log.print(S->size());
+        log.print(" smooth numbers\n");
     }
 
 }
