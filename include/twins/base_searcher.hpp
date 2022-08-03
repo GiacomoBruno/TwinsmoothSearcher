@@ -61,7 +61,11 @@ namespace twins
 
             auto operator==(const vector_mover<T>& o){ return o.vec == vec; }
 
+            auto operator==(vector_mover<T>& o){ return o.vec == vec; }
+
             auto operator!=(const vector_mover<T>& o){ return !(*this == o); }
+
+            auto operator!=(vector_mover<T>& o){ return !(*this == o); }
 
             auto operator=(const vector_mover<T>& o) 
             {
