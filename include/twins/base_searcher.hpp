@@ -70,7 +70,7 @@ namespace twins
             auto operator=(const vector_mover<T>& o) 
             {
                 //std::cout << "operator=const&" << std::endl;
-                if(!(o == *this)) 
+                if(this->operator!=(o))
                 {
                     delete vec;
                     vec = new std::vector<T>(*o.vec);
