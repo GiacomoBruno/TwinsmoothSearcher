@@ -136,7 +136,7 @@ void iteration(PVEC& io, PSET& S)
     generate_chunks(io, chunks);
 
     PSET temp_results[chunks.size()];
-    BS::thread_pool pool;
+    BS::thread_pool pool(120);
 
     auto loop = [&](int a, int b)
     {
