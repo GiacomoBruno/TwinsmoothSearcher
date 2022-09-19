@@ -4,21 +4,41 @@
 
 namespace searcher {
 
-    struct range_optimization {
+    struct k_optimization {
     };
 
 
     template<>
-    void generate_twins<range_optimization>(std::vector<mpz_class *> &chunk, PSET &S, PSET &output) {
+    void generate_twins<k_optimization>(std::vector<mpz_class *> &chunk, PSET &S, PSET &output) {
         mpz_class d, delta, m1, result;
-        int r = 0;
+
+        PSET::iterator y_bound{};
+        PSET::iterator z_bound{};
+
+        if (!chunk.empty()) {
+            {
+                mpf_class f{*chunk[0]};
+                f *= k;
+                mpz_class yb{f};
+                y_bound = S.lower_bound(&yb);
+            }
+            {
+                mpf_class f{*chunk[0]};
+                f *= (2 - k);
+                mpz_class zb{f};
+                z_bound = S.upper_bound(&zb);
+            }
+        } else return;
+
+
         for (auto &x: chunk) {
+
             //forward
             auto y = S.upper_bound(x);
             auto z = S.lower_bound(x);
             auto x_iter = S.find(x);
 
-            while (y != S.end() && r < RANGE_SIZE) {
+            while (y != S.end() && y != y_bound) {
                 m1 = *x * **y;
                 m1 += **y;
                 delta = **y - *x;
@@ -36,13 +56,11 @@ namespace searcher {
                         }
                     }
                 }
-                r++;
                 std::advance(y, 1);
             }
             //backward
-            r = 0;
             if (z != x_iter)
-                while (r < RANGE_SIZE) {
+                while (z != z_bound) {
                     m1 = **z * *x;
                     m1 += *x;
                     delta = *x - **z;
@@ -61,7 +79,6 @@ namespace searcher {
                             }
                         }
                     }
-                    r++;
                     if (z == S.begin()) break;
                     std::advance(z, -1);
                 }
