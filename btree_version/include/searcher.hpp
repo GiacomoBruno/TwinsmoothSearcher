@@ -52,6 +52,7 @@ namespace searcher {
     int MAX_BIT_SIZE = 1024;
     int MAX_BIT_SIZE_TO_SAVE = 1024;
     int OPTIMIZATION = 0;
+    std::string output_file;
     double k = 1.1;
 
     template<typename T>

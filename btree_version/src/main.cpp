@@ -44,6 +44,9 @@ void read_parameters()
         std::cout << "max bit size to save: ";
         std::cin >> searcher::MAX_BIT_SIZE_TO_SAVE;
     }
+
+    std::cout << "output file name: ";
+    std::cin >> searcher::output_file;
 }
 
 int main()
@@ -76,7 +79,7 @@ int main()
     b.conclude_bench();
 
     std::string output_fd = "./result/";
-    std::string output_fl = "twinsmooth.txt";
+    std::string output_fl = searcher::output_file;
 
     std::filesystem::create_directories(output_fd);
     std::fstream file;
