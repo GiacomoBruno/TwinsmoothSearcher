@@ -50,6 +50,7 @@ namespace searcher {
     int CHUNK_SIZE = 100;
     int RANGE_SIZE = 2500;
     int MAX_BIT_SIZE = 1024;
+    int MIN_BIT_SIZE_TO_SAVE = 0;
     int MAX_BIT_SIZE_TO_SAVE = 1024;
     int OPTIMIZATION = 0;
     std::string output_file;

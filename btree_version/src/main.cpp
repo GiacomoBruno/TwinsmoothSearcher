@@ -43,6 +43,8 @@ void read_parameters()
     if(bit_size_save) {
         std::cout << "max bit size to save: ";
         std::cin >> searcher::MAX_BIT_SIZE_TO_SAVE;
+        std::cout << "min bit size to save: ";
+        std::cin >> searcher::MIN_BIT_SIZE_TO_SAVE;
     }
 
     std::cout << "output file name: ";
@@ -94,7 +96,7 @@ int main()
     }
     else {
 
-        int smallest_to_save = static_cast<int>(searcher::MAX_BIT_SIZE_TO_SAVE * 0.85);
+        int smallest_to_save = static_cast<int>(searcher::MIN_BIT_SIZE_TO_SAVE);
         int biggest_to_save = static_cast<int>(searcher::MAX_BIT_SIZE_TO_SAVE);
         for (auto x: res) {
             int size = mpz_sizeinbase(x->get_mpz_t(), 2);
