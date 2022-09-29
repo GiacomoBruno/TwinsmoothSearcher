@@ -7,7 +7,8 @@
 #include <string>
 #include <fstream>
 #include <array>
-
+#include <tuple>
+#include <vector>
 //each prime added to the initial set, increases the max range size by 20%
 //on average the bitsize with the largest range increases by 1 with every second prime added
 
@@ -33,7 +34,7 @@ bool isprime(int num) {
 
 std::array<int, 1000> primes()
 {
-    std::array<int, 1000> _primes;
+    std::array<int, 1000> _primes{};
 
     _primes[0] = 2;
     int counter = 1;
@@ -59,30 +60,6 @@ int countPrimes(int strt, int end) {
         }
     }
     return count;
-}
-
-void simulate_some_data(int s)
-{
-    int initial_primes = 16;
-    size_t range = 10;
-    int bitsize = 15;
-    double increase = 0.30;
-    double decrease = 0.04   ;
-    auto prime_numbers = primes();
-
-
-    int total_new_primes = countPrimes(54, s);
-
-    bitsize = bitsize + (total_new_primes / 2);
-    //use distance between primes to decrease the increase in range ( or increase it )
-    //the farther two primes are the lower the decrease in percentage
-    //the closest the highter the decrease in percentage
-
-    for (int i = 0; i < total_new_primes; i++)
-    {
-
-    }
-    std::cout << range << " : " << bitsize << std::endl;
 }
 
 
@@ -139,27 +116,72 @@ int main()
     std::cout << "smoothness: ";
     std::cin >> s;
     //read_parameters();
-     simulate_some_data(s);
 
-    b.start_bench();
 
+
+    std::map<int, std::map<size_t, size_t>> smoothmap{};
+    auto prime_numbers = primes();
     searcher::PSET res;
-    switch(searcher::OPTIMIZATION)
-    {
-        case 0:
+    for(int i = 40; i < 60; i++) {
+        b.start_bench();
+        res.clear();
+        s= prime_numbers[i];
+        switch (searcher::OPTIMIZATION) {
+            case 0:
 
-            searcher::execute<searcher::no_optimization>(s, res);
-            break;
-        case 1:
-            searcher::execute<searcher::range_optimization>(s,res);
-            break;
-        case 2:
-            searcher::execute<searcher::k_optimization>(s,res);
-            break;
-        default: break;
+                smoothmap[prime_numbers[i]] = searcher::execute<searcher::no_optimization>(s, res);
+                break;
+            case 1:
+                smoothmap[prime_numbers[i]] = searcher::execute<searcher::range_optimization>(s, res);
+                break;
+            case 2:
+                smoothmap[prime_numbers[i]] = searcher::execute<searcher::k_optimization>(s, res);
+                break;
+            default:
+                break;
+        }
+        b.conclude_bench();
+
     }
 
-    b.conclude_bench();
+    auto create_increase_mapping = [&](std::map<size_t,size_t>& l, std::map<size_t, size_t>& r)
+    {
+        size_t max_left = 0;
+        size_t max_right = 0;
+        for(auto ll : l)
+            if(ll.second > max_left) max_left = ll.second;
+        for(auto rr : r)
+            if(rr.second > max_right) max_right = rr.second;
+
+        return max_right / (max_left / 100.0) - 100.0;
+    };
+
+    std::map<int, double> increase_map{};
+
+    struct smp {
+        int s;
+        std::map<size_t, size_t>* map;
+    };
+    std::vector<smp> vecmap{};
+
+    for(auto& sm : smoothmap)
+    {
+        auto ptr = &(sm.second);
+        smp smpv = {sm.first, ptr};
+        vecmap.push_back(smpv);
+    }
+
+    for(int i = 1; i < vecmap.size(); i++)
+    {
+        increase_map[vecmap[i].s] = create_increase_mapping(*vecmap[i-1].map, *vecmap[i].map);
+    }
+
+    for(auto m : increase_map)
+    {
+        std::cout <<"SMOOTHNESS" << std::setw(4) << m.first <<  " : " << std::setw(8) << m.second << std::endl;
+    }
+
+
 
     std::string output_fd = "./result/";
     std::string output_fl = searcher::output_file;

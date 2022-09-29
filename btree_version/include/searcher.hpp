@@ -248,14 +248,22 @@ namespace searcher {
             average = average / bitsize.second.size();
             result[bitsize.first] = average;
         }
+
+        for(size_t i = 0; i < 80; i++)
+        {
+            if(result.find(i) == result.end())
+                result[i] = 0;
+        }
+
         return result;
 
     }
     template<typename T>
-    void execute(int s, PSET &S)
+    std::map<size_t, size_t> execute(int s, PSET &S)
     {
-        std::cout << "EXECUTING: " << type_name<T>() <<std::endl;
-        std::cout << "SET TYPE:" << type_name<PSET>() << std::endl;
+        std::cout << "\nEXECUTING: " << type_name<T>() <<std::endl;
+        std::cout << "SMOOTHNESS: " << s << std::endl;
+
 
         std::vector<mpz_class *> work_set;
         for (int i = 1; i <= s; i++) {
@@ -275,29 +283,8 @@ namespace searcher {
         }
         std::cout << "FOUND: " << S.size() << std::endl;
 
-        get_some_stats(S);
-        auto map = generate_bitsize_range_map(S);
-
-        for (int i = 0; i < 120; i++)
-        {
-            if (map.find(i) == map.end())
-                map[i] = 0;
-        }
-
-        for(auto res : map)
-            std::cout << std::setw(4) << res.first << " : " << std::setw(8) << res.second << std::endl;
-
-        //each prime added to the initial set, increases the max range size by 20%
-        //on average the bitsize with the largest range increases by 1 with every second prime added
-        
-
-        //if we start with with a range of 300 at prime number 53 with bitsize medium = 15
-
-        //at prime number 997 we should have 123 increases of 20% over the initial 300 and bitsize medium increased by 61.5
-        //bitsize medium is probably a logaritmic increas and not a linear one
-
-        //360->
-
+        //get_some_stats(S);
+        return generate_bitsize_range_map(S);
     }
 
 }

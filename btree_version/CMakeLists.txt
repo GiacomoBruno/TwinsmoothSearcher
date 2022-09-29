@@ -33,4 +33,4 @@ target_include_directories(twinsmooth_searcher
     PRIVATE ${PROJECT_SOURCE_DIR}/src
 )
 
-target_link_libraries(twinsmooth_searcher mpir)
+target_link_libraries(twinsmooth_searcher gmp)
