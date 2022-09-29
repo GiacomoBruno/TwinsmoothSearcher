@@ -68,6 +68,7 @@ namespace searcher {
     int MIN_BIT_SIZE_TO_SAVE = 0;
     int MAX_BIT_SIZE_TO_SAVE = 1024;
     int OPTIMIZATION = 0;
+    int SMOOTHNESS = 0;
     std::string output_file;
     double k = 2.0;
 

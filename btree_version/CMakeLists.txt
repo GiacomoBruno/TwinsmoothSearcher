@@ -15,7 +15,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     include_directories(twinsmooth_searcher ${GMP_INCLUDE_DIR})
 endif()
 
-add_executable(twinsmooth_searcher include/range_searcher.hpp)
+add_executable(twinsmooth_searcher include/range_searcher.hpp include/variable_range_searcher.hpp)
 
 target_sources(twinsmooth_searcher
     PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp
@@ -23,6 +23,7 @@ target_sources(twinsmooth_searcher
     PRIVATE ${PROJECT_SOURCE_DIR}/include/searcher.hpp
     PRIVATE ${PROJECT_SOURCE_DIR}/include/BS/BS_thread_pool_light.hpp
     PRIVATE ${PROJECT_SOURCE_DIR}/include/BS/BS_thread_pool.hpp
+    PRIVATE ${PROJECT_SOURCE_DIR}/include/variable_range_searcher.hpp
 
     
 )

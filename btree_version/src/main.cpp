@@ -2,6 +2,7 @@
 #include "benchmark.hpp"
 #include "range_searcher.hpp"
 #include "k_searcher.hpp"
+#include "variable_range_searcher.hpp"
 #include <iostream>
 #include <filesystem>
 #include <string>
@@ -65,6 +66,8 @@ int countPrimes(int strt, int end) {
 
 void read_parameters()
 {
+    std::cout << "smoothness: ";
+    std::cin >> searcher::SMOOTHNESS;
 
     std::cout << "optimization [0 = none, 1 = range, 2 = k]: ";
     std::cin >> searcher::OPTIMIZATION;
@@ -112,9 +115,7 @@ int main()
 {
     benchmark b;
 
-    int s;
-    std::cout << "smoothness: ";
-    std::cin >> s;
+
     read_parameters();
 
 
@@ -126,14 +127,16 @@ int main()
         switch (searcher::OPTIMIZATION) {
             case 0:
 
-                searcher::execute<searcher::no_optimization>(s, res);
+                searcher::execute<searcher::no_optimization>(searcher::SMOOTHNESS, res);
                 break;
             case 1:
-                searcher::execute<searcher::range_optimization>(s, res);
+                searcher::execute<searcher::range_optimization>(searcher::SMOOTHNESS, res);
                 break;
             case 2:
-                searcher::execute<searcher::k_optimization>(s, res);
+                searcher::execute<searcher::k_optimization>(searcher::SMOOTHNESS, res);
                 break;
+            case 3:
+                searcher::execute<searcher::var_range_optimization>(searcher::SMOOTHNESS, res);
             default:
                 break;
         }
