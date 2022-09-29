@@ -69,11 +69,11 @@ namespace searcher {
     int MAX_BIT_SIZE_TO_SAVE = 1024;
     int OPTIMIZATION = 0;
     std::string output_file;
-    double k = 1.1;
+    double k = 2.0;
 
     template<typename T>
     void generate_chunks(const std::vector<T> &input, std::vector<std::vector<T>> &output) {
-        int counter;
+        int counter = 0;
         int idx = 0;
         output.emplace_back();
         for (const auto &i: input) {
@@ -151,7 +151,8 @@ namespace searcher {
         std::vector<std::vector<mpz_class *>> chunks{};
         generate_chunks(io, chunks);
 
-        PSET temp_results[chunks.size()];
+        std::vector<PSET> temp_results(chunks.size());
+
         BS::thread_pool_light pool;
 
         auto loop = [&](int a, int b) {
@@ -277,8 +278,26 @@ namespace searcher {
         get_some_stats(S);
         auto map = generate_bitsize_range_map(S);
 
+        for (int i = 0; i < 120; i++)
+        {
+            if (map.find(i) == map.end())
+                map[i] = 0;
+        }
+
         for(auto res : map)
-            std::cout << res.first << " : " << res.second << std::endl;
+            std::cout << std::setw(4) << res.first << " : " << std::setw(8) << res.second << std::endl;
+
+        //each prime added to the initial set, increases the max range size by 20%
+        //on average the bitsize with the largest range increases by 1 with every second prime added
+        
+
+        //if we start with with a range of 300 at prime number 53 with bitsize medium = 15
+
+        //at prime number 997 we should have 123 increases of 20% over the initial 300 and bitsize medium increased by 61.5
+        //bitsize medium is probably a logaritmic increas and not a linear one
+
+        //360->
+
     }
 
 }

@@ -6,9 +6,89 @@
 #include <filesystem>
 #include <string>
 #include <fstream>
+#include <array>
+
+//each prime added to the initial set, increases the max range size by 20%
+//on average the bitsize with the largest range increases by 1 with every second prime added
+
+
+//if we start with with a range of 300 at prime number 53 with bitsize medium = 15
+
+//at prime number 997 we should have 123 increases of 20% over the initial 300 and bitsize medium increased by 61.5
+//bitsize medium is probably a logaritmic increas and not a linear one
+
+//360->
+
+bool isprime(int num) {
+    if (num <= 1)
+        return false;
+    for (int i = 2; i <= num / 2; i++) {
+        if (num % i == 0)
+        {
+            return false;
+        }
+    }
+    return true; //if both failed then num is prime
+}
+
+std::array<int, 1000> primes()
+{
+    std::array<int, 1000> _primes;
+
+    _primes[0] = 2;
+    int counter = 1;
+
+    for (int i = 3; counter < 1000 ; i += 2)
+    {
+        if (isprime(i))
+        {
+            _primes[counter] = i;
+            counter++;
+        }
+    }
+
+    return _primes;
+}
+
+int countPrimes(int strt, int end) {
+    int count = 0;
+    for (int i = strt;i <= end;i++) {
+        if (isprime(i) == 1)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+
+void simulate_some_data(int s)
+{
+    int initial_primes = 16;
+    size_t range = 10;
+    int bitsize = 15;
+    double increase = 0.30;
+    double decrease = 0.04   ;
+    auto prime_numbers = primes();
+
+
+    int total_new_primes = countPrimes(54, s);
+
+    bitsize = bitsize + (total_new_primes / 2);
+    //use distance between primes to decrease the increase in range ( or increase it )
+    //the farther two primes are the lower the decrease in percentage
+    //the closest the highter the decrease in percentage
+
+    for (int i = 0; i < total_new_primes; i++)
+    {
+
+    }
+    std::cout << range << " : " << bitsize << std::endl;
+}
+
 
 void read_parameters()
 {
+
     std::cout << "optimization [0 = none, 1 = range, 2 = k]: ";
     std::cin >> searcher::OPTIMIZATION;
 
@@ -58,7 +138,8 @@ int main()
     int s;
     std::cout << "smoothness: ";
     std::cin >> s;
-    read_parameters();
+    //read_parameters();
+     simulate_some_data(s);
 
     b.start_bench();
 
