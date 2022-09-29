@@ -48,7 +48,7 @@ size_t generate_range(int bit_size, size_t smoothness)
 {
     static auto primes = PrimeNumbers();
 
-    size_t range = 390;
+    size_t range = 350;
 
     int count_primes = 0;
 
@@ -64,13 +64,13 @@ size_t generate_range(int bit_size, size_t smoothness)
 
     int mid_point = count_primes / 2 + 16;
 
-    bit_size_multiplier = 1.0 - normalize(0.0,mid_point,abs(bit_size - mid_point)) + 0.5;   
+    bit_size_multiplier = 1.0 - normalize(0.0,mid_point,abs(bit_size - mid_point)) + 0.3;   
     // 0.6 is the minimum multiplier
     // overshoot by 0.6 to make sure that the range is big enough
 
     for(int i = 0; i < count_primes; i++)
     {
-        range += (range * 0.030); //for every prime number add 3% to the range
+        range += (range * 0.025); //for every prime number add 3% to the range
     }
 
     //range now is the maximum it can be
