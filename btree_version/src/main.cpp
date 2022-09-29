@@ -181,7 +181,7 @@ int main()
         std::cout <<"SMOOTHNESS" << std::setw(4) << m.first <<  " : " << std::setw(8) << m.second << std::endl;
     }
 
-
+    res.clear();
 
     std::string output_fd = "./result/";
     std::string output_fl = searcher::output_file;
