@@ -29,7 +29,7 @@ namespace searcher {
                     m1 -= 1;
                     if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= MAX_BIT_SIZE) {
                         auto res = new mpz_class{m1};
-                        if (!S.exists(res)) {
+                        if (S.find(res) == S.end()) {
                             output.insert(res);
                         } else {
                             delete res;
@@ -54,7 +54,7 @@ namespace searcher {
 
                         if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= MAX_BIT_SIZE) {
                             auto res = new mpz_class{m1};
-                            if (!S.exists(res)) {
+                            if (S.find(res) == S.end()) {
                                 output.insert(res);
                             } else {
                                 delete res;

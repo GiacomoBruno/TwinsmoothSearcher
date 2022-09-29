@@ -15,6 +15,7 @@ namespace searcher {
         PSET::iterator y_bound{};
         PSET::iterator z_bound{};
 
+        //calculate the range limit based on k
         if (!chunk.empty()) {
             {
                 mpf_class f{*chunk[0]};
@@ -29,7 +30,6 @@ namespace searcher {
                 z_bound = S.upper_bound(&zb);
             }
         } else return;
-
 
         for (auto &x: chunk) {
 
@@ -49,7 +49,7 @@ namespace searcher {
                     m1 -= 1;
                     if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= MAX_BIT_SIZE) {
                         auto res = new mpz_class{m1};
-                        if (!S.exists(res)) {
+                        if (S.find(res) == S.end()) {
                             output.insert(res);
                         } else {
                             delete res;
@@ -72,7 +72,7 @@ namespace searcher {
 
                         if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= MAX_BIT_SIZE) {
                             auto res = new mpz_class{m1};
-                            if (!S.exists(res)) {
+                            if (S.find(res) == S.end()) {
                                 output.insert(res);
                             } else {
                                 delete res;

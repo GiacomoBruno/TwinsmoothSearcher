@@ -67,7 +67,7 @@ int main()
     {
         case 0:
 
-            searcher::execute<int>(s, res);
+            searcher::execute<searcher::no_optimization>(s, res);
             break;
         case 1:
             searcher::execute<searcher::range_optimization>(s,res);

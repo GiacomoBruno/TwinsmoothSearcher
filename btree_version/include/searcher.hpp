@@ -6,6 +6,9 @@
 #include <string_view>
 #include "tlx/container/btree_set.hpp"
 #include "BS/BS_thread_pool_light.hpp"
+#include <set>
+#include <map>
+#include "benchmark.hpp"
 
 template <class T>
 constexpr
@@ -31,20 +34,32 @@ type_name()
 
 namespace searcher {
 
-    using SET = tlx::btree_set<mpz_class>;
+    struct no_optimization{};
 
-    struct mpz_pointer_comparator {
-        auto operator()(mpz_class *l, mpz_class *r) const {
-            return mpz_cmp(l->get_mpz_t(), r->get_mpz_t());
-        }
+    namespace {
+        struct mpz_pointer_comparator {
+            auto operator()(mpz_class *l, mpz_class *r) const {
+                return mpz_cmp(l->get_mpz_t(), r->get_mpz_t());
+            }
 
-        auto operator()(const mpz_class *l, const mpz_class *r) const {
-            return mpz_cmp(l->get_mpz_t(), r->get_mpz_t());
-        }
-    };
+            auto operator()(const mpz_class *l, const mpz_class *r) const {
+                return mpz_cmp(l->get_mpz_t(), r->get_mpz_t());
+            }
+        };
 
-    using PSET = tlx::btree_set<mpz_class *, mpz_pointer_comparator>;
+        struct mpz_pointer_comparator_for_set {
+            auto operator()(mpz_class *l, mpz_class *r) const {
+                return mpz_cmp(l->get_mpz_t(), r->get_mpz_t()) < 0;
+            }
 
+            auto operator()(const mpz_class *l, const mpz_class *r) const {
+                return mpz_cmp(l->get_mpz_t(), r->get_mpz_t()) < 0;
+            }
+        };
+    }
+
+    using PSET = tlx::btree_set<mpz_class*, mpz_pointer_comparator>;
+    //using PSET = std::set<mpz_class*, mpz_pointer_comparator_for_set>;
     using PVEC = std::vector<mpz_class *>;
 
     int CHUNK_SIZE = 100;
@@ -61,14 +76,12 @@ namespace searcher {
         int counter;
         int idx = 0;
         output.emplace_back();
-
         for (const auto &i: input) {
             if (counter == CHUNK_SIZE) {
                 counter = 0;
                 output.emplace_back();
                 idx++;
             }
-
             output[idx].push_back(i);
             counter++;
         }
@@ -95,7 +108,7 @@ namespace searcher {
 
                     if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= MAX_BIT_SIZE) {
                         auto res = new mpz_class{m1};
-                        if (!S.exists(res)) {
+                        if (S.find(res) == S.end()) {
                             output.insert(res);
                         } else {
                             delete res;
@@ -119,7 +132,7 @@ namespace searcher {
 
                         if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= MAX_BIT_SIZE) {
                             auto res = new mpz_class{m1};
-                            if (!S.exists(res)) {
+                            if (S.find(res) == S.end()) {
                                 output.insert(res);
                             } else {
                                 delete res;
@@ -132,14 +145,14 @@ namespace searcher {
         }
     }
 
-
     template<typename T>
-    void iteration(PVEC &io, PSET &S) {
+    void iteration(PVEC &io, PSET &S)
+    {
         std::vector<std::vector<mpz_class *>> chunks{};
         generate_chunks(io, chunks);
 
         PSET temp_results[chunks.size()];
-        BS::thread_pool_light pool(120);
+        BS::thread_pool_light pool;
 
         auto loop = [&](int a, int b) {
             for (int i = a; i < b; ++i) {
@@ -165,11 +178,83 @@ namespace searcher {
         }
     }
 
+    void get_some_stats(PSET& S)
+    {
+        std::map<int, int> bitsizes{};
 
+        for(auto n : S)
+        {
+            int size = mpz_sizeinbase(n->get_mpz_t(), 2);
+
+            if(bitsizes.find(size) == bitsizes.end())
+                bitsizes[size] = 1;
+            else
+                bitsizes[size] += 1;
+        }
+
+        std::cout << "BITS->     AMOUNT\n";
+
+
+        for(auto bsize : bitsizes)
+        {
+            std::cout << std::setw(3) << bsize.first << " -> " << std::setw(10) << bsize.second << std::endl;
+        }
+    }
+
+    std::map<size_t,size_t> generate_bitsize_range_map(PSET& S)
+    {
+        std::map<size_t, std::vector<size_t>> allMap;
+
+        for(auto x : S)
+        {
+            mpz_class low = *x / 2;
+            mpz_class high = *x * 2;
+
+            auto low_iter = S.upper_bound(&low);
+            auto high_iter = S.lower_bound((&high));
+
+
+            size_t counter = 0;
+            auto x_iter = S.find(x);
+            auto iter = x_iter;
+            while(iter != S.end() && iter != low_iter)
+            {
+                counter++;
+                std::advance(iter, -1);
+            }
+            iter = x_iter;
+            while(iter != S.end() && iter != high_iter)
+            {
+                counter++;
+                std::advance(iter, 1);
+            }
+
+            auto bitsize = mpz_sizeinbase(x->get_mpz_t(), 2);
+
+            if(allMap.find(bitsize) == allMap.end())
+                allMap[bitsize] = {};
+
+            allMap[bitsize].push_back(counter);
+        }
+        std::map<size_t, size_t> result{};
+
+        for(const auto& bitsize : allMap)
+        {
+            size_t average = 0;
+            for(auto count : bitsize.second)
+                average += count;
+
+            average = average / bitsize.second.size();
+            result[bitsize.first] = average;
+        }
+        return result;
+
+    }
     template<typename T>
-    void execute(int s, PSET &S) {
-
+    void execute(int s, PSET &S)
+    {
         std::cout << "EXECUTING: " << type_name<T>() <<std::endl;
+        std::cout << "SET TYPE:" << type_name<PSET>() << std::endl;
 
         std::vector<mpz_class *> work_set;
         for (int i = 1; i <= s; i++) {
@@ -177,13 +262,23 @@ namespace searcher {
             S.insert(x);
             work_set.emplace_back(x);
         }
+        benchmark b;
 
         while (!work_set.empty()) {
+            b.start_bench();
             iteration<T>(work_set, S);
-            std::cout << "found: " << work_set.size() << std::endl;
-        }
 
+            std::cout << "found: " << work_set.size() << " in: ";
+            b.conclude_bench();
+            std::cout << std::endl;
+        }
         std::cout << "FOUND: " << S.size() << std::endl;
+
+        get_some_stats(S);
+        auto map = generate_bitsize_range_map(S);
+
+        for(auto res : map)
+            std::cout << res.first << " : " << res.second << std::endl;
     }
 
 }
