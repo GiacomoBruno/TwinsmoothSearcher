@@ -12,22 +12,29 @@ namespace searcher {
     void generate_twins<k_optimization>(std::vector<mpz_class *> &chunk, PSET &S, PSET &output) {
         mpz_class d, delta, m1, result;
 
-        PSET::iterator y_bound{};
-        PSET::iterator z_bound{};
+        //PSET::iterator y_bound{};
+        //PSET::iterator z_bound{};
 
+        mpz_class max_y;
+        mpz_class max_z;
         //calculate the range limit based on k
         if (!chunk.empty()) {
             {
                 mpf_class f{*chunk[0]};
                 f *= k;
-                mpz_class yb{f};
-                y_bound = S.lower_bound(&yb);
+
+                max_y = f;
+
+                //mpz_class yb{f};
+                //y_bound = S.lower_bound(&yb);
             }
             {
                 mpf_class f{*chunk[0]};
                 f *= (2 - k);
-                mpz_class zb{f};
-                z_bound = S.upper_bound(&zb);
+
+                max_z = f;
+                //mpz_class zb{f};
+                //z_bound = S.upper_bound(&zb);
             }
         } else return;
 
@@ -36,9 +43,12 @@ namespace searcher {
             //forward
             auto y = S.upper_bound(x);
             auto z = S.lower_bound(x);
+
             auto x_iter = S.find(x);
 
-            while (y != S.end() && y != y_bound) {
+
+            while (y != S.end() && **y < max_y) {
+
                 m1 = *x * **y;
                 m1 += **y;
                 delta = **y - *x;
@@ -60,7 +70,7 @@ namespace searcher {
             }
             //backward
             if (z != x_iter)
-                while (z != z_bound) {
+                while (**z < max_z) {
                     m1 = **z * *x;
                     m1 += *x;
                     delta = *x - **z;

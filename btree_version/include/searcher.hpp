@@ -259,7 +259,7 @@ namespace searcher {
 
     }
     template<typename T>
-    std::map<size_t, size_t> execute(int s, PSET &S)
+    void execute(int s, PSET &S)
     {
         std::cout << "\nEXECUTING: " << type_name<T>() <<std::endl;
         std::cout << "SMOOTHNESS: " << s << std::endl;
@@ -284,7 +284,7 @@ namespace searcher {
         std::cout << "FOUND: " << S.size() << std::endl;
 
         //get_some_stats(S);
-        return generate_bitsize_range_map(S);
+        //return generate_bitsize_range_map(S);
     }
 
 }

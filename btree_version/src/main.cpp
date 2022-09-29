@@ -115,71 +115,29 @@ int main()
     int s;
     std::cout << "smoothness: ";
     std::cin >> s;
-    //read_parameters();
+    read_parameters();
 
 
 
-    std::map<int, std::map<size_t, size_t>> smoothmap{};
-    auto prime_numbers = primes();
+
     searcher::PSET res;
-    for(int i = 40; i < 60; i++) {
         b.start_bench();
-        res.clear();
-        s= prime_numbers[i];
+
         switch (searcher::OPTIMIZATION) {
             case 0:
 
-                smoothmap[prime_numbers[i]] = searcher::execute<searcher::no_optimization>(s, res);
+                searcher::execute<searcher::no_optimization>(s, res);
                 break;
             case 1:
-                smoothmap[prime_numbers[i]] = searcher::execute<searcher::range_optimization>(s, res);
+                searcher::execute<searcher::range_optimization>(s, res);
                 break;
             case 2:
-                smoothmap[prime_numbers[i]] = searcher::execute<searcher::k_optimization>(s, res);
+                searcher::execute<searcher::k_optimization>(s, res);
                 break;
             default:
                 break;
         }
         b.conclude_bench();
-
-    }
-
-    auto create_increase_mapping = [&](std::map<size_t,size_t>& l, std::map<size_t, size_t>& r)
-    {
-        size_t max_left = 0;
-        size_t max_right = 0;
-        for(auto ll : l)
-            if(ll.second > max_left) max_left = ll.second;
-        for(auto rr : r)
-            if(rr.second > max_right) max_right = rr.second;
-
-        return max_right / (max_left / 100.0) - 100.0;
-    };
-
-    std::map<int, double> increase_map{};
-
-    struct smp {
-        int s;
-        std::map<size_t, size_t>* map;
-    };
-    std::vector<smp> vecmap{};
-
-    for(auto& sm : smoothmap)
-    {
-        auto ptr = &(sm.second);
-        smp smpv = {sm.first, ptr};
-        vecmap.push_back(smpv);
-    }
-
-    for(int i = 1; i < vecmap.size(); i++)
-    {
-        increase_map[vecmap[i].s] = create_increase_mapping(*vecmap[i-1].map, *vecmap[i].map);
-    }
-
-    for(auto m : increase_map)
-    {
-        std::cout <<"SMOOTHNESS" << std::setw(4) << m.first <<  " : " << std::setw(8) << m.second << std::endl;
-    }
 
     res.clear();
 
