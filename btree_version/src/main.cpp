@@ -142,7 +142,6 @@ int main()
         }
         b.conclude_bench();
 
-    res.clear();
 
     std::string output_fd = "./result/";
     std::string output_fl = searcher::output_file;
