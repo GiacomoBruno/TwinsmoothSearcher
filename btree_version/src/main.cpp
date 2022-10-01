@@ -155,7 +155,7 @@ int main()
     for(size_t i = size-1; i > size - 200; i--)
     {
         file << (*iter)->get_str() << "\n";
-        std::advance(iter, -1);
+        std::advance(iter, 1);
     }
 
 /*
