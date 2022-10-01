@@ -69,6 +69,7 @@ namespace searcher {
     int MAX_BIT_SIZE_TO_SAVE = 1024;
     int OPTIMIZATION = 0;
     int SMOOTHNESS = 0;
+    BS::thread_pool_light thread_pool;
     std::string output_file;
     double k = 2.0;
 
@@ -154,7 +155,7 @@ namespace searcher {
 
         std::vector<PSET> temp_results(chunks.size());
 
-        BS::thread_pool_light pool;
+
 
         auto loop = [&](int a, int b) {
             for (int i = a; i < b; ++i) {
@@ -162,9 +163,9 @@ namespace searcher {
             }
         };
 
-        pool.push_loop(0, chunks.size(), loop);
+        thread_pool.push_loop(0, chunks.size(), loop);
 
-        pool.wait_for_tasks();
+        thread_pool.wait_for_tasks();
 
         io.clear();
 
@@ -264,7 +265,7 @@ namespace searcher {
     {
         std::cout << "\nEXECUTING: " << type_name<T>() <<std::endl;
         std::cout << "SMOOTHNESS: " << s << std::endl;
-
+        std::cout << "THREAD COUNT: "<< thread_pool.get_thread_count() << std::endl;
 
         std::vector<mpz_class *> work_set;
         for (int i = 1; i <= s; i++) {
