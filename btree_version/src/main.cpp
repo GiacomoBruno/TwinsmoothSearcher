@@ -150,6 +150,15 @@ int main()
     std::fstream file;
     file.open(output_fd + output_fl, std::ios_base::out);
 
+    size_t size = res.size();
+    auto iter = res.rbegin();
+    for(size_t i = size-1; i > size - 200; i--)
+    {
+        file << (*iter)->get_str() << "\n";
+        std::advance(iter, -1);
+    }
+
+/*
     if(searcher::MAX_BIT_SIZE_TO_SAVE == 1024)
     {
         for(auto x : res)
@@ -168,6 +177,7 @@ int main()
             }
         }
     }
+    */
     file.flush();
     file.close();
 
