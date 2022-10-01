@@ -8,6 +8,7 @@
 #include "BS/BS_thread_pool_light.hpp"
 #include <set>
 #include <map>
+#include <sstream>
 #include "benchmark.hpp"
 
 template <class T>
@@ -147,6 +148,43 @@ namespace searcher {
         }
     }
 
+    void smistamento_risultati(std::vector<PSET>& results, std::vector<PSET>& output)
+    {
+        if(results.size() < 2)
+            return;
+
+        size_t length = results.size() - (results.size() % 2);
+        output = std::vector<PSET>{length/2};
+
+        thread_pool.push_loop(0, length, [&](int a, int b) {
+            for(auto* x : results[a])
+            {
+                output[a/2].insert(x);
+            }
+            for(auto* x : results[a+1])
+            {
+                auto ins = output[a/2].insert(x);
+                if(!ins.second)
+                    delete x;
+            }
+
+            results[a].clear();
+            results[a+1].clear();
+        }, length/2);
+        thread_pool.wait_for_tasks();
+
+        if(length != results.size())
+        {
+            for(auto* x : results[length]) {
+                auto ins = output[length/2 -1].insert(x);
+                if(!ins.second)
+                    delete x;
+            }
+            results[length].clear();
+        }
+        results.clear();
+    }
+
     template<typename T>
     void iteration(PVEC &io, PSET &S)
     {
@@ -155,30 +193,31 @@ namespace searcher {
 
         std::vector<PSET> temp_results(chunks.size());
 
-
-
-        auto loop = [&](int a, int b) {
+        thread_pool.push_loop(0, chunks.size(), [&](int a, int b) {
             for (int i = a; i < b; ++i) {
                 generate_twins<T>(chunks[i], S, temp_results[i]);
             }
-        };
-
-        thread_pool.push_loop(0, chunks.size(), loop);
-
+        });
         thread_pool.wait_for_tasks();
 
         io.clear();
 
-        for (int i = 0; i < chunks.size(); i++) {
-            for (auto &n: temp_results[i]) {
-                auto ins = S.insert(n);
-                if (ins.second) {
-                    io.push_back(*ins.first);
-                } else {
-                    delete n;
-                }
-            }
+        while(temp_results.size() > 1) {
+            std::vector<PSET> IN{temp_results};
+            std::vector<PSET> OUT;
+            smistamento_risultati(IN, OUT);
+            temp_results = OUT;
         }
+        //for (int i = 0; i < chunks.size(); i++) {
+            for (auto* n: temp_results[0]) {
+                auto ins = S.insert(n);
+                //if (ins.second) {
+                io.push_back(n);
+                //} else {
+                //    delete n;
+                //}
+            }
+        //}
     }
 
     void get_some_stats(PSET& S)

@@ -86,18 +86,19 @@ struct btree_default_traits {
     //! Number of slots in each leaf of the tree. Estimated so that each node
     //! has a size of about 256 bytes.
     static const int leaf_slots =
-        TLX_BTREE_MAX(8, 256 / (sizeof(Value)));
+        TLX_BTREE_MAX(8, 25600 / (sizeof(Value)));
 
     //! Number of slots in each inner node of the tree. Estimated so that each
     //! node has a size of about 256 bytes.
     static const int inner_slots =
-        TLX_BTREE_MAX(8, 256 / (sizeof(Key) + sizeof(void*)));
-
+        TLX_BTREE_MAX(8, 25600 / (sizeof(Key) + sizeof(void*)));
+//FOUND: 336176
+//seconds: 2.49751
     //! As of stx-btree-0.9, the code does linear search in find_lower() and
     //! find_upper() instead of binary_search, unless the node size is larger
     //! than this threshold. See notes at
     //! http://panthema.net/2013/0504-STX-B+Tree-Binary-vs-Linear-Search
-    static const size_t binsearch_threshold = 256;
+    static const size_t binsearch_threshold = 25600;
 };
 
 /*!
@@ -501,6 +502,7 @@ public:
         bool operator != (const iterator& x) const {
             return (x.curr_leaf != curr_leaf) || (x.curr_slot != curr_slot);
         }
+
     };
 
     //! STL-like read-only iterator object for B+ tree items. The iterator
