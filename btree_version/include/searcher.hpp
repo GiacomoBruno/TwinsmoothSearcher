@@ -188,6 +188,14 @@ namespace searcher {
     template<typename T>
     void iteration(PVEC &io, PSET &S)
     {
+        static double k_tmp = searcher::k;
+
+        if(S.size() < 100000)
+        {
+            searcher::k = 2.0;
+        }
+        else searcher::k = k_tmp;
+
         std::vector<std::vector<mpz_class *>> chunks{};
         generate_chunks(io, chunks);
 
@@ -208,16 +216,11 @@ namespace searcher {
             smistamento_risultati(IN, OUT);
             temp_results = OUT;
         }
-        //for (int i = 0; i < chunks.size(); i++) {
-            for (auto* n: temp_results[0]) {
-                auto ins = S.insert(n);
-                //if (ins.second) {
-                io.push_back(n);
-                //} else {
-                //    delete n;
-                //}
-            }
-        //}
+
+        for (auto* n: temp_results[0]) {
+            S.insert(n);
+            io.push_back(n);
+        }
     }
 
     void get_some_stats(PSET& S)
