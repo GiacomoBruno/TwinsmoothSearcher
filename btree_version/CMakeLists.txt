@@ -38,5 +38,5 @@ target_include_directories(twinsmooth_searcher
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     target_link_libraries(twinsmooth_searcher gmp)
 else()
-    target_link_libraries(twinsmooth_searcher gmp)
+    target_link_libraries(twinsmooth_searcher gmp pthread)
 endif()
