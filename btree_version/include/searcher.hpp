@@ -7,9 +7,7 @@
 namespace searcher {
 
     using namespace globals;
-
-    struct no_optimization{};
-
+    
     template<typename T>
     void generate_chunks(const std::vector<T> &input, std::vector<std::vector<T>> &output) {
         int counter = 0;
