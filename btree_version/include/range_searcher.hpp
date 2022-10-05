@@ -4,12 +4,9 @@
 
 namespace searcher {
 
-    struct range_optimization {
-    };
-
-
     template<>
-    void generate_twins<range_optimization>(std::vector<mpz_class *> &chunk, PSET &S, PSET &output) {
+    void generate_twins<globals::OPTIMIZATION_LEVELS::CONSTANT_RANGE_OPTIMIZATION>
+            (std::vector<mpz_class *> &chunk, PSET &S, PSET &output) {
         mpz_class d, delta, m1, result;
         int r = 0;
         for (auto &x: chunk) {
@@ -18,7 +15,7 @@ namespace searcher {
             auto z = S.lower_bound(x);
             auto x_iter = S.find(x);
 
-            while (y != S.end() && r < RANGE_SIZE) {
+            while (y != S.end() && r < GLOBALS.RangeCurrent) {
                 m1 = *x * **y;
                 m1 += **y;
                 delta = **y - *x;
@@ -27,7 +24,7 @@ namespace searcher {
                 if (d == 0) {
                     m1 /= delta;
                     m1 -= 1;
-                    if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= MAX_BIT_SIZE) {
+                    if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= GLOBALS.MaxBitSize) {
                         auto res = new mpz_class{m1};
                         if (S.find(res) == S.end()) {
                             output.insert(res);
@@ -41,8 +38,8 @@ namespace searcher {
             }
             //backward
             r = 0;
-            if (z != x_iter)
-                while (r < RANGE_SIZE) {
+            if (z != x_iter) {
+                while (r < GLOBALS.RangeCurrent) {
                     m1 = **z * *x;
                     m1 += *x;
                     delta = *x - **z;
@@ -52,7 +49,7 @@ namespace searcher {
                         m1 /= delta;
                         m1 -= 1;
 
-                        if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= MAX_BIT_SIZE) {
+                        if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= GLOBALS.MaxBitSize) {
                             auto res = new mpz_class{m1};
                             if (S.find(res) == S.end()) {
                                 output.insert(res);
@@ -65,8 +62,8 @@ namespace searcher {
                     if (z == S.begin()) break;
                     std::advance(z, -1);
                 }
+            }
         }
     }
-
 
 }

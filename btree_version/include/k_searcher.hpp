@@ -4,12 +4,8 @@
 
 namespace searcher {
 
-    struct k_optimization {
-    };
-
-
     template<>
-    void generate_twins<k_optimization>(std::vector<mpz_class *> &chunk, PSET &S, PSET &output) {
+    void generate_twins<globals::OPTIMIZATION_LEVELS::GLOBAL_K_OPTIMIZATION>(std::vector<mpz_class *> &chunk, PSET &S, PSET &output) {
         mpz_class d, delta, m1, result;
 
         //PSET::iterator y_bound{};
@@ -21,7 +17,7 @@ namespace searcher {
         if (!chunk.empty()) {
             {
                 mpf_class f{*chunk[0]};
-                f *= k;
+                f *= GLOBALS.KCurrent;
 
                 max_y = f;
 
@@ -30,7 +26,7 @@ namespace searcher {
             }
             {
                 mpf_class f{*chunk[0]};
-                f *= (2 - k);
+                f *= (2 - GLOBALS.KCurrent);
 
                 max_z = f;
                 //mpz_class zb{f};
@@ -57,7 +53,7 @@ namespace searcher {
                 if (d == 0) {
                     m1 /= delta;
                     m1 -= 1;
-                    if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= MAX_BIT_SIZE) {
+                    if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= GLOBALS.MaxBitSize) {
                         auto res = new mpz_class{m1};
                         if (S.find(res) == S.end()) {
                             output.insert(res);
@@ -80,7 +76,7 @@ namespace searcher {
                         m1 /= delta;
                         m1 -= 1;
 
-                        if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= MAX_BIT_SIZE) {
+                        if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= GLOBALS.MaxBitSize) {
                             auto res = new mpz_class{m1};
                             if (S.find(res) == S.end()) {
                                 output.insert(res);
@@ -92,6 +88,45 @@ namespace searcher {
                     if (z == S.begin()) break;
                     std::advance(z, -1);
                 }
+        }
+    }
+
+    template<>
+    void iteration<globals::OPTIMIZATION_LEVELS::GLOBAL_K_OPTIMIZATION>(PVEC &io, PSET &S)
+    {
+        static double k_tmp = GLOBALS.KCurrent;
+
+        if(S.size() < 100000)
+        {
+            GLOBALS.KCurrent = 2.0;
+        }
+        else GLOBALS.KCurrent = k_tmp;
+
+        std::vector<std::vector<mpz_class *>> chunks{};
+        generate_chunks(io, chunks);
+
+        std::vector<PSET> temp_results(chunks.size());
+
+        GLOBALS.ThreadPool.push_loop(0, chunks.size(), [&](int a, int b) {
+            for (int i = a; i < b; ++i) {
+                generate_twins<globals::OPTIMIZATION_LEVELS::GLOBAL_K_OPTIMIZATION>(chunks[i], S, temp_results[i]);
+            }
+        });
+        GLOBALS.ThreadPool.wait_for_tasks();
+
+        io.clear();
+
+        //parallelized check for collisions in the new results
+        while(temp_results.size() > 1) {
+            std::vector<PSET> IN{temp_results};
+            std::vector<PSET> OUT;
+            check_result_collisions(IN, OUT);
+            temp_results = OUT;
+        }
+
+        for (auto* n: temp_results[0]) {
+            S.insert(n);
+            io.push_back(n);
         }
     }
 
