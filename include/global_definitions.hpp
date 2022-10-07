@@ -36,10 +36,12 @@ namespace globals
         int RangeStart{0};
         int RangeEnd{0};
         int RangeCurrent{0};
+        int RangeStep{0};
 
         double KStart{0.0};
         double KEnd{0.0};
         double KCurrent{0.0};
+        double KStep{0.0};
 
         BS::thread_pool_light ThreadPool{};
         std::string OutputFile{};
@@ -48,12 +50,8 @@ namespace globals
     };
 
     struct mpz_pointer_comparator {
-        auto operator()(mpz_class *l, mpz_class *r) const {
-            return mpz_cmp(l->get_mpz_t(), r->get_mpz_t());
-        }
-
-        auto operator()(const mpz_class *l, const mpz_class *r) const {
-            return mpz_cmp(l->get_mpz_t(), r->get_mpz_t());
+        int operator()(mpz_class *l, mpz_class *r) const {
+            return mpz_cmp(l->get_mpz_t(), r->get_mpz_t());// < 0;
         }
     };
 

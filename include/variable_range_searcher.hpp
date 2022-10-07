@@ -2,8 +2,6 @@
 #include "searcher.hpp"
 #include <array>
 
-
-
 namespace searcher {
 
     namespace utils

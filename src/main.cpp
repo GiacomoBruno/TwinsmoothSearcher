@@ -1,68 +1,17 @@
 #include "searcher.hpp"
-#include "benchmark.hpp"
 #include "range_searcher.hpp"
-#include "k_searcher.hpp"
 #include "variable_range_searcher.hpp"
+#include "k_searcher.hpp"
+#include "iterative_k_searcher.hpp"
+
+
+#include "benchmark.hpp"
 #include <iostream>
 #include <filesystem>
 #include <string>
 #include <fstream>
 #include <array>
 #include <tuple>
-#include <vector>
-//each prime added to the initial set, increases the max range size by 20%
-//on average the bitsize with the largest range increases by 1 with every second prime added
-
-
-//if we start with with a range of 300 at prime number 53 with bitsize medium = 15
-
-//at prime number 997 we should have 123 increases of 20% over the initial 300 and bitsize medium increased by 61.5
-//bitsize medium is probably a logaritmic increas and not a linear one
-
-//360->
-
-bool isprime(int num) {
-    if (num <= 1)
-        return false;
-    for (int i = 2; i <= num / 2; i++) {
-        if (num % i == 0)
-        {
-            return false;
-        }
-    }
-    return true; //if both failed then num is prime
-}
-
-std::array<int, 1000> primes()
-{
-    std::array<int, 1000> _primes{};
-
-    _primes[0] = 2;
-    int counter = 1;
-
-    for (int i = 3; counter < 1000 ; i += 2)
-    {
-        if (isprime(i))
-        {
-            _primes[counter] = i;
-            counter++;
-        }
-    }
-
-    return _primes;
-}
-
-int countPrimes(int strt, int end) {
-    int count = 0;
-    for (int i = strt;i <= end;i++) {
-        if (isprime(i) == 1)
-        {
-            count++;
-        }
-    }
-    return count;
-}
-
 
 void read_parameters()
 {
@@ -81,15 +30,28 @@ void read_parameters()
 
     switch(GLOBALS.OptimizationType)
     {
+        //no optimization
         case 0: break;
+        //range optimization
         case 1:
             std::cout << "range: ";
             std::cin >> GLOBALS.RangeCurrent;
             break;
+        //global k optimization
         case 2:
             std::cout << "k: ";
             std::cin >> GLOBALS.KCurrent;
             break;
+        //iterative k
+        case 3:
+            std::cout << "k start: ";
+            std::cin >> GLOBALS.KStart;
+            std::cout << "k end: ";
+            std::cin >> GLOBALS.KEnd;
+            std::cout << "k step: ";
+            std::cin >> GLOBALS.KStep;
+            break;
+
     }
 
     bool bit_size_opt =false;
@@ -122,11 +84,7 @@ int main()
 {
     benchmark b;
 
-
     read_parameters();
-
-
-
 
     searcher::PSET res;
         b.start_bench();
@@ -141,8 +99,15 @@ int main()
             case O::GLOBAL_K_OPTIMIZATION:
                 searcher::execute<O::GLOBAL_K_OPTIMIZATION>(res);
                 break;
+            case O::ITERATIVE_K_OPTIMIZATION:
+                searcher::execute<O::ITERATIVE_K_OPTIMIZATION>(res);
+                break;
+            case O::ITERATIVE_RANGE_OPTIMIZATION:
+                searcher::execute<O::ITERATIVE_RANGE_OPTIMIZATION>(res);
+                break;
             case O::VARIABLE_RANGE_OPTIMIZATION:
                 searcher::execute<O::VARIABLE_RANGE_OPTIMIZATION>(res);
+                break;
             default:
                 break;
         }
@@ -176,6 +141,5 @@ int main()
 
     file.flush();
     file.close();
-
 
 }

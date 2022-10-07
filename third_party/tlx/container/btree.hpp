@@ -1198,30 +1198,32 @@ private:
     //! \{
 
     //! True if a < b ? "constructed" from key_less_()
-    bool key_less(const key_type& a, const key_type& b) const {
-        return key_less_(a, b) < 0;
-    }
 
-    //! True if a <= b ? constructed from key_less()
-    bool key_lessequal(const key_type& a, const key_type& b) const {
-        return key_less_(a, b) <= 0;
-    }
+        bool key_less(const key_type &a, const key_type &b) const {
+            return key_less_(a, b) < 0;
+        }
 
-    //! True if a > b ? constructed from key_less()
-    bool key_greater(const key_type& a, const key_type& b) const {
-        return key_less_(a, b) >0;
-    }
+        //! True if a <= b ? constructed from key_less()
+        bool key_lessequal(const key_type &a, const key_type &b) const {
+            return key_less_(a, b) <= 0;
+        }
 
-    //! True if a >= b ? constructed from key_less()
-    bool key_greaterequal(const key_type& a, const key_type& b) const {
-        return key_less_(a, b) >= 0;
-    }
+        //! True if a > b ? constructed from key_less()
+        bool key_greater(const key_type &a, const key_type &b) const {
+            return key_less_(a, b) > 0;
+        }
 
-    //! True if a == b ? constructed from key_less(). This requires the <
-    //! relation to be a total order, otherwise the B+ tree cannot be sorted.
-    bool key_equal(const key_type& a, const key_type& b) const {
-        return key_less_(a, b) == 0;
-    }
+        //! True if a >= b ? constructed from key_less()
+        bool key_greaterequal(const key_type &a, const key_type &b) const {
+            return key_less_(a, b) >= 0;
+        }
+
+        //! True if a == b ? constructed from key_less(). This requires the <
+        //! relation to be a total order, otherwise the B+ tree cannot be sorted.
+        bool key_equal(const key_type &a, const key_type &b) const {
+            return key_less_(a, b) == 0;
+        }
+
 
     //! \}
 

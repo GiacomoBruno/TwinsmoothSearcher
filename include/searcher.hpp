@@ -90,7 +90,7 @@ namespace searcher {
         size_t length = results.size() - (results.size() % 2);
         output = std::vector<PSET>{length/2};
 
-        GLOBALS.ThreadPool.push_loop(0, length, [&](int a, int b) {
+        GLOBALS.ThreadPool.push_loop(0, length, [&](int a, int) {
             for(auto* x : results[a])
             {
                 output[a/2].insert(x);
