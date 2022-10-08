@@ -31,31 +31,34 @@ namespace searcher {
         mpz_class d, delta, m1;
         int max = last_array_element(chunk);
 
-        for (int i = 0; i < max; i++) {
-            auto& x = chunk[i];
-            auto y = S.upper_bound(x);
-            auto z = S.lower_bound(x);
-            while (y != S.end()) {
-                FORWARD_CALCS(x, y);
+        for(int i = 0; i < max; i++)
+        {
+            bool found_same = false;
+            auto&x = chunk[i];
+            auto iter = S.begin();
+            while(iter != S.end())
+            {
+                if(x == *iter)
+                {
+                    found_same = true;
+                    std::advance(iter, 1);
+                    continue;
+                }
 
-                if (d == 0) {
+                if(found_same)
+                    FORWARD_CALCS(x,iter);
+                else
+                    BACKWARD_CALCS(x,iter);
+
+                if(d == 0)
+                {
                     ADD_TO_SET();
                 }
-                std::advance(y, 1);
-            }
-            //backward
 
-            if(mpz_cmp((*z)->get_mpz_t(), x->get_mpz_t()) == 0)
-                continue;
-
-            while (z != S.begin()) {
-                BACKWARD_CALCS(x, z);
-                if (d == 0) {
-                    ADD_TO_SET();
-                }
-                std::advance(z, -1);
+                std::advance(iter, 1);
             }
         }
+
     }
 
 
