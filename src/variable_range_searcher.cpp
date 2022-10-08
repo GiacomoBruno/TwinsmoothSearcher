@@ -84,52 +84,28 @@ namespace searcher {
             size_t RANGE = utils::generate_range(mpz_sizeinbase(x->get_mpz_t(), 2), GLOBALS.Smoothness);
 
             while (y != S.end() && r < RANGE) {
-                m1 = *x * **y;
-                m1 += **y;
-                delta = **y - *x;
-                d = m1 % delta;
+                FORWARD_CALCS(x,y);
 
                 if (d == 0) {
-                    m1 /= delta;
-                    m1 -= 1;
-                    if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= GLOBALS.MaxBitSize) {
-                        auto res = new mpz_class{m1};
-                        if (S.find(res) == S.end()) {
-                            output.insert(res);
-                        } else {
-                            delete res;
-                        }
-                    }
+                    ADD_TO_SET();
                 }
                 r++;
                 std::advance(y, 1);
             }
             //backward
             r = 0;
-            if (z != x_iter)
-                while (r < RANGE) {
-                    m1 = **z * *x;
-                    m1 += *x;
-                    delta = *x - **z;
-                    d = m1 % delta;
+            if(mpz_cmp((*z)->get_mpz_t(), x->get_mpz_t()) == 0) continue;
 
-                    if (d == 0) {
-                        m1 /= delta;
-                        m1 -= 1;
+            while (z != S.begin() && r < RANGE)
+            {
+                BACKWARD_CALCS(x,z);
 
-                        if (mpz_sizeinbase(m1.get_mpz_t(), 2) <= GLOBALS.MaxBitSize) {
-                            auto res = new mpz_class{m1};
-                            if (S.find(res) == S.end()) {
-                                output.insert(res);
-                            } else {
-                                delete res;
-                            }
-                        }
-                    }
-                    r++;
-                    if (z == S.begin()) break;
-                    std::advance(z, -1);
+                if (d == 0) {
+                    ADD_TO_SET();
                 }
+                r++;
+                std::advance(z, -1);
+            }
         }
     }
 
