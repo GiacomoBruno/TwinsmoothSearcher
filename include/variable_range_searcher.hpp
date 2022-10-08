@@ -73,7 +73,7 @@ namespace searcher {
     }
 
     template<>
-    void generate_twins<globals::OPTIMIZATION_LEVELS::VARIABLE_RANGE_OPTIMIZATION>(std::vector<mpz_class *> &chunk, PSET &S, PSET &output) {
+    void generate_twins<globals::OPTIMIZATION_LEVELS::VARIABLE_RANGE_OPTIMIZATION>(CHUNKARR &chunk, PSET &S, PSET &output) {
         mpz_class d, delta, m1, result;
         int r = 0;
         for (auto &x: chunk) {

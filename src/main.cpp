@@ -1,16 +1,10 @@
 #include "searcher.hpp"
-#include "range_searcher.hpp"
-#include "variable_range_searcher.hpp"
-#include "k_searcher.hpp"
-#include "iterative_k_searcher.hpp"
-
 
 #include "benchmark.hpp"
 #include <iostream>
 #include <filesystem>
 #include <string>
 #include <fstream>
-#include <array>
 #include <tuple>
 
 void read_parameters()
@@ -22,8 +16,6 @@ void read_parameters()
     std::cout << "\n\t" << "no optimizations: " << static_cast<int>(globals::OPTIMIZATION_LEVELS::NO_OPTIMIZATION);
     std::cout << "\n\t" << "constant range:   " << static_cast<int>(globals::OPTIMIZATION_LEVELS::CONSTANT_RANGE_OPTIMIZATION);
     std::cout << "\n\t" << "global k:         " << static_cast<int>(globals::OPTIMIZATION_LEVELS::GLOBAL_K_OPTIMIZATION);
-    std::cout << "\n\t" << "iterative k:      " << static_cast<int>(globals::OPTIMIZATION_LEVELS::ITERATIVE_K_OPTIMIZATION);
-    std::cout << "\n\t" << "iterative range:  " << static_cast<int>(globals::OPTIMIZATION_LEVELS::ITERATIVE_RANGE_OPTIMIZATION);
     std::cout << "\n\t" << "variable range:   " << static_cast<int>(globals::OPTIMIZATION_LEVELS::VARIABLE_RANGE_OPTIMIZATION);
     std::cout << "\nchoose: ";
     std::cin >> GLOBALS.OptimizationType;
@@ -98,12 +90,6 @@ int main()
                 break;
             case O::GLOBAL_K_OPTIMIZATION:
                 searcher::execute<O::GLOBAL_K_OPTIMIZATION>(res);
-                break;
-            case O::ITERATIVE_K_OPTIMIZATION:
-                searcher::execute<O::ITERATIVE_K_OPTIMIZATION>(res);
-                break;
-            case O::ITERATIVE_RANGE_OPTIMIZATION:
-                searcher::execute<O::ITERATIVE_RANGE_OPTIMIZATION>(res);
                 break;
             case O::VARIABLE_RANGE_OPTIMIZATION:
                 searcher::execute<O::VARIABLE_RANGE_OPTIMIZATION>(res);

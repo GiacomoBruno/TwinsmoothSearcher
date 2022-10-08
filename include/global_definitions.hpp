@@ -2,10 +2,13 @@
 #include <gmpxx.h>
 #include "tlx/container/btree_set.hpp"
 #include "BS/BS_thread_pool_light.hpp"
+#include <array>
+#include <vector>
 
 namespace globals
 {
 
+//#define CHECK_BITSIZE
 #define GLOBALS globals::SearcherGlobals::Instance()
 
     enum class OPTIMIZATION_LEVELS
@@ -13,9 +16,7 @@ namespace globals
         NO_OPTIMIZATION = 0,
         CONSTANT_RANGE_OPTIMIZATION = 1,
         GLOBAL_K_OPTIMIZATION = 2,
-        ITERATIVE_K_OPTIMIZATION = 3,
-        ITERATIVE_RANGE_OPTIMIZATION = 4,
-        VARIABLE_RANGE_OPTIMIZATION = 5
+        VARIABLE_RANGE_OPTIMIZATION = 3
     };
 
     class SearcherGlobals
@@ -26,7 +27,7 @@ namespace globals
             return instance;
         }
 
-        int ChunkSize{100};
+        static constexpr int ChunkSize{100};
         int MaxBitSize{1024};
         int MinBitSizeToSave{0};
         int MaxBitSizeToSave{1024};
@@ -57,25 +58,8 @@ namespace globals
 
     using PSET = tlx::btree_set<mpz_class*, mpz_pointer_comparator>;
     using PVEC = std::vector<mpz_class *>;
+    using CHUNKARR = std::array<mpz_class*, SearcherGlobals::ChunkSize>;
+    using CHUNKVEC = std::vector<CHUNKARR>;
 
-    std::string PrintOptimizationLevel(OPTIMIZATION_LEVELS level)
-    {
-        using O = OPTIMIZATION_LEVELS;
-        switch(level)
-        {
-            case O::NO_OPTIMIZATION:
-                return "No optimizations";
-            case O::CONSTANT_RANGE_OPTIMIZATION:
-                return std::string("Constant range: ") + std::to_string(GLOBALS.RangeCurrent);
-            case O::GLOBAL_K_OPTIMIZATION:
-                return std::string("Global K: ") + std::to_string(GLOBALS.KCurrent);
-            case O::ITERATIVE_K_OPTIMIZATION:
-                return std::string("Iterative K: ") + std::to_string(GLOBALS.KStart) + " - " + std::to_string(GLOBALS.KEnd);
-            case O::ITERATIVE_RANGE_OPTIMIZATION:
-                return std::string("Iterative Range: ") + std::to_string(GLOBALS.RangeStart) + " - " + std::to_string(GLOBALS.RangeEnd);
-            case O::VARIABLE_RANGE_OPTIMIZATION:
-                return "Variable range";
-        }
-        return "";
-    }
+    std::string PrintOptimizationLevel(OPTIMIZATION_LEVELS level);
 }
