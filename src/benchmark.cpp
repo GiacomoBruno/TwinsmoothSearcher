@@ -1,14 +1,21 @@
 #include "benchmark.hpp"
-#include <iostream>
 
+using namespace std::chrono;
 
 void benchmark::start_bench()
 {
-    start_time = std::chrono::steady_clock::now();
+    start_time = steady_clock::now();
 }
 
 void benchmark::conclude_bench()
 {
-    end_time = std::chrono::steady_clock::now();
-    std::cout << "seconds: " << ((double)std::chrono::duration_cast<std::chrono::microseconds>((end_time) - (start_time)).count() / (double) 1000000);
+    end_time = steady_clock::now();
+}
+
+double benchmark::seconds_passed() const
+{
+    return (
+        static_cast<double>(
+            duration_cast<microseconds>((end_time) - (start_time)).count()) /
+        1000000.0);
 }
