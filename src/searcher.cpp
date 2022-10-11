@@ -176,8 +176,9 @@ void execute(PSET &S)
         iteration<level>(work_set, S);
         b.conclude_bench();
 
-        iteration_tail_string(
-            work_set.size(), last_set_size, b.seconds_passed());
+        if(!work_set.empty())
+            iteration_tail_string(
+                work_set.size(), last_set_size, b.seconds_passed());
     }
     std::cout << "FOUND: " << S.size() << std::endl;
 }
