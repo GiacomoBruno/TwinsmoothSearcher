@@ -46,15 +46,6 @@ void read_parameters()
         std::cout << "k: ";
         std::cin >> GLOBALS.KCurrent;
         break;
-        // iterative k
-    case 3:
-        std::cout << "k start: ";
-        std::cin >> GLOBALS.KStart;
-        std::cout << "k end: ";
-        std::cin >> GLOBALS.KEnd;
-        std::cout << "k step: ";
-        std::cin >> GLOBALS.KStep;
-        break;
     }
 
     bool bit_size_opt = false;
