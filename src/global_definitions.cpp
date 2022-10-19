@@ -77,7 +77,7 @@ void LoadConfigFile()
     auto divide = [] (const std::string& s, char c)
     {
         size_t pos = s.find_first_of(c);
-        return std::tuple<std::string, std::string>{s.substr(0, pos), s.substr(pos, s.size() -pos)};
+        return std::tuple<std::string, std::string>{s.substr(0, pos), s.substr(pos+1, s.size() -pos-1)};
     };
 
 
