@@ -35,9 +35,8 @@
 build
 ./cmake-build-debug/*
 cmake-build-debug
-
-./cmake-build-debug-mingw-msys/*
-cmake-build-debug-mingw-msys
+./cmake-build-release/*
+cmake-build-release
 
 .vscode
 ./.vscode/*
@@ -50,3 +49,6 @@ doc
 
 coverage
 ./coverage/*
+*.DS_Store
+./.idea
+.idea
