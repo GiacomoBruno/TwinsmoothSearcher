@@ -50,5 +50,6 @@ doc
 coverage
 ./coverage/*
 *.DS_Store
-./.idea
+.DS_Store
+./.idea/*
 .idea
