@@ -34,6 +34,7 @@ class SearcherGlobals {
     int MaxBitSizeToSave{ 1024 };
     int OptimizationType{ 0 };
     int Smoothness{ 0 };
+    int MaxFileSize{ 20 };
 
     [[maybe_unused]] int RangeStart{ 0 };
     [[maybe_unused]] int RangeEnd{ 0 };
@@ -78,5 +79,7 @@ void iteration_tail_string(
     size_t work_set_size,
     size_t last_set_size,
     double iteration_duration);
+
+void LoadConfigFile();
 
 } // namespace globals

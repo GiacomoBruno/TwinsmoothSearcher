@@ -2,7 +2,8 @@
 
 #include <chrono>
 #include <iomanip>
-
+#include <fstream>
+#include <tuple>
 namespace globals {
 
 std::string PrintOptimizationLevel(OPTIMIZATION_LEVELS level)
@@ -63,5 +64,60 @@ void iteration_tail_string(
                      "%Y/%m/%d %H:%M:%S")
               << std::endl;
 }
+
+void LoadConfigFile()
+{
+    std::ifstream conf("config.conf");
+    std::string line;
+
+    auto lowercase = [] (std::string& s) {
+        std::transform(s.begin(), s.end(), s.begin(), [] (unsigned char c) { return static_cast<char>(std::tolower(c));});
+    };
+
+    auto divide = [] (const std::string& s, char c)
+    {
+        size_t pos = s.find_first_of(c);
+        return std::tuple<std::string, std::string>{s.substr(0, pos), s.substr(pos, s.size() -pos)};
+    };
+
+
+    while(std::getline(conf, line))
+    {
+        if(line[0] == '#') //skip comment
+            continue;
+        lowercase(line);
+        auto [name, value] = divide(line, ' ');
+
+        if(name == "maxbitsize")
+            GLOBALS.MaxBitSize = std::stoi(value);
+        else if(name == "minbitsizetosave")
+            GLOBALS.MinBitSizeToSave = std::stoi(value);
+        else if(name == "maxbitsizetosave")
+            GLOBALS.MaxBitSizeToSave = std::stoi(value);
+        else if(name == "optimizationtype")
+        {
+            if(value == "no_optimization")
+                GLOBALS.OptimizationType = static_cast<int>(OPTIMIZATION_LEVELS::NO_OPTIMIZATION);
+            else if(value == "constant_range_optimization")
+                GLOBALS.OptimizationType = static_cast<int>(OPTIMIZATION_LEVELS::CONSTANT_RANGE_OPTIMIZATION);
+            else if(value == "variable_range_optimization")
+                GLOBALS.OptimizationType = static_cast<int>(OPTIMIZATION_LEVELS::VARIABLE_RANGE_OPTIMIZATION);
+            else if(value == "global_k_optimization")
+                GLOBALS.OptimizationType = static_cast<int>(OPTIMIZATION_LEVELS::GLOBAL_K_OPTIMIZATION);
+        }
+        else if(name == "smoothness")
+            GLOBALS.Smoothness = std::stoi(value);
+        else if(name == "maxfilesize")
+            GLOBALS.MaxFileSize = std::stoi(value);
+        else if(name == "range")
+            GLOBALS.RangeCurrent = std::stoi(value);
+        else if(name == "k")
+            GLOBALS.KCurrent = std::stod(value);
+        else if(name == "outputfile")
+            GLOBALS.OutputFile = value;
+    }
+
+}
+
 
 } // namespace globals

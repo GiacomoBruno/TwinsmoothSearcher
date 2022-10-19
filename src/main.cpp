@@ -1,8 +1,7 @@
 #include "benchmark.hpp"
 #include "searcher.hpp"
-
+#include "splitfile.hpp"
 #include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -72,13 +71,19 @@ void read_parameters()
 
     std::cout << "output file name: ";
     std::cin >> GLOBALS.OutputFile;
+
+    std::cout << "maximum file size (in MB): ";
+    std::cin >> GLOBALS.MaxFileSize;
 }
 
-int main()
+int main(int argc, char** argv)
 {
     benchmark b;
 
-    read_parameters();
+    if(std::filesystem::exists("config.conf"))
+        globals::LoadConfigFile();
+    else
+        read_parameters();
 
     searcher::PSET res;
     b.start_bench();
@@ -105,9 +110,8 @@ int main()
     std::string output_fl = GLOBALS.OutputFile;
 
     std::filesystem::create_directories(output_fd);
-    std::fstream file;
-    file.open(output_fd + output_fl, std::ios_base::out);
-
+    splitfile file(output_fd, output_fl, GLOBALS.MaxFileSize * 1000000ull);
+    file.init();
     if (GLOBALS.MaxBitSizeToSave == 1024) {
         for (auto x : res) {
             file << x->get_str() << "\n";
@@ -118,11 +122,8 @@ int main()
         for (auto x : res) {
             int size = mpz_sizeinbase(x->get_mpz_t(), 2);
             if (size >= smallest_to_save && size <= biggest_to_save) {
-                file << x->get_str() << "\n";
+                file << (x->get_str() + std::string("\n"));
             }
         }
     }
-
-    file.flush();
-    file.close();
 }
