@@ -228,7 +228,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
         if(factors[2] < 40) continue;
 
         interesting_primes << "PRIME: " << prime->get_str() << "\n";
-        interesting_primes << "GENERATOR: " << smooth->get_str() << "^" << n << " - 1" << "\n";
+        interesting_primes << "GENERATOR: 2 * " << smooth->get_str() << "^" << n << " - 1" << "\n";
         interesting_primes << "BITSIZE: " << mpz_sizeinbase(prime->get_mpz_t(), 2) << "bits\n";
         interesting_primes << "f = " << factors[2] << "\n";
         interesting_primes << "sqrt(B)/f = " << (factors.rbegin()->second / static_cast<double>(factors[2])) << "\n";
