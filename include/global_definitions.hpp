@@ -36,6 +36,7 @@ class SearcherGlobals {
     int OptimizationType{ 0 };
     int Smoothness{ 0 };
     int MaxFileSize{ 20 };
+    int MaxNForPrimeCalcs{4};
 
     [[maybe_unused]] int RangeStart{ 0 };
     [[maybe_unused]] int RangeEnd{ 0 };

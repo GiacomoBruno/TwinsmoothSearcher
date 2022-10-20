@@ -196,7 +196,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
     {
         if(mpz_sizeinbase((*iter)->get_mpz_t(),2) < GLOBALS.MinBitSizeToSave) break;
 
-        for(int n = 2; n < 10; n++)
+        for(int n = 2; n < GLOBALS.MaxNForPrimeCalcs; n++)
         {
             auto p_prime = new mpz_class{};
 

@@ -118,6 +118,8 @@ void LoadConfigFile()
             GLOBALS.KCurrent = std::stod(value);
         else if (name == "outputfile")
             GLOBALS.OutputFile = value;
+        else if(name == "maxnforprimecalcs")
+            GLOBALS.MaxNForPrimeCalcs = std::stoi(value);
     }
 }
 
