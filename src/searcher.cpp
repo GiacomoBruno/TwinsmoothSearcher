@@ -1,7 +1,7 @@
 #include "searcher.hpp"
 
 #include <chrono>
-
+#include <fstream>
 namespace searcher {
 
 void generate_chunks(const std::vector<mpz_class *> &input, CHUNKVEC &output)
@@ -213,6 +213,8 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
         }
     }
 
+    std::ofstream interesting_primes("./result/interesting_primes.txt", std::ios::app);
+
     for(auto [prime, smooth, n] : primes)
     {
         auto num = new mpz_class{*prime};
@@ -223,16 +225,16 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
         auto factors = Factors(num);
         if(factors[2] < 40) continue;
 
-        std::cout << "PRIME: " << prime->get_str() << "\n";
-        std::cout << "GENERATOR: " << smooth->get_str() << "^" << n << " - 1" << "\n";
-        std::cout << "BITSIZE: " << mpz_sizeinbase(prime->get_mpz_t(), 2) << "bits\n";
-        std::cout << "f = " << factors[2] << "\n";
-        std::cout << "sqrt(B)/f = " << (factors.rbegin()->second / static_cast<double>(factors[2])) << "\n";
-        std::cout << "p^2 - 1 factors: \n";
+        interesting_primes << "PRIME: " << prime->get_str() << "\n";
+        interesting_primes << "GENERATOR: " << smooth->get_str() << "^" << n << " - 1" << "\n";
+        interesting_primes << "BITSIZE: " << mpz_sizeinbase(prime->get_mpz_t(), 2) << "bits\n";
+        interesting_primes << "f = " << factors[2] << "\n";
+        interesting_primes << "sqrt(B)/f = " << (factors.rbegin()->second / static_cast<double>(factors[2])) << "\n";
+        interesting_primes << "p^2 - 1 factors: \n";
         mpz_class T;
         for(auto& fac : factors)
         {
-            std::cout << fac.first << "^" << fac.second << "\n";
+            interesting_primes << fac.first << "^" << fac.second << "\n";
             if(fac.first != 2)
             {
                 mpz_class tmp{fac.first};
@@ -241,11 +243,13 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
             }
         }
 
-        std::cout << "T = " << T.get_str() << "\n";
+        interesting_primes << "T = " << T.get_str() << "\n";
 
         delete num;
         delete prime;
     }
+
+    interesting_primes.close();
 
 }
 
