@@ -7,6 +7,7 @@
 #include <gmpxx.h>
 #include <iostream>
 #include <vector>
+#include <map>
 
 namespace globals {
 
@@ -46,11 +47,14 @@ class SearcherGlobals {
     double KCurrent{ 0.0 };
     [[maybe_unused]] double KStep{ 0.0 };
 
+
+    std::vector<int>& GetRelevantPrimes();
     BS::thread_pool_light ThreadPool{};
     std::string OutputFile{};
 
    private:
     SearcherGlobals() = default;
+    std::vector<int> RelevantPrimes{};
 };
 
 struct mpz_pointer_comparator {
@@ -81,5 +85,7 @@ void iteration_tail_string(
     double iteration_duration);
 
 void LoadConfigFile();
+
+std::map<int, int> Factors(mpz_class* number);
 
 } // namespace globals

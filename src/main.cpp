@@ -122,7 +122,7 @@ int main(int argc, char** argv)
         for (auto x : res) {
             int size = mpz_sizeinbase(x->get_mpz_t(), 2);
             if (size >= smallest_to_save && size <= biggest_to_save) {
-                file << (x->get_str() + std::string("\n"));
+                file << (std::string(x->get_str()) + std::string("\n"));
             }
         }
     }

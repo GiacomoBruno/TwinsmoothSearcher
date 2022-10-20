@@ -1,8 +1,8 @@
 #include "global_definitions.hpp"
 
 #include <chrono>
-#include <iomanip>
 #include <fstream>
+#include <iomanip>
 #include <tuple>
 namespace globals {
 
@@ -70,54 +70,93 @@ void LoadConfigFile()
     std::ifstream conf("config.conf");
     std::string line;
 
-    auto lowercase = [] (std::string& s) {
-        std::transform(s.begin(), s.end(), s.begin(), [] (unsigned char c) { return static_cast<char>(std::tolower(c));});
+    auto lowercase = [](std::string &s) {
+        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) {
+            return static_cast<char>(std::tolower(c));
+        });
     };
 
-    auto divide = [] (const std::string& s, char c)
-    {
+    auto divide = [](const std::string &s, char c) {
         size_t pos = s.find_first_of(c);
-        return std::tuple<std::string, std::string>{s.substr(0, pos), s.substr(pos+1, s.size() -pos-1)};
+        return std::tuple<std::string, std::string>{
+            s.substr(0, pos), s.substr(pos + 1, s.size() - pos - 1)
+        };
     };
 
-
-    while(std::getline(conf, line))
-    {
-        if(line[0] == '#') //skip comment
+    while (std::getline(conf, line)) {
+        if (line[0] == '#') // skip comment
             continue;
         lowercase(line);
         auto [name, value] = divide(line, ' ');
 
-        if(name == "maxbitsize")
+        if (name == "maxbitsize")
             GLOBALS.MaxBitSize = std::stoi(value);
-        else if(name == "minbitsizetosave")
+        else if (name == "minbitsizetosave")
             GLOBALS.MinBitSizeToSave = std::stoi(value);
-        else if(name == "maxbitsizetosave")
+        else if (name == "maxbitsizetosave")
             GLOBALS.MaxBitSizeToSave = std::stoi(value);
-        else if(name == "optimizationtype")
-        {
-            if(value == "no_optimization")
-                GLOBALS.OptimizationType = static_cast<int>(OPTIMIZATION_LEVELS::NO_OPTIMIZATION);
-            else if(value == "constant_range_optimization")
-                GLOBALS.OptimizationType = static_cast<int>(OPTIMIZATION_LEVELS::CONSTANT_RANGE_OPTIMIZATION);
-            else if(value == "variable_range_optimization")
-                GLOBALS.OptimizationType = static_cast<int>(OPTIMIZATION_LEVELS::VARIABLE_RANGE_OPTIMIZATION);
-            else if(value == "global_k_optimization")
-                GLOBALS.OptimizationType = static_cast<int>(OPTIMIZATION_LEVELS::GLOBAL_K_OPTIMIZATION);
-        }
-        else if(name == "smoothness")
+        else if (name == "optimizationtype") {
+            if (value == "no_optimization")
+                GLOBALS.OptimizationType =
+                    static_cast<int>(OPTIMIZATION_LEVELS::NO_OPTIMIZATION);
+            else if (value == "constant_range_optimization")
+                GLOBALS.OptimizationType = static_cast<int>(
+                    OPTIMIZATION_LEVELS::CONSTANT_RANGE_OPTIMIZATION);
+            else if (value == "variable_range_optimization")
+                GLOBALS.OptimizationType = static_cast<int>(
+                    OPTIMIZATION_LEVELS::VARIABLE_RANGE_OPTIMIZATION);
+            else if (value == "global_k_optimization")
+                GLOBALS.OptimizationType = static_cast<int>(
+                    OPTIMIZATION_LEVELS::GLOBAL_K_OPTIMIZATION);
+        } else if (name == "smoothness")
             GLOBALS.Smoothness = std::stoi(value);
-        else if(name == "maxfilesize")
+        else if (name == "maxfilesize")
             GLOBALS.MaxFileSize = std::stoi(value);
-        else if(name == "range")
+        else if (name == "range")
             GLOBALS.RangeCurrent = std::stoi(value);
-        else if(name == "k")
+        else if (name == "k")
             GLOBALS.KCurrent = std::stod(value);
-        else if(name == "outputfile")
+        else if (name == "outputfile")
             GLOBALS.OutputFile = value;
     }
-
 }
 
+std::vector<int> &SearcherGlobals::GetRelevantPrimes()
+{
+    if (RelevantPrimes.empty()) {
+        RelevantPrimes.push_back(2);
+        for (int i = 3; i < Smoothness + 2; i += 2) {
+            for (int j = 0; j < RelevantPrimes.size() &&
+                 RelevantPrimes[j] * RelevantPrimes[j] <= i;
+                 j++) {
+                if (i % RelevantPrimes[j] == 0)
+                    goto not_a_prime;
+            }
+            RelevantPrimes.push_back(i);
+        not_a_prime:;
+        }
+    }
+    return RelevantPrimes;
+}
+
+std::map<int, int> Factors(mpz_class *number)
+{
+    auto &primes = GLOBALS.GetRelevantPrimes();
+
+    std::map<int, int> factors{};
+    mpz_class n{ *number };
+    for (auto &prime : primes) {
+        while (n % prime == 0) {
+            if (factors.find(prime) == factors.end()) {
+                factors[prime] = 0;
+            }
+
+            factors[prime]++;
+            n = n / prime;
+        }
+    }
+
+    return factors;
+}
 
 } // namespace globals

@@ -179,9 +179,76 @@ void execute(PSET &S)
         if(!work_set.empty())
             iteration_tail_string(
                 work_set.size(), last_set_size, b.seconds_passed());
+
+        calculate_large_primes(work_set);
+
     }
     std::cout << "FOUND: " << S.size() << std::endl;
 }
+
+void calculate_large_primes(const std::vector<mpz_class*>& numbers)
+{
+    if(numbers.empty()) return;
+    if(mpz_sizeinbase((*numbers.rbegin())->get_mpz_t(), 2) < GLOBALS.MinBitSizeToSave) return;
+    std::vector<std::tuple<mpz_class*, mpz_class*, int>> primes{};
+
+    for(auto iter = std::next(numbers.rbegin()); iter != numbers.rend(); std::advance(iter,1))
+    {
+        if(mpz_sizeinbase((*iter)->get_mpz_t(),2) < GLOBALS.MinBitSizeToSave) break;
+
+        for(int n = 2; n < 10; n++)
+        {
+            auto p_prime = new mpz_class{};
+
+            mpz_pow_ui(p_prime->get_mpz_t(), (*iter)->get_mpz_t(), n);
+            *p_prime = (2 * *p_prime) - 1;
+            if(mpz_probab_prime_p(p_prime->get_mpz_t(), 50))
+            {
+                primes.emplace_back(p_prime, *iter, n);
+            }
+            else
+            {
+                delete p_prime;
+            }
+        }
+    }
+
+    for(auto [prime, smooth, n] : primes)
+    {
+        auto num = new mpz_class{*prime};
+
+        *num = *num * *num;
+        *num = *num - 1;
+
+        auto factors = Factors(num);
+        if(factors[2] < 40) continue;
+
+        std::cout << "PRIME: " << prime->get_str() << "\n";
+        std::cout << "GENERATOR: " << smooth->get_str() << "^" << n << " - 1" << "\n";
+        std::cout << "BITSIZE: " << mpz_sizeinbase(prime->get_mpz_t(), 2) << "bits\n";
+        std::cout << "f = " << factors[2] << "\n";
+        std::cout << "sqrt(B)/f = " << (factors.rbegin()->second / static_cast<double>(factors[2])) << "\n";
+        std::cout << "p^2 - 1 factors: \n";
+        mpz_class T;
+        for(auto& fac : factors)
+        {
+            std::cout << fac.first << "^" << fac.second << "\n";
+            if(fac.first != 2)
+            {
+                mpz_class tmp{fac.first};
+                mpz_pow_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), fac.second);
+                T += tmp;
+            }
+        }
+
+        std::cout << "T = " << T.get_str() << "\n";
+
+        delete num;
+        delete prime;
+    }
+
+}
+
 
 template void execute<OPTIMIZATION_LEVELS::NO_OPTIMIZATION>(PSET &S);
 

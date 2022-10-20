@@ -69,4 +69,6 @@ void iteration(PVEC &io, PSET &S);
 template <OPTIMIZATION_LEVELS level>
 void execute(PSET &S);
 
+void calculate_large_primes(const std::vector<mpz_class*>& numbers);
+
 } // namespace searcher

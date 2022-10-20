@@ -33,6 +33,7 @@ target_sources(twinsmooth_searcher
         PRIVATE ${PROJECT_SOURCE_DIR}/src/range_searcher.cpp
         PRIVATE ${PROJECT_SOURCE_DIR}/src/global_k_searcher.cpp
         PRIVATE ${PROJECT_SOURCE_DIR}/src/variable_range_searcher.cpp
+        PRIVATE ${PROJECT_SOURCE_DIR}/src/splitfile.cpp
         PRIVATE ${PROJECT_SOURCE_DIR}/src/benchmark.cpp
         PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp
         )
