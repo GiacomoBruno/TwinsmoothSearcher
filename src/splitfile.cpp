@@ -1,5 +1,5 @@
 #include "splitfile.hpp"
-
+#include <filesystem>
 splitfile &splitfile::operator<<(const std::string &msg)
 {
     _current_file << msg;
