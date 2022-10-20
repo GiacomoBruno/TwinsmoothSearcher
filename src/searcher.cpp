@@ -236,7 +236,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
         mpz_class T;
         for(auto& fac : factors)
         {
-            interesting_primes << fac.first << "^" << fac.second << "\n";
+            interesting_primes << fac.first << "^" << fac.second << " + ";
             if(fac.first != 2)
             {
                 mpz_class tmp{fac.first};
@@ -245,7 +245,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
             }
         }
 
-        interesting_primes << "T = " << T.get_str() << "\n";
+        interesting_primes << "T (" << T.get_str() << ")\n";
 
         delete num;
         delete prime;
