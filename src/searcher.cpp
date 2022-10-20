@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <fstream>
+#include <filesystem>
 namespace searcher {
 
 void generate_chunks(const std::vector<mpz_class *> &input, CHUNKVEC &output)
@@ -213,6 +214,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
         }
     }
 
+    std::filesystem::create_directories("./result/");
     std::ofstream interesting_primes("./result/interesting_primes.txt", std::ios::app);
 
     for(auto [prime, smooth, n] : primes)
