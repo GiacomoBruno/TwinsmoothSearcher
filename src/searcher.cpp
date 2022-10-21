@@ -193,6 +193,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
     if(mpz_sizeinbase((*numbers.rbegin())->get_mpz_t(), 2) < GLOBALS.MinBitSizeToSave) return;
     std::vector<std::tuple<mpz_class*, mpz_class*, int>> primes{};
 
+
     for(auto iter = std::next(numbers.rbegin()); iter != numbers.rend(); std::advance(iter,1))
     {
         if(mpz_sizeinbase((*iter)->get_mpz_t(),2) < GLOBALS.MinBitSizeToSave) break;
@@ -225,7 +226,10 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
         *num = *num - 1;
 
         auto factors = Factors(num);
-        if(factors[2] < 40) continue;
+        if(factors[2] < 40) {
+            delete prime;
+            continue;
+        }
 
         interesting_primes << "PRIME: " << prime->get_str() << "\n";
         interesting_primes << "GENERATOR: 2 * " << smooth->get_str() << "^" << n << " - 1" << "\n";
