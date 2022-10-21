@@ -8,7 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(CheckIPOSupported)
 check_ipo_supported(RESULT supported OUTPUT error)
 
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(GMP_INCLUDE_DIR "/opt/homebrew/include")
@@ -22,7 +22,7 @@ add_executable(twinsmooth_searcher)
 
 if (supported)
     message(STATUS "IPO / LTO enabled")
-    #set_property(TARGET twinsmooth_searcher PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+    set_property(TARGET twinsmooth_searcher PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 else ()
     message(STATUS "IPO / LTO not supported: <${error}>")
 endif ()
