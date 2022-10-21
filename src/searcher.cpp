@@ -1,10 +1,8 @@
 #include "searcher.hpp"
-
 #include <chrono>
 #include <fstream>
 #include <filesystem>
 #include <cmath>
-#include <zip_file.hpp>
 namespace searcher {
 
 void generate_chunks(const std::vector<mpz_class *> &input, CHUNKVEC &output)

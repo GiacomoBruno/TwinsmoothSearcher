@@ -2,6 +2,8 @@
 
 #include "BS/BS_thread_pool_light.hpp"
 #include "tlx/container/btree_set.hpp"
+#include <zip_file.hpp>
+
 
 #include <array>
 #include <gmpxx.h>

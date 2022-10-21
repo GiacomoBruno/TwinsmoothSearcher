@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <utility>
+#include "global_definitions.hpp"
 
 class splitfile
 {

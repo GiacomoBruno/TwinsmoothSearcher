@@ -1,6 +1,5 @@
 #include "splitfile.hpp"
 #include <filesystem>
-#include <zip_file.hpp>
 splitfile &splitfile::operator<<(const std::string &msg)
 {
     _current_file << msg;
