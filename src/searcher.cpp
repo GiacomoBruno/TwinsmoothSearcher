@@ -227,6 +227,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
 
         auto factors = Factors(num);
         if(factors[2] < 40) {
+            delete num;
             delete prime;
             continue;
         }
