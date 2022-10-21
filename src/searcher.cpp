@@ -224,7 +224,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                     mpz_class num{*prime};
                     mpz_class pp1{*prime};
                     mpz_class pm1{*prime};
-                    mpz_class T{0};
+                    mpz_class T{1};
 
                     pp1 += 1;
                     pm1 -= 1;
@@ -263,7 +263,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                     ss << "f(p-1) = " << factors_pm1[2] << "\n";
                     ss << "sqrt(B)/f(p-1) = " << (sqrt(factors_pm1.rbegin()->second) / static_cast<double>(factors_pm1[2])) << "\n";
                     ss << "p - 1 factors: ";
-                    T = 0;
+                    T = 1;
                     for(auto& fac : factors_pm1)
                     {
                         ss << fac.first << "^" << fac.second << " * ";
