@@ -226,8 +226,8 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
 
     Factors(nullptr);
 
-    //GLOBALS.ThreadPool.push_loop(0, primes.size(), [&](size_t a, size_t b) {
-    size_t a= 0;size_t b = primes.size();
+    GLOBALS.ThreadPool.push_loop(0, primes.size(), [&](size_t a, size_t b) {
+    //size_t a= 0;size_t b = primes.size();
         for (size_t i = a; i < b; ++i)
         {
             auto [prime, smooth, n] = primes[i];
@@ -268,8 +268,8 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
 
             strings[i] = ss.str();
         }
-    //});
-    //GLOBALS.ThreadPool.wait_for_tasks();
+    });
+    GLOBALS.ThreadPool.wait_for_tasks();
 
     for(auto& s : strings)
     {
