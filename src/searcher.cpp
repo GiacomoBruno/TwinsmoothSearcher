@@ -221,23 +221,31 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                     std::stringstream ss;
 
                     mpz_class num{*prime};
+                    mpz_class pp1{*prime};
+                    mpz_class pm1{*prime};
+                    mpz_class T{0};
 
-                    num = num * num;
-                    num = num - 1;
+                    pp1 += 1;
+                    pm1 -= 1;
 
-                    auto factors = Factors(&num);
-                    if(factors[2] < 40) {
+                    auto factors_pp1 = Factors(&pp1);
+                    auto factors_pm1 = Factors(&pm1);
+                    if(factors_pp1[2] < 40 && factors_pm1[2] < 40) {
                         continue;
                     }
 
-                    ss << "PRIME: " << prime->get_str() << "\n";
-                    ss << "GENERATOR: 2 * " << smooth->get_str() << "^" << n << " - 1" << "\n";
+                    ss << "\nPRIME: " << prime->get_str() << "\n";
                     ss << "BITSIZE: " << mpz_sizeinbase(prime->get_mpz_t(), 2) << "bits\n";
-                    ss << "f = " << factors[2] << "\n";
-                    ss << "sqrt(B)/f = " << (factors.rbegin()->second / static_cast<double>(factors[2])) << "\n";
-                    ss << "p^2 - 1 factors: \n";
-                    mpz_class T;
-                    for(auto& fac : factors)
+
+                    ss << "GENERATOR: N =" << n << " r = " << smooth->get_str() << "\n";
+                    ss <<"\t2 * " << smooth->get_str() << "^" << n << " - 1" << "\n\n";
+
+                    ss << "p + 1 = " << pp1.get_str() << "\n";
+
+                    ss << "f(p+1) = " << factors_pp1[2] << "\n";
+                    ss << "sqrt(B)/f(p+1) = " << (sqrt(factors_pp1.rbegin()->second) / static_cast<double>(factors_pp1[2])) << "\n";
+                    ss << "p + 1 factors: ";
+                    for(auto& fac : factors_pp1)
                     {
                         ss << fac.first << "^" << fac.second << " + ";
                         if(fac.first != 2)
@@ -247,7 +255,23 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                             T += tmp;
                         }
                     }
+                    ss << "T (" << T.get_str() << ")\n";
 
+                    ss << "p - 1 = " << pm1.get_str() << "\n";
+                    ss << "f(p-1) = " << factors_pm1[2] << "\n";
+                    ss << "sqrt(B)/f(p-1) = " << (sqrt(factors_pm1.rbegin()->second) / static_cast<double>(factors_pm1[2])) << "\n";
+                    ss << "p - 1 factors: ";
+                    T = 0;
+                    for(auto& fac : factors_pm1)
+                    {
+                        ss << fac.first << "^" << fac.second << " + ";
+                        if(fac.first != 2)
+                        {
+                            mpz_class tmp{fac.first};
+                            mpz_pow_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), fac.second);
+                            T += tmp;
+                        }
+                    }
                     ss << "T (" << T.get_str() << ")\n";
 
                     strings[i] = ss.str();
@@ -262,7 +286,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
     GLOBALS.ThreadPool.wait_for_tasks();
 
     std::filesystem::create_directories("./result/");
-    std::ofstream interesting_primes("./result/interesting_primes.txt", std::ios::app);
+    std::ofstream interesting_primes("./result/"+ GLOBALS.OutputFile+"_primes_" + std::to_string(GLOBALS.Smoothness) + ".txt", std::ios::app);
 
     for(auto& s : strings)
     {

@@ -107,7 +107,7 @@ int main(int argc, char** argv)
     b.conclude_bench();
 
     std::string output_fd = "./result/";
-    std::string output_fl = GLOBALS.OutputFile;
+    std::string output_fl = GLOBALS.OutputFile + "_" + std::to_string(GLOBALS.Smoothness);
 
     std::filesystem::create_directories(output_fd);
     splitfile file(output_fd, output_fl, GLOBALS.MaxFileSize * 1000000ull);
