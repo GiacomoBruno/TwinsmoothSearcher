@@ -3,6 +3,7 @@
 #include <chrono>
 #include <fstream>
 #include <filesystem>
+#include <cmath>
 namespace searcher {
 
 void generate_chunks(const std::vector<mpz_class *> &input, CHUNKVEC &output)
@@ -243,7 +244,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                     ss << "p + 1 = " << pp1.get_str() << "\n";
 
                     ss << "f(p+1) = " << factors_pp1[2] << "\n";
-                    ss << "sqrt(B)/f(p+1) = " << (sqrt(factors_pp1.rbegin()->second) / static_cast<double>(factors_pp1[2])) << "\n";
+                    ss << "sqrt(B)/f(p+1) = " << (std::sqrt(factors_pp1.rbegin()->second) / static_cast<double>(factors_pp1[2])) << "\n";
                     ss << "p + 1 factors: ";
                     for(auto& fac : factors_pp1)
                     {
