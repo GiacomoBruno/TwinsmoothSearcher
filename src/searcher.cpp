@@ -248,14 +248,15 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                     ss << "p + 1 factors: ";
                     for(auto& fac : factors_pp1)
                     {
-                        ss << fac.first << "^" << fac.second << " + ";
+                        ss << fac.first << "^" << fac.second << " * ";
                         if(fac.first != 2)
                         {
                             mpz_class tmp{fac.first};
                             mpz_pow_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), fac.second);
-                            T += tmp;
+                            T *= tmp;
                         }
                     }
+                    T = pp1 - T;
                     ss << "T (" << T.get_str() << ")\n";
 
                     ss << "p - 1 = " << pm1.get_str() << "\n";
@@ -265,15 +266,16 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                     T = 0;
                     for(auto& fac : factors_pm1)
                     {
-                        ss << fac.first << "^" << fac.second << " + ";
+                        ss << fac.first << "^" << fac.second << " * ";
                         if(fac.first != 2)
                         {
                             mpz_class tmp{fac.first};
                             mpz_pow_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), fac.second);
-                            T += tmp;
+                            T *= tmp;
                         }
                     }
-                    ss << "T (" << T.get_str() << ")\n";
+                    T = pm1 - T;
+                    ss << "T (" <<  T.get_str() << ")\n";
 
                     strings[i] = ss.str();
                 }
