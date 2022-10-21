@@ -181,7 +181,11 @@ void execute(PSET &S)
             iteration_tail_string(
                 work_set.size(), last_set_size, b.seconds_passed());
 
+        b.start_bench();
         calculate_large_primes(work_set);
+        b.conclude_bench();
+
+        std::cout << "prime calculation took: " << b.seconds_passed() << std::endl;
 
     }
     std::cout << "FOUND: " << S.size() << std::endl;
@@ -218,46 +222,61 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
     std::filesystem::create_directories("./result/");
     std::ofstream interesting_primes("./result/interesting_primes.txt", std::ios::app);
 
-    for(auto [prime, smooth, n] : primes)
-    {
-        auto num = new mpz_class{*prime};
+    std::vector<std::string> strings(primes.size());
 
-        *num = *num * *num;
-        *num = *num - 1;
+    Factors(nullptr);
 
-        auto factors = Factors(num);
-        if(factors[2] < 40) {
-            delete num;
-            delete prime;
-            continue;
-        }
-
-        interesting_primes << "PRIME: " << prime->get_str() << "\n";
-        interesting_primes << "GENERATOR: 2 * " << smooth->get_str() << "^" << n << " - 1" << "\n";
-        interesting_primes << "BITSIZE: " << mpz_sizeinbase(prime->get_mpz_t(), 2) << "bits\n";
-        interesting_primes << "f = " << factors[2] << "\n";
-        interesting_primes << "sqrt(B)/f = " << (factors.rbegin()->second / static_cast<double>(factors[2])) << "\n";
-        interesting_primes << "p^2 - 1 factors: \n";
-        mpz_class T;
-        for(auto& fac : factors)
+    //GLOBALS.ThreadPool.push_loop(0, primes.size(), [&](size_t a, size_t b) {
+    size_t a= 0;size_t b = primes.size();
+        for (size_t i = a; i < b; ++i)
         {
-            interesting_primes << fac.first << "^" << fac.second << " + ";
-            if(fac.first != 2)
-            {
-                mpz_class tmp{fac.first};
-                mpz_pow_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), fac.second);
-                T += tmp;
+            auto [prime, smooth, n] = primes[i];
+            std::stringstream ss;
+
+            mpz_class num{*prime};
+
+            num = num * num;
+            num = num - 1;
+
+            auto factors = Factors(&num);
+            if(factors[2] < 40) {
+                delete prime;
+                continue;
             }
+
+            ss << "PRIME: " << prime->get_str() << "\n";
+            ss << "GENERATOR: 2 * " << smooth->get_str() << "^" << n << " - 1" << "\n";
+            ss << "BITSIZE: " << mpz_sizeinbase(prime->get_mpz_t(), 2) << "bits\n";
+            ss << "f = " << factors[2] << "\n";
+            ss << "sqrt(B)/f = " << (factors.rbegin()->second / static_cast<double>(factors[2])) << "\n";
+            ss << "p^2 - 1 factors: \n";
+            mpz_class T;
+            for(auto& fac : factors)
+            {
+                ss << fac.first << "^" << fac.second << " + ";
+                if(fac.first != 2)
+                {
+                    mpz_class tmp{fac.first};
+                    mpz_pow_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), fac.second);
+                    T += tmp;
+                }
+            }
+
+            ss << "T (" << T.get_str() << ")\n";
+
+            delete prime;
+
+            strings[i] = ss.str();
         }
+    //});
+    //GLOBALS.ThreadPool.wait_for_tasks();
 
-        interesting_primes << "T (" << T.get_str() << ")\n";
-
-        delete num;
-        delete prime;
+    for(auto& s : strings)
+    {
+        interesting_primes << s;
     }
 
     interesting_primes.close();
-
 }
 
 

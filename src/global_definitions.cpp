@@ -145,6 +145,7 @@ std::map<int, int> Factors(mpz_class *number)
 {
     auto &primes = GLOBALS.GetRelevantPrimes();
 
+    if(number == nullptr) return {};
     std::map<int, int> factors{};
     mpz_class n{ *number };
     for (auto &prime : primes) {
