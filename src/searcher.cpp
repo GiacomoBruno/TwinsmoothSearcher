@@ -191,10 +191,18 @@ void execute(PSET &S)
 
     }
     std::cout << "FOUND: " << S.size() << std::endl;
-    miniz_cpp::zip_file file;
-    file.write("./result/"+ GLOBALS.OutputFile+"_primes_" + std::to_string(GLOBALS.Smoothness) + ".txt");
-    file.save("./result/"+ GLOBALS.OutputFile+"_primes_" + std::to_string(GLOBALS.Smoothness) + ".zip");
-    std::filesystem::remove("./result/"+ GLOBALS.OutputFile+"_primes_" + std::to_string(GLOBALS.Smoothness) + ".txt");
+    if(std::filesystem::exists("./result/"+ GLOBALS.OutputFile+"_primes_" + std::to_string(GLOBALS.Smoothness) + ".txt")) {
+        miniz_cpp::zip_file file;
+        file.write(
+            "./result/" + GLOBALS.OutputFile + "_primes_" +
+            std::to_string(GLOBALS.Smoothness) + ".txt");
+        file.save(
+            "./result/" + GLOBALS.OutputFile + "_primes_" +
+            std::to_string(GLOBALS.Smoothness) + ".zip");
+        std::filesystem::remove(
+            "./result/" + GLOBALS.OutputFile + "_primes_" +
+            std::to_string(GLOBALS.Smoothness) + ".txt");
+    }
 }
 
 void calculate_large_primes(const std::vector<mpz_class*>& numbers)
