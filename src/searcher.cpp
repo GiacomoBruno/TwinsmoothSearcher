@@ -4,6 +4,7 @@
 #include <fstream>
 #include <filesystem>
 #include <cmath>
+#include <zip_file.hpp>
 namespace searcher {
 
 void generate_chunks(const std::vector<mpz_class *> &input, CHUNKVEC &output)
@@ -190,6 +191,10 @@ void execute(PSET &S)
 
     }
     std::cout << "FOUND: " << S.size() << std::endl;
+    miniz_cpp::zip_file file;
+    file.write("./result/"+ GLOBALS.OutputFile+"_primes_" + std::to_string(GLOBALS.Smoothness) + ".txt");
+    file.save("./result/"+ GLOBALS.OutputFile+"_primes_" + std::to_string(GLOBALS.Smoothness) + ".zip");
+    std::filesystem::remove("./result/"+ GLOBALS.OutputFile+"_primes_" + std::to_string(GLOBALS.Smoothness) + ".txt");
 }
 
 void calculate_large_primes(const std::vector<mpz_class*>& numbers)
@@ -249,7 +254,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                     for(auto& fac : factors_pp1)
                     {
                         ss << fac.first << "^" << fac.second << " * ";
-                        if(fac.first != 2)
+                        //if(fac.first != 2)
                         {
                             mpz_class tmp{fac.first};
                             mpz_pow_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), fac.second);
@@ -267,7 +272,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                     for(auto& fac : factors_pm1)
                     {
                         ss << fac.first << "^" << fac.second << " * ";
-                        if(fac.first != 2)
+                        //if(fac.first != 2)
                         {
                             mpz_class tmp{fac.first};
                             mpz_pow_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), fac.second);
@@ -281,7 +286,6 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                 }
 
                 delete p_prime;
-
             }
         }
 
