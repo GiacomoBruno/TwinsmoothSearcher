@@ -267,7 +267,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                             T *= tmp;
                         }
                     }
-                    T = pp1 - T;
+                    T = pp1 / T;
                     ss << "T (" << T.get_str() << ")\n";
 
                     ss << "p - 1 = " << pm1.get_str() << "\n";
@@ -285,7 +285,7 @@ void calculate_large_primes(const std::vector<mpz_class*>& numbers)
                             T *= tmp;
                         }
                     }
-                    T = pm1 - T;
+                    T = pm1 / T;
                     ss << "T (" <<  T.get_str() << ")\n";
 
                     strings[i] = ss.str();
