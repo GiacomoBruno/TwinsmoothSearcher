@@ -104,8 +104,13 @@ int main(int argc, char** argv)
     default:
         break;
     }
+    /*
+     *
+FOUND: 339282
+Total time taken: 19.8176 seconds
+     */
     b.conclude_bench();
-
+    std::cout << "Total time taken: " << b.seconds_passed() << " seconds" << std::endl;
     std::string output_fd = "./result/";
     std::string output_fl = GLOBALS.OutputFile + "_" + std::to_string(GLOBALS.Smoothness);
 
