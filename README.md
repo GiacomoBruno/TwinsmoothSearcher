@@ -2,7 +2,9 @@
 
 Required libraries:
 ```bash
-sudo apt-get install g++, cmake, libgmp
+sudo apt-get install g++ #or clang
+sudo apt-get install cmake
+sudo apt-get install libgmp-dev
 ```
 Installation + compilation:
 ```bash
